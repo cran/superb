@@ -1,6 +1,19 @@
 context("Testing Winer and Mauchly statistical tests and Shrout & Fleiss ICC functions")
 
 
+test_that("Testing Welch degree of freedom", {
+    dta <- data.frame(cbind(
+        DV.1 = c(3., 6., 2., 2., 5.),
+        DV.2 = c(4., 5., 4., 4., 3.),
+        DV.3 = c(2., 7., 7., 8., 6.),
+        DV.4 = c(6., 8., 4., 6., 5.),
+        grp  = c(1., 1., 2., 2., 2.)
+    ))
+
+    expect_equal( WelchDegreeOfFreedom(dta, "DV.1", "grp"), 1.8988764 )
+})
+
+
 test_that("Testing Winer test", {
     dta <- data.frame(cbind(
         col1 <- c(3., 6., 2., 2., 5.),
@@ -79,15 +92,15 @@ test_that("Testing the built-in plotting function", {
     tg$DV <- tg$len
 
     p1 <- superbPlot.bar(dta, "dose", 
-        "supp", ".~.", FALSE, tg, list(color="black"), list(color="purple") )
+        "supp", ".~.", tg, list(color="black"), list(color="purple") )
     p2 <- superbPlot.line(dta, "dose", 
-        "supp", ".~.", FALSE, tg, list(color="black"), list(color="purple") )
+        "supp", ".~.", tg, list(color="black"), list(color="purple") )
     p3 <- superbPlot.point(dta, "dose", 
-        "supp", ".~.", FALSE, tg, list(), list() )
+        "supp", ".~.", tg, list(), list() )
     p4 <- superbPlot.pointjitter(dta, "dose", 
-        "supp", ".~.", FALSE, tg, list(color="black"), list(color="purple") )
+        "supp", ".~.", tg, list(color="black"), list(color="purple") )
     p5 <- superbPlot.pointjitterviolin(dta, "dose", 
-         "supp", ".~dose", FALSE, tg, list(color="black"), list(color="purple") ) +
+         "supp", ".~dose", tg, list(color="black"), list(color="purple") ) +
         scale_x_continuous("mean ratings")
     expect_output( str(p1), "List of 9")
     expect_output( str(p2), "List of 9")
@@ -97,5 +110,9 @@ test_that("Testing the built-in plotting function", {
 })
 
 
+test_that("Testing the runDebug functions", {
+    expect_equal( getOption("superb.feedback"), c("design","warnings","summary") )
 
+    expect_equal( runDebug("design","THIS IS A TEST OF runDebug",c(),list()), NULL)
 
+})

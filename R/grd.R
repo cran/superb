@@ -1,31 +1,34 @@
 ######################################################################################
-#' @title GRD
+#' @title Generate random data
 #'
-#' @description Generate Random Data (GRD) is a function that
-#' generates a data frame containing random data suitable for analyses.
+#' @md
+#'
+#' @description The function ``GRD()`` generates a data frame containing 
+#' random data suitable for analyses.
 #' The data can be from within-subject or between-group designs.
 #' Within-subject designs are in wide format. The function was originally
 #' presented in \insertCite{ch19;textual}{superb}.
 #'
 #' @param RenameDV provide a name for the dependent variable (default DV) 
-#' @param SubjectsPerGroup indicates the number of simulated scores per group (default 100 in each group) 
-#' @param BSFactors a string indicating the between-subject factor(s) with, between parenthesis, the number of levels or the list of level names. Multiple factors are separated with a colon ":"
-#' @param WSFactors a string indicating the within-subject factor(s) in the same format as the between-subject factors
+#' @param SubjectsPerGroup indicates the number of simulated scores per 
+#'      group (default 100 in each group) 
+#' @param BSFactors a string indicating the between-subject factor(s) 
+#'      with, between parenthesis, the number of levels or the list of 
+#'      level names. Multiple factors are separated with a colon ":" or 
+#'      enumerated in a vector of strings.
+#' @param WSFactors a string indicating the within-subject factor(s) in 
+#'      the same format as the between-subject factors
 #' @param Effects a list detailing the effects to apply to the data
-#' @param Population a list providing the population characteristics (default is a normal distribution with a mean of 0 and standard deviation of 1)
-#' @param Contaminant a list providing the contaminant characteristics and the proportion of contaminant (default 0)
-#' @param Debug a boolean to produced detailed debugging information (default FALSE); useful for the maintainer only really
-#' @param Summary a boolean printing a summary of the design (default FALSE)
+#' @param Population a list providing the population characteristics 
+#'      (default is a normal distribution with a mean of 0 and standard deviation of 1)
+#' @param Contaminant a list providing the contaminant characteristics 
+#'      and the proportion of contaminant (default 0)
 #'
 #'
 #' @return a data.frame with the simulated scores.
 #'
 #' @note Note that the \code{range} effect specification has been renamed
 #'    \code{extent} to avoid masking the base function \code{base::range}.
-#'
-#' @references
-#'   \insertAllCited{} 
-#' 
 #'
 #' @examples
 #'  # Simplest example using all the default arguments: 
@@ -38,8 +41,8 @@
 #'  hist(dta$score )
 #'
 #'  # Examples for a between-subject design and for a within-subject design: 
-#'  dtaBS <- GRD( BSFactors = '3')
-#'  dtaWS <- GRD( WSFactors = "Moment (2)")
+#'  dta <- GRD( BSFactors = '3')
+#'  dta <- GRD( WSFactors = "Moment (2)")
 #'
 #'  # A complex, 3 x 2 x (2) mixed design with a variable amount of participants in the 6 groups:
 #'  dta <- GRD(BSFactors = "difficulty(3) : gender (2)", 
@@ -58,37 +61,33 @@
 #'  hist(dta$IQ)
 #'
 #'  # This example adds an effect along the "Difficulty" factor with a slope of 15
-#'  dta <- GRD(BSFactors="Difficulty(5)", SubjectsPerGroup = 1000,
+#'  dta <- GRD(BSFactors="Difficulty(5)", SubjectsPerGroup = 100,
 #'      Population=list(mean=50,stddev=5), 
 #'      Effects = list("Difficulty" = slope(15) )  )
 #'  # show the mean performance as a function of difficulty:
-#'  superbPlot(dta, BSFactor = "Difficulty", variables="DV")
+#'  superbPlot(dta, BSFactors = "Difficulty", variables="DV")
 #' 
-#'  # an example in which the moments are correlated
+#'  # An example in which the moments are correlated
 #'  dta <- GRD( BSFactors = "Difficulty(2)",WSFactors = "Moment (2)", 
 #'     SubjectsPerGroup = 1000,
 #'      Effects = list("Difficulty" = slope(3), "Moment" = slope(1) ),
 #'      Population=list(mean=50,stddev=20,rho=0.85)
 #'  )
-#'  # the mean plot on the raw data
-#'  superbPlot(dta, BSFactor = "Difficulty", WSFactor = "Moment(2)", 
+#'  # the mean plot on the raw data...
+#'  superbPlot(dta, BSFactors = "Difficulty", WSFactors = "Moment(2)", 
 #'      variables=c("DV.1","DV.2"), plotStyle="line",
 #'      adjustments = list (purpose="difference") )
-#'  # the mean plot on the decorrelated data; 
-#'  # because of correlation, the error bars are markedly different
-#'  superbPlot(dta, BSFactor = "Difficulty", WSFactor = "Moment(2)", 
+#'  # ... and the mean plot on the decorrelated data; 
+#'  # because of high correlation, the error bars are markedly different
+#'  superbPlot(dta, BSFactors = "Difficulty", WSFactors = "Moment(2)", 
 #'      variables=c("DV.1","DV.2"), plotStyle="line",
 #'      adjustments = list (purpose="difference", decorrelation = "CM") )
 #'  
-#' 
-#' 
+#' @references
+#' \insertAllCited{} 
 #' 
 #' @importFrom Rdpack reprompt
 #' @export GRD
-#' @export extent
-#' @export slope
-#' @export custom
-#' @export Rexpression
 #' @import stats
 #' @import MASS
 #'
@@ -101,9 +100,7 @@ GRD <- function(
     WSFactors = "",
     Effects = list(),
     Population  = list(mean = 0, stddev = 1, rho = 0, scores="rnorm(1, mean = GM, sd = STDDEV)"),
-    Contaminant = list(mean = 0, stddev = 1, rho = 0, scores="rnorm(1, mean = CGM, sd = CSTDDEV)", proportion = 0),
-    Debug = FALSE, 
-    Summary = FALSE
+    Contaminant = list(mean = 0, stddev = 1, rho = 0, scores="rnorm(1, mean = CGM, sd = CSTDDEV)", proportion = 0)
 ){
     #####################################################
     # STEP 0: Load required library
@@ -119,44 +116,43 @@ GRD <- function(
     BSList <- list()
     WSList <- list()
     # determining between-group factors
-    if (!(BSFactors=="")) {
+    if (!(all(BSFactors==""))) {
         BSList <- grdUnpacker(BSFactors, ':', 'BS')
     }
     ngroups <- prod(unlist(lapply(BSList,length)))
-    runDebug(Debug, "processing BSFactors", 
+    runDebug("GRD:1.1", "GRD:1.1: Processing BSFactors", 
         c("BSList","ngroups"),list(BSList,ngroups))
 
     # determining repeated measures
-    if (!(WSFactors=="")) {
+    if (!(all(WSFactors==""))) {
         unpacked <- grdUnpacker(WSFactors, ':', 'WS')
         if (any(names(unpacked) %in% names(BSList))) 
             stop('Unique names across BSFactors and WSFactors list must be provided')
         WSList <- unpacked
     }
     nreplic <- prod(unlist(lapply(WSList,length)))
-    runDebug(Debug, "processing WSFactors", 
+    runDebug("GRD:1.2", "GRD:1.2: Processing WSFactors", 
         c("WSList","nreplic"),list(WSList,nreplic))
 
     # validating groups sizes
     if ((length(SubjectsPerGroup)!= 1)&&(length(SubjectsPerGroup)!=ngroups)) 
         stop('There is ',ngroups, " groups to be created but only ",length(SubjectsPerGroup), " have been defined")
-  
+
     # setting matrix size, Columns and Rows
-    BSnames <- names(BSList)
-    WSnames <- names(WSList)
-    facnames <- c(BSnames, WSnames)
-    cols <- 2 + length(facnames) # variable "id" et "DV" ajoutée
+    BSnames  <- names(BSList)
+    WSnames  <- names(WSList)
+    facnames <- c(BSnames, WSnames); cols <- 2+ length(facnames) # variable "id" et "DV" ajout?e
     subj <- if(length(SubjectsPerGroup)==1) {
         SubjectsPerGroup * ngroups
     } else {
         sum(SubjectsPerGroup) 
     }
     rows = subj * nreplic
-    runDebug(Debug, "processing matrix size", 
+    runDebug("GRD:1.3", "GRD:1.3: Processing matrix size", 
         c("BSnames","WSnames","facnames","cols","rows","subj"   ),
         list(BSnames,WSnames,facnames,cols,rows,subj))
 
-    if (Summary) {
+    if ('summary' %in% getOption("superb.feedback") ) {
         grdShowDesign(BSList, WSList, ngroups, nreplic, subj, SubjectsPerGroup)
     }
 
@@ -192,6 +188,10 @@ GRD <- function(
             data[,1+length(BSList)+i] = unlist(lapply(design[,i],rep,times=subj))
         }
     }
+
+    runDebug("GRD:2", "GRD:2: Processing base matrix", 
+        c("dataMatrix"),
+        list(data))
 
   
     #####################################################
@@ -252,6 +252,19 @@ GRD <- function(
             CDIST   <- "mvrnorm(1, mu = CGM, Sigma = CSIGMA)" }
     }
 
+    runDebug("GRD:3", "GRD:3: Processing population", 
+        c("GM","STDDEV","RHO","DIST","CGM","CSTDDEV","CRHO","CDIST","PROP"),
+        list(GM,STDDEV,RHO,DIST,CGM,CSTDDEV,CRHO,CDIST,PROP))
+    if ((RHO != 0)||(CRHO != 0)) {
+        runDebug("GRD.rho", "GRD.rho: Processing multivariate population", 
+            c("SIGMA","CSIGMA"),
+            list(SIGMA,CSIGMA))
+    }
+
+
+    #####################################################
+    # STEP 4: Getting effect definitions
+    #####################################################
 
     # generating a function F0 (population) and C0 (contaminant) from this
     neffects=0
@@ -261,30 +274,20 @@ GRD <- function(
     fctstrb <- paste("C0 <- function(", allfactors, ") { ", CDIST, " }", sep = "" )
     eval(parse(text=fctstrb))
 
-    runDebug(Debug, "processing population", 
-        c("GM","STDDEV","RHO","DIST","fctstra","CGM","CSTDDEV","CRHO","CDIST","PROP","fctstrb"),
-        list(GM,STDDEV,RHO,DIST,fctstra,CGM,CSTDDEV,CRHO,CDIST,PROP,fctstrb))
-    if ((RHO != 0)||(CRHO != 0)) {
-        runDebug(Debug, "processing multivariate population", 
-            c("SIGMA","CSIGMA"),
-            list(SIGMA,CSIGMA))
-    }
-
-
-    #####################################################
-    # STEP 4: Getting effect definitions
-    #####################################################
-    # make functions that mapped to the data returns the effect  
+    # make functions that when mapped to the data returns the effect  
     if (length(Effects) > 0 ) { 
         for (i in 1:length(Effects)) {
             neffects = neffects + 1
             # make effect and run it.
             fctstr = grdMakeEffect(neffects, names(Effects)[i], Effects[[i]], 
-                c(BSList, WSList), data, allfactors, Debug
+                c(BSList, WSList), data, allfactors
             )
             eval(parse(text=fctstr))
         }
     }
+    runDebug("GRD:4", "GRD:4: Processing the effects", 
+        c("fctstrF","fctstrC"),
+        list(fctstra,fctstrb))
   
   
     ############################################
@@ -292,10 +295,10 @@ GRD <- function(
     ############################################
     # runs F0 effect
     if (multivariate) {
-        temp1    <- function(args) { do.call(what="F0",args=as.list(args),quote=FALSE)}
+        temp1    <- function(args) { do.call(what="F0", args=as.list(args), quote=FALSE)}
         deltaDV  <- as.vector( t(apply(data[1:subj,], 1, temp1)) ) 
     } else {
-        temp1    <- function(args) { do.call(what="F0",args=as.list(args),quote=FALSE)}
+        temp1    <- function(args) { do.call(what="F0", args=as.list(args), quote=FALSE)}
         deltaDV  <- apply(data, 1, temp1)    
     }
     data$DV <- data$DV + deltaDV
@@ -348,9 +351,8 @@ GRD <- function(
 
 
 
-
 ######################################################################################
-#' @title effect description
+#' @title Effect description
 #'
 #' @aliases slope extent custom Rexpression
 #'
@@ -363,31 +365,40 @@ GRD <- function(
 #' "factor = Rexpression("R code")" will apply R code to all levels of 
 #' the factors. R code result alters the base mean.
 #'
-#' @param s the size of the effect or a R code string
+#' @usage slope(s)
+#' @usage extent(s)
+#' @usage custom(...)
+#' @usage Rexpression(str)
 #'
+#' @param s the size of the effect 
+#' @param ... a sequence with the sizes of the effects
+#' @param str R code string
 #'
 #' @return These internal functions are not meant to be used in 
 #' isolation in any meaningful way...
 #'
+#' @export slope
+#' @export extent
+#' @export custom
+#' @export Rexpression
 #'
 
-
 ##################################################################   
-# Aesthetic private functions
+# Aesthetic functions
 ##################################################################   
 
 # These provide nicer inputs to grd
 slope       <- function(s)   { c(-97, s)   }
 extent      <- function(s)   { c(-98, s)   }
 custom      <- function(...) { c(-99,...)  }
-Rexpression <- function(s)   { c("-96", paste(c(s),collapse="") ) }
+Rexpression <- function(str)   { c("-96", paste(c(str),collapse="") ) }
 
 
 ##################################################################   
 # Subsidiary private functions: grdMakeEffect; grdL2W; grdDepacker; grdUnpacker;
 ##################################################################   
 
-grdMakeEffect <- function (fnumber, name, details, WBSList, data, allfactors, Debug) {
+grdMakeEffect <- function (fnumber, name, details, WBSList, data, allfactors ) {
 
     if (details[1] == "-96") {
         # this is an R expression
@@ -425,7 +436,7 @@ grdMakeEffect <- function (fnumber, name, details, WBSList, data, allfactors, De
                  "switch( ",swit,subs,") }", sep = "" )
     }
     
-    runDebug(Debug, paste("Effect functions",fnumber), 
+    runDebug("GRD.Effect", paste("GRD.Effect: Processing effect declaration ", fnumber), 
         c("eff","pfaclevel","fctstr"),
         list(eff,pfaclevel,fctstr))
 
@@ -435,7 +446,7 @@ grdMakeEffect <- function (fnumber, name, details, WBSList, data, allfactors, De
 
 grdL2W <- function (data, within, dv = "DV") {
     # the function grdL2W taken from Navarro, "lsr" library longToWide.
-    # The original function is a bit different so I made a few minor changes
+    # The original function is a bit different so I made minor changes.
     idvar <- setdiff(names(data), c(within, dv))
     if (length(within) > 1) {
         collapsed.treatments <- apply(as.matrix(data[, within]), 
@@ -502,8 +513,12 @@ grdUnpacker = function(string, sep_across, defaultfactorname) {
             # Identify levels
             lvls <- gsub(".*\\((.*)\\).*", "\\1", varnlvls)
             lvls <- unlist(strsplit(lvls,","))
-              
-            #If it is a single number, assume it is the number of levels, not its name
+                
+            # If the two levels are numeric, e.g., (1,4) convert to numeric
+            if ((length(lvls) == 2) & all(suppressWarnings(!is.na(as.numeric(lvls)))))
+                lvls <- as.numeric(lvls[1]):as.numeric(lvls[2])
+
+            # If it is a single number, assume it is the number of levels, not the level name
             if (length(lvls) == 1 && suppressWarnings(!is.na(as.numeric(lvls))))  {
                 lvls <- 1:lvls
             }

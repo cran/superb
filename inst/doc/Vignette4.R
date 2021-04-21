@@ -4,6 +4,9 @@ library(superb)
 library(ggplot2)
 
 ## ---- message=FALSE, echo=TRUE, fig.cap="Figure 1: Various statistics and various measures of precisions"----
+# shut down 'warnings', 'design' and 'summary' messages
+options(superb.feedback = 'none') 
+
 # Generate a random dataset from a (3 x 2) design, entirely within subject.
 # The sample size is very small (n=5) and the correlation between scores is high (rho = .8)
 dta <- GRD( 
@@ -14,23 +17,22 @@ dta <- GRD(
 )
 
 # a quick function to call superbPlot
-makeplot <- function(statfct, errorbarfct, g, ttl) {
+makeplot <- function(statfct, errorbarfct, gam, rg, subttl) {
     superbPlot(dta, 
-        WSFactor  = c("Moment(3)","Dose(2)"), 
+        WSFactors  = c("Moment(3)","Dose(2)"), 
         variables = c("DV.1.1","DV.2.1","DV.3.1","DV.1.2","DV.2.2","DV.3.2"), 
         statistic = statfct, 
         errorbar  = errorbarfct, 
-        gamma     = g, 
+        gamma     = gam, 
         plotStyle = "line",
-        adjustments = list(purpose="difference", decorrelation="CM"),
-        Quiet     = TRUE # to supress design confirmation; unneeded 
-    )
-} + labs(title = ttl)
+        adjustments = list(purpose="difference", decorrelation="CM")
+    ) + ylab(subttl) + coord_cartesian( ylim = rg )
+} 
 
-p1 <- makeplot("mean",      "CI", .95, "Mean +- 95% confidence intervals of the mean")
-p2 <- makeplot("mean",      "SE", .00, "Mean +- standard error of the mean")
-p3 <- makeplot("median",    "CI", .95, "Median +- 95% confidence interval of the mean")
-p4 <- makeplot("fisherskew","CI", .95, "Fisher skew +- 95% confidence interval")
+p1 <- makeplot("mean",      "CI", .95, c(6,14), "Mean +- 95% CI of the mean")
+p2 <- makeplot("mean",      "SE", .00, c(6,14), "Mean +- SE of the mean")
+p3 <- makeplot("median",    "CI", .95, c(6,14), "Median +- 95% CI of the median")
+p4 <- makeplot("fisherskew","CI", .95, c(-2,+2), "Fisher skew +- 95% CI")
 
 library(gridExtra)
 p <- grid.arrange(p1,p2,p3,p4, ncol=2)
@@ -58,9 +60,9 @@ superb:::is.gamma.required("SE.mean")
     # or check that it is a valid statistic function
     superb:::is.stat.function("d1")
 
-## ---- message=FALSE, echo=TRUE, fig.cap="Figure 2: superbPlot with a custom-made descriptive sttistic function "----
+## ---- message=FALSE, echo=TRUE, fig.cap="Figure 2: ``superbPlot`` with a custom-made descriptive statistic function "----
     superbPlot(dataFigure1, 
-        BSFactor = "grp", 
+        BSFactors = "grp", 
         statistic = "d1", errorbar = "none",
         plotStyle="line",
         adjustments = list(purpose = "difference"),
@@ -84,11 +86,11 @@ superb:::is.gamma.required("SE.mean")
     CI.d1(grp1)  
 
     # or check that it is a valid interval function
-    superb:::is.interval.function("CI.d1")
+    superb:::is.errorbar.function("CI.d1")
 
 ## ---- message=FALSE, echo=TRUE, fig.cap="Figure 3: superbPlot with a custom-made descriptive sttistic function "----
     superbPlot(dataFigure1, 
-        BSFactor = "grp", 
+        BSFactors = "grp", 
         statistic = "d1", errorbar = "CI",
         plotStyle="line",
         adjustments = list(purpose = "single"),
@@ -112,8 +114,8 @@ superb:::is.gamma.required("SE.mean")
     lecoutre2007(dp, length(grp1) )
 
 ## -----------------------------------------------------------------------------
-    # we define a bootstrapCI which subsample the whole sample, here called X
-    bootstrapCI.mean <- function(X, gamma = 0.95) {
+    # we define myBootstrapCI which subsample the whole sample, here called X
+    myBootstrapCI.mean <- function(X, gamma = 0.95) {
       res = c()
       for (i in 1:10000) {
         res[i] <- mean(sample(X, length(X), replace = T))
@@ -122,14 +124,14 @@ superb:::is.gamma.required("SE.mean")
     }
 
     # we check that it is a valid interval function
-    superb:::is.interval.function("bootstrapCI.mean")
+    superb:::is.errorbar.function("myBootstrapCI.mean")
 
-## ---- message=FALSE, echo=TRUE, fig.cap="Figure 4: superbPlot with a custom-made descriptive sttistic function "----
+## ---- message=FALSE, echo=TRUE, fig.cap="Figure 4: superbPlot with a custom-made interval function."----
     plt1 <- superbPlot(dataFigure1, 
-        BSFactor = "grp", 
+        BSFactors = "grp", 
         variable = c("score"), 
         plotStyle="line",
-        statistic = "mean", errorbar = "bootstrapCI",
+        statistic = "mean", errorbar = "myBootstrapCI",
         adjustments = list(purpose = "difference")
     ) + 
     xlab("Group") + ylab("Score") + 
@@ -139,7 +141,7 @@ superb:::is.gamma.required("SE.mean")
     scale_x_discrete(labels=c("1" = "Collaborative games", "2" = "Unstructured activity"))
 
     plt2 <- superbPlot(dataFigure1, 
-        BSFactor = "grp", 
+        BSFactors = "grp", 
         variable = c("score"), 
         plotStyle="line",
         statistic = "mean", errorbar = "CI",

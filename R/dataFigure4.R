@@ -8,6 +8,8 @@
 #'
 #' @docType data
 #'
+#' @md
+#'
 #' @usage data(dataFigure4)
 #'
 #' @format An object of class data.frame.
@@ -15,7 +17,7 @@
 #' @keywords datasets
 #'
 #' @references 
-#'          \insertAllCited{}
+#' \insertAllCited{}
 #'
 #' @source \doi{10.5709/acp-0214-z}
 #'
@@ -24,15 +26,17 @@
 #' library(gridExtra)
 #' data(dataFigure4)
 #' 
+#' options(superb.feedback = 'none') # shut down 'warnings' and 'design' interpretation messages
+#' 
 #' ## realize the plot with unadjusted (left) and ajusted (right) 95% confidence intervals
-#' plt4a = superbPlot(dataFigure4, BSFactor = "group", 
-#'     adjustments=list(purpose = "single", popSize = Inf), Quiet = TRUE,
+#' plt4a = superbPlot(dataFigure4, BSFactors = "group", 
+#'     adjustments=list(purpose = "single", popSize = Inf), 
 #'     variables = c("score"), plotStyle="bar" ) + 
 #'   xlab("Group") + ylab("Score") + labs(title="Difference-adjusted 95% CI\n") +
 #'   coord_cartesian( ylim = c(85,115) ) +
 #'   geom_hline(yintercept = 100, colour = "black", size = 0.5, linetype=2)
-#' plt4b = superbPlot(dataFigure4, BSFactor = "group",
-#'     adjustments=list(purpose = "single", popSize = 50 ), Quiet = TRUE,
+#' plt4b = superbPlot(dataFigure4, BSFactors = "group",
+#'     adjustments=list(purpose = "single", popSize = 50 ), 
 #'     variables = c("score"), plotStyle="bar" ) + 
 #'   xlab("Group") + ylab("Score") + labs(title="Population size and difference-\nadjusted 95% CI") +
 #'   coord_cartesian( ylim = c(85,115) ) + 

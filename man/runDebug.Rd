@@ -4,10 +4,10 @@
 \alias{runDebug}
 \title{runDebug}
 \usage{
-runDebug(state, title, vars, vals)
+runDebug(where, title, vars, vals)
 }
 \arguments{
-\item{state}{boolean (TRUE to activate runDebug)}
+\item{where}{indicates where in the program runDebug was called}
 
 \item{title}{string text to be displayed when this function is triggered}
 
@@ -20,6 +20,6 @@ puts in the globalenvironment the variables named "vars"
 }
 \description{
 runDebug is an internal function used by GRD and superbPlot
-     to help in debugging the functions. It assigns in the global environment
-     the variables that are local to a function so that they become visible.
+to help in debugging the functions. It assigns in the global environment
+the variables that are local to a function so that they become visible.
 }

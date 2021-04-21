@@ -15,7 +15,7 @@ data(dataFigure4)
 }
 \description{
 The data, inspired from \insertCite{c17}{superb}, shows an example where the
-"stand-alone" 95% confidence interval of the means returns
+"stand-alone" 95\% confidence interval of the means returns
 a result in contradiction with the result of a statistical test.
 The paradoxical result is resolved by using adjusted confidence intervals,
 here the population size-adjusted confidence interval.
@@ -25,15 +25,17 @@ library(ggplot2)
 library(gridExtra)
 data(dataFigure4)
 
+options(superb.feedback = 'none') # shut down 'warnings' and 'design' interpretation messages
+
 ## realize the plot with unadjusted (left) and ajusted (right) 95\% confidence intervals
-plt4a = superbPlot(dataFigure4, BSFactor = "group", 
-    adjustments=list(purpose = "single", popSize = Inf), Quiet = TRUE,
+plt4a = superbPlot(dataFigure4, BSFactors = "group", 
+    adjustments=list(purpose = "single", popSize = Inf), 
     variables = c("score"), plotStyle="bar" ) + 
   xlab("Group") + ylab("Score") + labs(title="Difference-adjusted 95\% CI\n") +
   coord_cartesian( ylim = c(85,115) ) +
   geom_hline(yintercept = 100, colour = "black", size = 0.5, linetype=2)
-plt4b = superbPlot(dataFigure4, BSFactor = "group",
-    adjustments=list(purpose = "single", popSize = 50 ), Quiet = TRUE,
+plt4b = superbPlot(dataFigure4, BSFactors = "group",
+    adjustments=list(purpose = "single", popSize = 50 ), 
     variables = c("score"), plotStyle="bar" ) + 
   xlab("Group") + ylab("Score") + labs(title="Population size and difference-\nadjusted 95\% CI") +
   coord_cartesian( ylim = c(85,115) ) + 

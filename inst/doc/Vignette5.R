@@ -1,18 +1,79 @@
 ## ---- echo = FALSE, message = FALSE, results = 'hide'-------------------------
-cat("this will be hidden; use for general initializations.")
+cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
+options(superb.feedback = 'none')
 
 ## -----------------------------------------------------------------------------
 superb:::is.superbPlot.function("superbPlot.line")
 
 ## -----------------------------------------------------------------------------
+testdata <- GRD(
+    RenameDV   = "score", 
+    SubjectsPerGroup = 25, 
+    BSFactors  = "Difficulty(3)", 
+    WSFactors  = "Day(day1, day2)",
+    Population = list(mean = 65,stddev = 12,rho = 0.5),
+    Effects    = list("Day" = slope(-5), "Difficulty" = slope(3) )
+)
+head(testdata)
+
+## -----------------------------------------------------------------------------
+mp <- function(data, style, ...) {
+    superbPlot(data,
+        WSFactors = "Day(2)",
+        BSFactors = "Difficulty",
+        variables = c("score.day1", "score.day2"),
+        adjustments = list(purpose="difference", decorrelation="CM"),
+        plotStyle = style,
+        ...
+    )+labs(title = paste("Layout is ''",style,"''",sep=""))
+}
+
+## ---- fig.width= 7, fig.height = 7, fig.cap = "Figure 1a: Look of the six built-in layouts on the same random dataset"----
+p1 <- mp(testdata, "bar")
+p2 <- mp(testdata, "point")
+p3 <- mp(testdata, "line")
+p4 <- mp(testdata, "pointjitter" )
+p5 <- mp(testdata, "pointjitterviolin")
+p6 <- mp(testdata, "pointindividualline")
+
+library(gridExtra)
+grid.arrange(p1,p2,p3,p4,p5,p6,ncol=2)
+
+## ---- fig.width =7, fig.height = 7, fig.cap = "Figure 1b: The seventh layout, the raincloud"----
+mp(testdata, "raincloud") + coord_flip()
+
+## ---- fig.width= 7, fig.height = 7, fig.cap = "Figure 2: The six built-in template with ornamental styling added."----
+ornate = list( 
+    scale_colour_manual( name = "Difference", 
+        labels = c("Easy", "Hard", "Unthinkable"), 
+        values = c("blue", "black", "purple")) ,
+    scale_fill_manual( name = "Difference", 
+        labels = c("Easy", "Hard", "Unthinkable"), 
+        values = c("blue", "black", "purple")) ,
+    scale_shape_manual( name = "Difference", 
+        labels = c("Easy", "Hard", "Unthinkable") ,
+        values = c(0, 10, 13)) ,
+    theme_bw(base_size = 9) ,
+    labs(x = "Days of test", y = "Score in points" ),
+    scale_x_discrete(labels=c("1" = "Former day", "2" = "Latter day"))
+)
+library(gridExtra)
+grid.arrange(
+    p1+ornate, p2+ornate, p3+ornate,
+    p4+ornate, p5+ornate, p6+ornate,
+    ncol=2)
+
+## ---- fig.width= 7, fig.height = 7, fig.cap = "Figure 2b: The raincloud with ornamental styling added."----
+mp(testdata, "raincloud") + coord_flip() + ornate
+
+## -----------------------------------------------------------------------------
 superbPlot.foo <- function(
     summarydata,
-    xvar,       
-    groupingfac,
+    xfactor,       
+    groupingfactor,
     addfactors, 
-    Debug, 
     rawdata        
     # any optional argument you wish
 ) {
@@ -20,37 +81,36 @@ superbPlot.foo <- function(
     return(plot)
 }
 
-## ---- message=FALSE, echo=FALSE, fig.cap="Figure 1: Mean score with 95% confidence interval using the ``simple`` plot layout."----
-superbPlot.simple <- function(
-    summarydata, xvar, groupingfac, addfactors, Debug, rawdata 
-) {
+## ---- message=FALSE, echo=FALSE, fig.cap="Figure 3: Mean score with 95% confidence interval using the ``simple`` plot layout."----
+superbPlot.simple <- function( summarydata, xfactor, groupingfactor, addfactors, rawdata ) {
     plot <- ggplot(
-        data = summarydata, 
-        mapping = aes_string( x = xvar, y = "center")
+        data = summarydata,
+        mapping = aes_string( x = xfactor, y = "center", group= groupingfactor)
     ) +
     geom_point( ) +
-    geom_errorbar( mapping = aes_string(ymin = "center + lowerwidth", ymax = "center + upperwidth")  )+ 
+    geom_errorbar( mapping = aes_string(ymin = "center + lowerwidth", ymax = "center + upperwidth")  )+
     facet_grid( addfactors )
-        
+       
     return(plot)
 }
 superbPlot(TMB1964r,
-     WSFactor = "T(7)",      
-     BSFactor = "Condition",
-     variables = c("T1","T2","T3","T4","T5","T6","T7"),
-     plotStyle = "simple", Quiet = TRUE, Debug=FALSE
+    WSFactors = "T(7)",
+    BSFactors = "Condition",
+    variables = c("T1","T2","T3","T4","T5","T6","T7"),
+    plotStyle = "simple"
 )
 
 ## -----------------------------------------------------------------------------
 superbPlot.simple <- function(
-    summarydata, xvar, groupingfac, addfactors, Debug, rawdata 
+    summarydata, xfactor, groupingfactor, addfactors, rawdata 
 ) {
     plot <- ggplot(
         data = summarydata, 
-        mapping = aes_string( x = xvar, y = "center")
+        mapping = aes_string( x = xfactor, y = "center", group=groupingfactor)
     ) +
-    geom_point( ) +
-    geom_errorbar( mapping = aes_string(ymin = "center + lowerwidth", ymax = "center + upperwidth")  )+ 
+    geom_point(  ) +
+    geom_errorbar( mapping = aes_string(ymin = "center + lowerwidth", 
+                                        ymax = "center + upperwidth")  )+ 
     facet_grid( addfactors )
         
     return(plot)
@@ -61,13 +121,13 @@ superb:::is.superbPlot.function("superbPlot.simple")
 
 ## ---- message=FALSE, echo=TRUE, results='hide', fig.show='hide'---------------
 superbPlot(TMB1964r,
-     WSFactor = "T(7)",      
-     BSFactor = "Condition",
+     WSFactors = "T(7)",      
+     BSFactors = "Condition",
      variables = c("T1","T2","T3","T4","T5","T6","T7"),
-     plotStyle = "simple", Quiet = TRUE
+     plotStyle = "simple"
 )
 
-## ---- eval = FALSE, message=FALSE, echo=FALSE, error=FALSE, results='hide'----
+## ---- eval = FALSE, message=FALSE, echo=TRUE, error=FALSE, results='hide'-----
 #      do.call( geom_point, modifyList(
 #         list( size= 3 ##etc., the default directives##
 #         ), myownParams
@@ -75,58 +135,64 @@ superbPlot(TMB1964r,
 
 ## -----------------------------------------------------------------------------
 superbPlot.simpleWithOptions <- function(
-    summarydata, xvar, groupingfac, addfactors, Debug, rawdata,
+    summarydata, xfactor, groupingfactor, addfactors, rawdata,
     myownParams = list()  ## add the optional arguments to the function
 ) {
     plot <- ggplot(
         data = summarydata, 
-        mapping = aes_string( x = xvar, y = "center")
+        mapping = aes_string( x = xfactor, y = "center", group="Condition")
     ) +
     do.call( geom_point, modifyList(
        list( color ="black" ),
         myownParams
     )) + 
-    geom_errorbar( mapping = aes_string(ymin = "center + lowerwidth", ymax = "center + upperwidth")  )+ 
+    do.call( geom_errorbar, modifyList(
+        list( mapping = aes_string(ymin = "center + lowerwidth", 
+                                   ymax = "center + upperwidth")  ),
+        myownParams 
+    )) + 
     facet_grid( addfactors )
         
     return(plot)
 }
 superb:::is.superbPlot.function("superbPlot.simpleWithOptions")
 
-## ---- message=FALSE, echo=TRUE, results='hide', fig.show='show', fig.cap="Figure 2: A simple figure with optional arguments"----
+## ---- message=FALSE, echo=TRUE, results='hide', fig.show='show', fig.cap="Figure 4: A simple figure with optional arguments"----
 superbPlot(TMB1964r,
-    WSFactor = "T(7)",      
-    BSFactor = "Condition",
+    WSFactors = "T(7)",      
+    BSFactors = "Condition",
     variables = c("T1","T2","T3","T4","T5","T6","T7"),
-    plotStyle = "simpleWithOptions", Quiet = TRUE,
-    myownParams = list(size=12, color="red") ## here goes the optional arguments
+    plotStyle = "simpleWithOptions", 
+    myownParams = list(size=1, color="purple", position = position_dodge(width = 0.3) ) ## here goes the optional arguments
 )
 
 ## ---- eval=FALSE, message=FALSE, echo=TRUE, results='hide'--------------------
-#  runDebug( Debug, "Text to show",
+#  options(superb.feedback = 'all')
+#  runDebug( 'where are we?', "Text to show when we get there",
 #    c("variable1", "variable2", "etc"),
-#    list( var1InTheFct, var2InTheFct, varetcInTheFct)
+#    list( "var1InTheFct", "var2InTheFct", "varetcInTheFct")
 #  )
 
 ## ---- message=FALSE, echo=TRUE, results='hide', fig.show='hide'---------------
 superbPlot.empty <- function(
-    summarydata, xvar, groupingfac, addfactors, Debug, rawdata 
+    summarydata, xfactor, groupingfactor, addfactors, rawdata 
 ) {
-    runDebug( Debug, "Getting the dataframes",
+    runDebug( 'inempty', "Dumping the two dataframes",
         c("summary","raw"), list(summarydata, rawdata))
 
     plot <- ggplot() # an empty plot        
     return(plot)
 }
+options(superb.feedback = 'inempty')  ## turn on feedback when reaching 'inempty'
 superbPlot(TMB1964r,
-     WSFactor = "T(7)",      
-     BSFactor = "Condition",
+     WSFactors = "T(7)",      
+     BSFactors = "Condition",
      variables = c("T1","T2","T3","T4","T5","T6","T7"),
-     plotStyle = "empty", Quiet = TRUE, Debug = TRUE ## turn on Debug
+     plotStyle = "empty" 
 )
 
 ## ---- message=FALSE, echo=TRUE, results='hide', fig.show='hide'---------------
-superbPlot.simple(summary, "T", "Condition", ".~.", FALSE, raw)
+superbPlot.simple(summary, "T", "Condition", ".~.", raw)
 
 ## -----------------------------------------------------------------------------
 # install.packages("emojifont")
@@ -134,16 +200,16 @@ library(emojifont)
 
 ## -----------------------------------------------------------------------------
 superbPlot.smiley <- function(
-    summarydata, xvar, groupingfac, addfactors, Debug, rawdata 
+    summarydata, xfactor, groupingfactor, addfactors, rawdata 
 ) {
     # the early part bears on summary data with variable "center"
     plot <- ggplot(
         data = summarydata, 
         mapping = aes_string(
-            x = xvar, y = "center", 
-            fill = groupingfac, 
-            shape = groupingfac, 
-            colour = groupingfac)
+            x = xfactor, y = "center", 
+            fill = groupingfactor, 
+            shape = groupingfactor, 
+            colour = groupingfactor)
     ) +
     geom_point(position = position_dodge(width = .95)) +
     geom_errorbar( width = .6, position = position_dodge(.95), 
@@ -152,8 +218,8 @@ superbPlot.smiley <- function(
     # this part bears on the rawdata only with variable "DV"
     geom_text(data = rawdata, 
               position = position_jitter(0.5),
-              family="EmojiOne", label=emoji("smile"), size=3, 
-              mapping=aes_string(x=xvar, y="DV", group = groupingfac)
+              family="EmojiOne", label=emoji("smile"), size=6, 
+              mapping=aes_string(x=xfactor, y="DV", group = groupingfactor)
     ) +
     facet_grid( addfactors )
         
@@ -163,11 +229,11 @@ superbPlot.smiley <- function(
 ## -----------------------------------------------------------------------------
 superb:::is.superbPlot.function("superbPlot.smiley")
 
-## -----------------------------------------------------------------------------
+## ---- fig.width= 7, fig.height = 6, fig.cap = "Figure 5: smile!"--------------
 superbPlot(TMB1964r,
-     WSFactor = "T(7)",      
-     BSFactor = "Condition", 
+     WSFactors = "T(7)",      
+     BSFactors = "Condition", 
      variables = c("T1","T2","T3","T4","T5","T6","T7"),
-     plotStyle = "smiley", Quiet = TRUE
+     plotStyle = "smiley"
 )
 

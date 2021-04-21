@@ -12,10 +12,11 @@ Computes standard error and confidence interval of various descriptive statistic
     can be used. See Cousineau (2017) <doi:10.5709/acp-0214-z> for a review or Cousineau (2005)
     <doi:10.20982/tqmp.01.1.p042>, Morey (2008) <doi:10.20982/tqmp.04.2.p061>, Baguley (2012)
     <doi:10.3758/s13428-011-0123-7>, Cousineau & Laurencelle (2016) <doi:10.1037/met0000055>,
-    Cousineau & O'Brien (2014) <doi:10.3758/s13428-013-0441-z>.
+    Cousineau & O'Brien (2014) <doi:10.3758/s13428-013-0441-z>, Calderini & Harding 
+    <doi:10.20982/tqmp.15.1.p001>.
 }
 \details{
-\code{suberb} is a library to perform descriptive statistics plots
+`suberb` is a library to perform descriptive statistics plots
 based on the superb framework. In a nutshell, the framework 
 assert that confidence intervals must be devised according to 
 all the relevant information that can be used to assess precision.
@@ -71,7 +72,8 @@ and example datasets described in the paper:  \itemize{
 Other contributors:
 \itemize{
   \item Bradley Harding \email{bradley.harding@umoncton.ca} [contributor]
-  \item Marc-André Goulet \email{magoulet101@gmail.com} [contributor]
+  \item Marc-Andre Goulet \email{magoulet101@gmail.com} [contributor]
+  \item Jesika Walker \email{jwalk050@uottawa.ca} [artist]
 }
 
 }

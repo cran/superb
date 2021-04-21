@@ -11,14 +11,13 @@ An object of class data.frame.
 data(TMB1964r)
 }
 \description{
-The data comes from \insertCite{b21;textual}{superb}. It is a near exact replication of the original
-study from \insertCite{tmb64}{superb}.
-}
-\details{
+The data comes from \insertCite{b21;textual}{superb}. It is a near exact
+replication of the original study from \insertCite{tmb64}{superb}.
+
 The design is a (7) x 4 with:  7 levels of stimulus duration (within-subject) and
 4 between-subject conditions.
 Additional variables included in the reproduction is the primary language of the participant
-in which he/she participated (mainly francophones and anglophones; 
+in which he/she participated (mainly francophones and anglophones;
 and the gender (mainly male and female).
 }
 \examples{
@@ -26,23 +25,25 @@ library(ggplot2)
 
 data(TMB1964r)
 
+options(superb.feedback = 'none') # shut down 'warnings' and 'design' interpretation messages
+
 # general plot ignoring covariates sex and languages with only defaults
 # We illustrate correlation- and difference-adjusted 95\% confidence intervals of the mean
 superbPlot(TMB1964r,
-    WSFactor = "T(7)",      # the within-subject factor (spanning 7 columns)
-    BSFactor = "Condition", # the between-subject factor (4 levels)
+    WSFactors = "T(7)",      # the within-subject factor (spanning 7 columns)
+    BSFactors = "Condition", # the between-subject factor (4 levels)
     variables = c("T1","T2","T3","T4","T5","T6","T7"),
     adjustments = list(purpose="difference", decorrelation="CM"),
-    plotStyle = "line", Quiet = TRUE
+    plotStyle = "line"
 )
 
 # We add directives for the error bars (thick), for the points (larger) and for the lines (thick)
 plt <- superbPlot(TMB1964r,
-    WSFactor = "T(7)",
-    BSFactor = "Condition",
+    WSFactors = "T(7)",
+    BSFactors = "Condition",
     variables = c("T1","T2","T3","T4","T5","T6","T7"),
     adjustments = list(purpose="difference", decorrelation="CM"),
-    plotStyle = "line", Quiet = TRUE,
+    plotStyle = "line", 
     errorbarParams = list(width = 0.5, size=1.25, position = position_dodge(.5) ),
     pointParams = list(size=2.5, position = position_dodge(.5)),
     lineParams = list(size=1.25)
@@ -67,11 +68,11 @@ scale_x_discrete(labels=c("1" = "16.67", "2" = "33.33",
 
 # Exploring three factors simultaneously: T, Condition and Sex (last two between-group)
 superbPlot(TMB1964r,
-    WSFactor = "T(7)",
-    BSFactor = c("Condition","Sex"),
+    WSFactors = "T(7)",
+    BSFactors = c("Condition","Sex"),
     variables = c("T1","T2","T3","T4","T5","T6","T7"),
     adjustments = list(purpose="difference", decorrelation="CM"),
-    plotStyle = "line", Quiet=TRUE,
+    plotStyle = "line", 
     errorbarParams = list(size=0.05, position = position_dodge(.5) ),
     pointParams = list(size=2.5, position = position_dodge(.5)),
     lineParams = list(size=0.25)
@@ -96,10 +97,10 @@ mee3 <- TMB1964r[(TMB1964r$Language != "I prefer not to answer")&TMB1964r$Langua
 
 # advanced plots are available, such as pointjitter ...
 superbPlot(mee3,
-    WSFactor = "T(7)",
-    BSFactor = c("Condition","Language"),
+    WSFactors = "T(7)",
+    BSFactors = c("Condition","Language"),
     variables = c("T1","T2","T3","T4","T5","T6","T7"),
-    adjustments = list(purpose="difference", decorrelation="CM"), Quiet = TRUE,
+    adjustments = list(purpose="difference", decorrelation="CM"), 
     plotStyle = "pointjitter",
     jitterParams = list(alpha = 0.25) #near transparent jitter points
 ) + 
@@ -121,10 +122,10 @@ scale_x_discrete(labels=c("1" = "16.67", "2" = "33.33",
 # ... and pointjitterviolin : a plot that superimposes the distribution as a violin plot
 # 
 superbPlot(mee3,
-    WSFactor = "T(7)",
-    BSFactor = c("Condition","Language"),
+    WSFactors = "T(7)",
+    BSFactors = c("Condition","Language"),
     variables = c("T1","T2","T3","T4","T5","T6","T7"),
-    adjustments = list(purpose="difference", decorrelation="CM"), Quiet = TRUE,
+    adjustments = list(purpose="difference", decorrelation="CM"), 
     plotStyle = "pointjitterviolin",
     jitterParams = list(alpha = 0.4), #near transparent jitter points
     violinParams = list(alpha = 0.2)

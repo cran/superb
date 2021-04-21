@@ -5,7 +5,7 @@ library(ggplot2)
 
 ## ---- message=FALSE, echo=FALSE, fig.cap="Figure 1: Mean scores along with 95% confidence interval for two groups of students on the quality of learning behavior."----
 superbPlot(dataFigure1, 
-        BSFactor = "grp", 
+        BSFactors = "grp", 
         variables = "score", 
         plotStyle="line" ) + 
     xlab("Group") + ylab("Score") + 
@@ -15,21 +15,19 @@ superbPlot(dataFigure1,
     scale_x_discrete(labels=c("1" = "Collaborative games", "2" = "Unstructured activity"))
 
 ## ---- message=FALSE, warning=FALSE, echo=TRUE---------------------------------
-library(schoRsch)
-
-t_out(t.test(dataFigure1$score[dataFigure1$grp==1], 
+t.test(dataFigure1$score[dataFigure1$grp==1], 
         dataFigure1$score[dataFigure1$grp==2],
-        var.equal=T))
+        var.equal=T)
 
 ## ---- message=FALSE, echo=TRUE------------------------------------------------
-t_out(t.test(dataFigure1$score[dataFigure1$grp==1], mu=100))
+t.test(dataFigure1$score[dataFigure1$grp==1], mu=100)
 
 ## ---- message=FALSE, echo=TRUE------------------------------------------------
-t_out(t.test(dataFigure1$score[dataFigure1$grp==2], mu=105))
+t.test(dataFigure1$score[dataFigure1$grp==2], mu=105)
 
 ## ---- message=FALSE, echo=TRUE, fig.cap="Figure 2: Mean scores along with difference-adjusted 95% confidence interval for two groups of students on the quality of learning behavior."----
 superbPlot(dataFigure1, 
-        BSFactor = "grp", 
+        BSFactors = "grp", 
         adjustments=list(purpose = "difference"),  # the only new thing here
         variables = "score", 
         plotStyle="line" ) + 
@@ -42,7 +40,7 @@ superbPlot(dataFigure1,
 ## ---- message=FALSE, echo=TRUE, fig.cap="Figure 3: Two representation of the data with unadjusted (left) and adjusted (right) 95% confidence intervals"----
 library(gridExtra)
 plt1 <- superbPlot(dataFigure1, 
-        BSFactor = "grp", 
+        BSFactors = "grp", 
         variables = "score", 
         plotStyle="line" ) + 
     xlab("Group") + ylab("Score") + 
@@ -52,7 +50,7 @@ plt1 <- superbPlot(dataFigure1,
     scale_x_discrete(labels=c("1" = "Collaborative games", "2" = "Unstructured activity")) 
 
 plt2 <- superbPlot(dataFigure1, 
-        BSFactor = "grp", 
+        BSFactors = "grp", 
         adjustments=list(purpose = "difference"), 
         variables = "score", 
         plotStyle="line" ) + 
@@ -67,7 +65,7 @@ plt <- grid.arrange(plt1, plt2, ncol=2)
 ## ---- message=FALSE, echo=TRUE, fig.cap="Figure 4: Two representations of the results with adjusted and unadjusted error bars on the same plot"----
 # generate the two plots, nudging the error bars, using distinct colors, and having the background transparent
 plt1 <- superbPlot(dataFigure1, 
-        BSFactor = "grp", 
+        BSFactors = "grp", 
         variables = "score", 
         errorbarParams = list(color="blue",position = position_nudge(-0.05) ),
         plotStyle="line" ) + 
@@ -80,7 +78,7 @@ plt1 <- superbPlot(dataFigure1,
          plot.background = element_rect(fill = "transparent", color = "white"))
 
 plt2 <- superbPlot(dataFigure1, 
-        BSFactor = "grp", 
+        BSFactors = "grp", 
         adjustments=list(purpose = "difference"), 
         variables = "score", 
         errorbarParams = list(color="red",position = position_nudge(0.05) ),

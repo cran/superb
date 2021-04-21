@@ -1,5 +1,6 @@
 #' @details
-#' \code{suberb} is a library to perform descriptive statistics plots
+#'
+#' `suberb` is a library to perform descriptive statistics plots
 #' based on the superb framework. In a nutshell, the framework 
 #' assert that confidence intervals must be devised according to 
 #' all the relevant information that can be used to assess precision.
@@ -33,7 +34,7 @@
 #' \insertCite{ch19}{superb}.
 #' 
 #' @references
-#'      \insertAllCited{}
+#' \insertAllCited{}
 #' 
 #' The package includes additional, helper, functions: \itemize{
 #'      \item{\code{ShroutFleissICC1}} to compute intra-class correlation;
@@ -52,5 +53,22 @@
 #' @keywords internal
 "_PACKAGE"
 #> [1] "_PACKAGE"
+
+.onLoad <- function(libname, pkgname) {    
+    # Set the default feedback traces displayed to all:
+    #   summary:  in GRD, shows a summary of the design;
+    #   design:   in superbPlot, shows information on how the within-subject variables are understood
+    #   warnings: in superbPlot, returns 'FYI' messages about the data to help decide if the appropriate error bars were used
+    # You can use 'all' to see all the feedback informations.
+    options( superb.feedback = c('design','warnings','summary') )
+    # Set the default bootstrap number of iterations to 5000; this is a minimum, avoid reducing it.
+    options( superb.bootstrapIter = 5000)
+}
+
+.onDetach <- function(libpath) {
+    # remove the options
+    options( superb.feedback = NULL )
+    options( superb.bootstrapIter = NULL )
+}
 
 

@@ -20,10 +20,10 @@ ICC the intra-class measure of association.
 }
 \description{
 The functions ShroutFleissICC1, ShroutFleissICC11
-  and ShroutFleissICC1k computes the intra-class correlation ICC
-  for a given data frame containing repeated measures in columns cols
-  when the measures are in distinct clusters, identified in column clustercol.
-  See \insertCite{sf79}{superb}.
+and ShroutFleissICC1k computes the intra-class correlation ICC
+for a given data frame containing repeated measures in columns cols
+when the measures are in distinct clusters, identified in column clustercol.
+See \insertCite{sf79}{superb}.
 }
 \examples{
 # creates a small data frames with 4 subject's scores for 5 measures:
@@ -49,8 +49,9 @@ ShroutFleissICC1(dta2, 1, 2:4)
 ShroutFleissICC1k(dta2[, 1], dta2[,2:4])
 # 0.7543859649 
   
-
 }
 \references{
+\insertAllCited{}
+
 \insertAllCited{}
 }

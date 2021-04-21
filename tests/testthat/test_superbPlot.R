@@ -1,7 +1,8 @@
-context("Testing suberb")
+context("Testing suberbPlot")
 
 
 test_that("PRELIMINARY TESTS (1/4)", {
+    options(superb.feedback = 'none')
     library(grid)
     library(gridExtra)
 
@@ -9,13 +10,16 @@ test_that("PRELIMINARY TESTS (1/4)", {
     # write.table(ToothGrowth, file = "file0.dat", sep = "\t", col.names = FALSE)
 
     plt <- superbPlot(ToothGrowth, BSFactor = c("dose","supp"), variables = "len",
-      statistic = "mean", Debug=F, plotStyle="bar" )
+      statistic = "mean", plotStyle="bar" )
 
     expect_equal( "ggplot" %in% class(plt), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
 test_that("PRELIMINARY TESTS (2/4)", {
+    options(superb.feedback = 'none')
     library(grid)
     g0 <- superbPlot(ToothGrowth, BSFactor = c("dose","supp"), variables = "len",
       statistic = "mean", 
@@ -26,20 +30,28 @@ test_that("PRELIMINARY TESTS (2/4)", {
     g2 <- g1 + theme(axis.text.x = element_text(size=30, colour="red") ) + coord_cartesian(ylim=c(5,45))
 
     expect_equal( "ggplot" %in% class(g2), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 test_that("PRELIMINARY TESTS (3/4)", {
+    options(superb.feedback = 'none')
     res <- superbPlot(ToothGrowth, BSFactor = c("dose","supp"), 
       variables = "len", showPlot=FALSE )
 
     expect_output( str(res), "data.frame")
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 test_that("PRELIMINARY TESTS (4/4)", {
+    options(superb.feedback = 'none')
     p <- superbPlot(ToothGrowth, BSFactor = c("dose","supp"), variables = "len",
       statistic = "mean", plotStyle="line" )
 
     expect_equal( "ggplot" %in% class(p), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
@@ -49,40 +61,50 @@ test_that("PRELIMINARY TESTS (4/4)", {
 # SYSTEMATIC TESTS OF THE STATISTICS
 #########################################
 
-test_that("test 1a: 3 groupes inpépendants", { 
+test_that("test 1a: 3 groupes inpependants", { 
+    options(superb.feedback = c('none'))
     dta1a <- GRD( BSFactors = "Group(3)", Population = list( mean=10, stddev = 5) )
     # write.table(dta1a, file = "test1a.dat", sep = "\t", col.names = FALSE)
     p <- superbPlot(dta1a, BSFactor = "Group", variables = "DV",
-      statistic = "mean", errorbar = "SE", plotStyle="line", Debug=F )
+      statistic = "mean", errorbar = "SE", plotStyle="line")
 
     expect_equal( "ggplot" %in% class(p), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
-test_that("test 1b: factorielle à grps indépendants; 3 x 2", {
+test_that("test 1b: factorielle a grps independants; 3 x 2", {
+    options(superb.feedback = c('none'))
     dta1b <- GRD( BSFactors = "Group(3): Sex(2)", Population = list( mean=10, stddev = 5))
     # write.table(dta1b, file = "test1b.dat", sep = "\t", col.names = FALSE)
     p <- superbPlot(dta1b, BSFactor = c("Group","Sex"), variables = "DV",
       statistic = "mean", errorbar = "SE" )
 
     expect_equal( "ggplot" %in% class(p), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
-test_that("test 2a: 1 facteur à 3 mesures répétées; (3)", {
+test_that("test 2a: 1 facteur a 3 mesures repetees; (3)", {
+    options(superb.feedback = c('warnings'))
     dta2a <- GRD( WSFactors = "Moment(3)", SubjectsPerGroup = 5, Population = list( mean=10, stddev = 5))
     # write.table(dta2a, file = "test2a.dat", sep = "\t", col.names = FALSE)
-    expect_warning( p <- superbPlot(dta2a, WSFactor = "moment(3)", 
+    expect_message( p <- superbPlot(dta2a, WSFactor = "moment(3)", 
       adjustments=list(decorrelation="CA"),
       errorbar = "CI", plotStyle="line",
       variables = c("DV.1","DV.2","DV.3") 
     ))
 
     expect_equal( "ggplot" %in% class(p), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
-test_that("test 2b: 2 facteurs à mesures répétées; (3 x 2)", {
+test_that("test 2b: 2 facteurs a mesures repetees; (3 x 2)", {
+    options(superb.feedback = "none") # to supress design confirmation; unneeded in tests
     dta2b <- GRD( WSFactors = "Moment(3): Dose(2)", SubjectsPerGroup = 5, Population = list( mean=10, stddev = 5, rho = .80))
     # write.table(dta2b, file = "test2b.dat", sep = "\t", col.names = FALSE)
     p <- superbPlot(dta2b, WSFactor = c("moment(3)","Dose(2)"), 
@@ -91,30 +113,34 @@ test_that("test 2b: 2 facteurs à mesures répétées; (3 x 2)", {
       adjustments = list(purpose="difference", decorrelation="CM"),
       errorbarParams = list(position = position_dodge(width = .15)),
       pointParams = list(position = position_dodge(width = .15)),
-      Quiet=T # to supress design confirmation; unneeded in tests
     )
 
     expect_equal( "ggplot" %in% class(p), TRUE)
+    options(superb.feedback = c("design","warnings") ) # restores to default
 })
 
 
-test_that("test 3: schème mixte; 3 x (3)", {
+test_that("test 3: scheme mixte; 3 x (3)", {
+    options(superb.feedback = c('warnings'))
     dta3 <- GRD( BSFactors = "Group(3)", WSFactors = "Moment(3)", 
       SubjectsPerGroup = 5, Population = list( mean=10, stddev = 5),
       Effects = list("Moment" = slope(5))
     )
     # write.table(dta3, file = "test3.dat", sep = "\t", col.names = FALSE)
-    expect_warning( p <- superbPlot(dta3, WSFactor = "Moment(3)", BSFactor = "Group", 
+    expect_message( p <- superbPlot(dta3, WSFactor = "Moment(3)", BSFactor = "Group", 
         variables = c("DV.1","DV.2","DV.3"), 
         statistic = "mean", errorbar = "SE", plotStyle="line",
         adjustments = list(purpose="single", decorrelation="CM")
     ))
 
     expect_equal( "ggplot" %in% class(p), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
-test_that("test 4a: schème à trois facteurs, 2 étant between  3 x 3 x (3)", {
+test_that("test 4a: scheme a trois facteurs, 2 etant between  3 x 3 x (3)", {
+    options(superb.feedback = c('design','warnings'))
     dta4a <- GRD( BSFactors = "Group(3) : Dose(3)", WSFactors = "Moment(3)", 
       SubjectsPerGroup = 4, Population = list( mean=10, stddev = 5),
       Effects = list("Moment" = slope(5))
@@ -127,23 +153,27 @@ test_that("test 4a: schème à trois facteurs, 2 étant between  3 x 3 x (3)", {
       factorOrder = c("Dose","Group","Moment"), showPlot = T)
 
     expect_equal( "ggplot" %in% class(p), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
     
   
-test_that("test 5a: schème à quatre facteurs; 5 x 4 (3 x 2)", {
+test_that("test 5a: scheme a quatre facteurs; 5 x 4 (3 x 2)", {
+    options(superb.feedback = "none") # to supress design confirmation; unneeded in tests
     dta5a <- GRD( BSFactors = "Group(5) : Dose(4)", WSFactors = "Moment(3):Hand(2)", 
-      Debug=FALSE, Summary=FALSE, Population = list( mean=10, stddev = 5, rho = .90),
-      Effects = list("Moment" = slope(5), "Hand" = slope(10)) )
+        Population = list( mean=10, stddev = 5, rho = .90),
+        Effects = list("Moment" = slope(5), "Hand" = slope(10)) )
     # write.table(dta5a, file = "test5a.dat", sep = "\t", col.names = FALSE)
     p <- superbPlot(dta5a, plotStyle="line",
         WSFactor = c("Moment(3)","Hand(2)"), 
         BSFactor= c("Group","Dose"),
         variables = c("DV.1.1","DV.2.1","DV.3.1","DV.1.2","DV.2.2","DV.3.2"), 
         statistic = "mean", errorbar = "CI", gamma = .9999,
-        adjustments = list(purpose="difference", decorrelation="CM"), Debug=F, Quiet=T
+        adjustments = list(purpose="difference", decorrelation="CM")
     )
 
     expect_equal( "ggplot" %in% class(p), TRUE)
+    options(superb.feedback = c("design","warnings") ) # restores to default
 })
 
 
@@ -152,16 +182,20 @@ test_that("test 5a: schème à quatre facteurs; 5 x 4 (3 x 2)", {
 #########################################
 
 test_that("test 6: Some data", {
+    options(superb.feedback = c('none'))
     dta6 <- GRD( WSFactors = "Moment(3):Hand(2)",
         Effects = list("Moment" = slope(5), "Hand" = slope(3)),
         SubjectsPerGroup = 6,
         Population = list (mean = 20, stddev = 5, rho = 0.8) )
 
     expect_output( str(dta6), "data.frame")
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
 test_that("test 6a: factorOrder", {
+    options(superb.feedback = "none") # to supress design confirmation; unneeded in tests
     library(gridExtra)
     dta6 <- GRD( WSFactors = "Moment(3):Hand(2)",
         Effects = list("Moment" = slope(5), "Hand" = slope(3)),
@@ -169,21 +203,24 @@ test_that("test 6a: factorOrder", {
         Population = list (mean = 20, stddev = 5, rho = 0.8) )
     # factorOrder
     p1 <- superbPlot(dta6, 
-        WSFactor = c("Moment(3)","Hand(2)"), Quiet=T, 
+        WSFactor = c("Moment(3)","Hand(2)"),  
         variables = c("DV.1.1","DV.2.1","DV.3.1","DV.1.2","DV.2.2","DV.3.2"), 
         statistic = "mean", errorbar = "SE", factorOrder = c("Moment", "Hand") )
     p2 <- superbPlot(dta6, 
-        WSFactor = c("Moment(3)","Hand(2)"), Quiet=T, 
+        WSFactor = c("Moment(3)","Hand(2)"),  
         variables = c("DV.1.1","DV.2.1","DV.3.1","DV.1.2","DV.2.2","DV.3.2"), 
         statistic = "mean", errorbar = "SE", factorOrder = c("Hand","Moment") )
     p <- grid.arrange(p1,p2,ncol=2)
 
     expect_equal( "ggplot" %in% class(p1), TRUE)
     expect_equal( "ggplot" %in% class(p2), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
 test_that("test 6b: adjustments CA vs CM vs LM", {
+    options(superb.feedback = "none") # to supress design confirmation; unneeded in tests
     library(gridExtra)
     dta6 <- GRD( WSFactors = "Moment(3):Hand(2)", 
         Effects = list("Moment" = slope(5), "Hand" = slope(3)),
@@ -191,17 +228,17 @@ test_that("test 6b: adjustments CA vs CM vs LM", {
         Population = list (mean = 20, stddev = 5, rho = 0.8) )
     # adjustments CA vs CM vs LM
     p1 <- superbPlot(dta6, 
-        WSFactor = c("Moment(3)","Hand(2)"), Quiet=T, 
+        WSFactor = c("Moment(3)","Hand(2)"),  
         variables = c("DV.1.1","DV.2.1","DV.3.1","DV.1.2","DV.2.2","DV.3.2"), 
         adjustments = list(purpose="difference", decorrelation="CA") )+
       coord_cartesian( ylim = c(8,30) ) + labs(title="CA") 
     p2 <- superbPlot(dta6, 
-        WSFactor = c("Moment(3)","Hand(2)"), Quiet=T, 
+        WSFactor = c("Moment(3)","Hand(2)"),  
         variables = c("DV.1.1","DV.2.1","DV.3.1","DV.1.2","DV.2.2","DV.3.2"), 
         adjustments = list(purpose="difference", decorrelation="CM") )+
       coord_cartesian( ylim = c(8,30) ) + labs(title="CM") 
     p3 <- superbPlot(dta6, 
-        WSFactor = c("Moment(3)","Hand(2)"), Quiet=T, 
+        WSFactor = c("Moment(3)","Hand(2)"),  
         variables = c("DV.1.1","DV.2.1","DV.3.1","DV.1.2","DV.2.2","DV.3.2"), 
         adjustments = list(purpose="difference", decorrelation="LM") )+
       coord_cartesian( ylim = c(8,30) ) + labs(title="LM") 
@@ -210,27 +247,30 @@ test_that("test 6b: adjustments CA vs CM vs LM", {
     expect_equal( "ggplot" %in% class(p1), TRUE)
     expect_equal( "ggplot" %in% class(p2), TRUE)
     expect_equal( "ggplot" %in% class(p3), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
 test_that("test 6c: statistics of central tendency mean, median and gmean", {
+    options(superb.feedback = "none") # to supress design confirmation; unneeded in tests
     library(gridExtra)
     dta6 <- GRD( WSFactors = "Moment(3):Hand(2)",  
         Effects = list("Moment" = slope(5), "Hand" = slope(3)),
         SubjectsPerGroup = 6,
         Population = list (mean = 20, stddev = 5, rho = 0.8) )
     p1 <- superbPlot(dta6, 
-        WSFactor = c("Moment(3)","Hand(2)"), Quiet=T, 
+        WSFactor = c("Moment(3)","Hand(2)"),  
         variables = c("DV.1.1","DV.2.1","DV.3.1","DV.1.2","DV.2.2","DV.3.2"), 
         statistic = "mean", errorbar = "CI"  ) +
       coord_cartesian( ylim = c(8,30) ) + labs(title="mean") 
     p2 <- superbPlot(dta6, 
-        WSFactor = c("Moment(3)","Hand(2)"), Quiet=T, 
+        WSFactor = c("Moment(3)","Hand(2)"),  
         variables = c("DV.1.1","DV.2.1","DV.3.1","DV.1.2","DV.2.2","DV.3.2"), 
         statistic = "median", errorbar = "CI"  ) +
       coord_cartesian( ylim = c(8,30) ) + labs(title="median") 
     p3 <- superbPlot(dta6, 
-        WSFactor = c("Moment(3)","Hand(2)"), Quiet=T, 
+        WSFactor = c("Moment(3)","Hand(2)"),  
         variables = c("DV.1.1","DV.2.1","DV.3.1","DV.1.2","DV.2.2","DV.3.2"), 
         statistic = "gmean", errorbar = "CI"  ) +
       coord_cartesian( ylim = c(8,30) ) + labs(title="geometric mean")
@@ -239,10 +279,13 @@ test_that("test 6c: statistics of central tendency mean, median and gmean", {
     expect_equal( "ggplot" %in% class(p1), TRUE)
     expect_equal( "ggplot" %in% class(p2), TRUE)
     expect_equal( "ggplot" %in% class(p3), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
 test_that("test 6d: statistics of dispersion sd and MAD", {
+    options(superb.feedback = "none") # to supress design confirmation; unneeded in tests
     library(gridExtra)
     dta6 <- GRD( WSFactors = "Moment(3):Hand(2)",  
         Effects = list("Moment" = slope(5), "Hand" = slope(3)),
@@ -251,22 +294,25 @@ test_that("test 6d: statistics of dispersion sd and MAD", {
     # fisherkurtosis is less stable; MAD should be about 2.5;
     # gmean requires only positive data;
     p1 <- superbPlot(dta6, 
-        WSFactor = c("Moment(3)","Hand(2)"), Quiet=T, 
+        WSFactor = c("Moment(3)","Hand(2)"),  
         variables = c("DV.1.1","DV.2.1","DV.3.1","DV.1.2","DV.2.2","DV.3.2"), 
         statistic = "sd", errorbar = "CI"  )
     p2 <- superbPlot(dta6, 
-        WSFactor = c("Moment(3)","Hand(2)"), Quiet=T, 
+        WSFactor = c("Moment(3)","Hand(2)"),  
         variables = c("DV.1.1","DV.2.1","DV.3.1","DV.1.2","DV.2.2","DV.3.2"), 
         statistic = "MAD", errorbar = "CI"  )
     p <- grid.arrange(p1,p2,ncol=2)
 
     expect_equal( "ggplot" %in% class(p1), TRUE)
     expect_equal( "ggplot" %in% class(p2), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
 
 test_that("test 6e: adding ggplot options", {
+    options(superb.feedback = 'none')
     # ggplot options
     p1 <- superbPlot(ToothGrowth, BSFactor = c("dose","supp"), variables = "len",
       statistic = "mean", errorbar = "CI", gamma = .999,
@@ -277,10 +323,13 @@ test_that("test 6e: adding ggplot options", {
       theme_light(base_size=14 )
 
     expect_equal( "ggplot" %in% class(p2), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
       
 test_that("test 6f: adding ggplot options to the error bars, to the points", {
+    options(superb.feedback = 'none')
     p <- superbPlot(ToothGrowth, BSFactor = c("dose","supp"), variables = "len",
       statistic = "mean", errorbar = "CI", gamma = .999,
       adjustments = list(purpose = "difference"),
@@ -291,10 +340,13 @@ test_that("test 6f: adding ggplot options to the error bars, to the points", {
     )
 
     expect_equal( "ggplot" %in% class(p), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
 test_that("test 6g: adding ggplot options to the error bars, to the points (bis)", {
+    options(superb.feedback = 'none')
     p <- superbPlot(ToothGrowth, BSFactor = c("dose","supp"), variables = "len",
       statistic = "mean", errorbar = "CI", gamma = .999,
       adjustments = list(purpose = "difference"),
@@ -306,6 +358,8 @@ test_that("test 6g: adding ggplot options to the error bars, to the points (bis)
     )
 
     expect_equal( "ggplot" %in% class(p), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
@@ -314,6 +368,7 @@ test_that("test 6g: adding ggplot options to the error bars, to the points (bis)
 #########################################
 
 test_that("Explorations for ICC", {
+    options(superb.feedback = c('warnings'))
     library(gridExtra)
     dta99 <- GRD( WSFactors = "Moment(3)", SubjectsPerGroup = 15, 
         Population = list( mean=20, stddev = 5),
@@ -327,12 +382,12 @@ test_that("Explorations for ICC", {
 
     # write.table(dta99, file = 'file9.dat', sep = "\t", col.names = FALSE)
 
-    expect_warning( noncluster <- superbPlot(dta99, WSFactor = "moment(3)", 
+    expect_message( noncluster <- superbPlot(dta99, WSFactor = "moment(3)", 
       adjustments = list(decorrelation="CM"),
       errorbar = "CI", showPlot=T,
       variables = c("DV.1","DV.2","DV.3") 
     )+ labs(title="Without cluster information") + coord_cartesian( ylim = c(40,60) ) )
-    expect_warning( yescluster <- superbPlot(dta99, WSFactor = "moment(3)", 
+    expect_message( yescluster <- superbPlot(dta99, WSFactor = "moment(3)", 
       adjustments = list(decorrelation="CM", samplingDesign = "CRS"),
       clusterColumn = "myclus",
       errorbar = "CI", showPlot=T,
@@ -342,6 +397,8 @@ test_that("Explorations for ICC", {
 
     expect_equal( "ggplot" %in% class(noncluster), TRUE)
     expect_equal( "ggplot" %in% class(yescluster), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
@@ -351,26 +408,29 @@ test_that("Explorations for ICC", {
 ########################################################
 
 test_that("Verifying CA and popSize ", {
+    options(superb.feedback = c('warnings'))
     library(gridExtra)
     dta3 <- GRD( BSFactors = "Group(2)", WSFactors = "Moment(3)", 
       SubjectsPerGroup = 5, Population = list (mean = 20, stddev = 5, rho = 0.8),
       Effects = list("Moment" = slope(5)) )
     # write.table(dta3, file = "file3.dat", sep = "\t", col.names = FALSE)
 
-    expect_warning( p1 <- superbPlot(dta3, WSFactor = "Moment(3)", BSFactor = "Group", 
+    expect_message( p1 <- superbPlot(dta3, WSFactor = "Moment(3)", BSFactor = "Group", 
         variables = c("DV.1","DV.2","DV.3"), 
         statistic = "mean", errorbar = "SE",
-        adjustments = list(purpose="single", decorrelation="CM", popSize = Inf ),
-        Debug = F ) + labs(title="Infinite populations") )
-    expect_warning( p2 <- superbPlot(dta3, WSFactor = "Moment(3)", BSFactor = "Group", 
+        adjustments = list(purpose="single", decorrelation="CM", popSize = Inf )
+      ) + labs(title="Infinite populations") )
+    expect_message( p2 <- superbPlot(dta3, WSFactor = "Moment(3)", BSFactor = "Group", 
         variables = c("DV.1","DV.2","DV.3"), 
         statistic = "mean", errorbar = "SE",
-        adjustments = list(purpose="single", decorrelation="CM", popSize = c(Inf,6) ),
-        Debug = F ) + labs(title="population of 6 in grp 2") )
+        adjustments = list(purpose="single", decorrelation="CM", popSize = c(Inf,6) )
+      ) + labs(title="population of 6 in grp 2") )
     p <- grid.arrange(p1,p2,ncol=2)
 
     expect_equal( "ggplot" %in% class(p1), TRUE)
     expect_equal( "ggplot" %in% class(p2), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
 
 
@@ -379,6 +439,7 @@ test_that("Verifying CA and popSize ", {
 #########################################
 
 test_that("Testing pre and post processing", {
+    options(superb.feedback = c('warnings'))
     library(ggplot2)
     library(gridExtra)
     dta9 <- GRD( WSFactors = "Moment(3)", SubjectsPerGroup = 5, 
@@ -386,7 +447,7 @@ test_that("Testing pre and post processing", {
         Effects = list("Moment" = slope(3) ) )
     # write.table(dta9, file = "file9.dat", sep = "\t", col.names = FALSE)
 
-    expect_warning( 
+    expect_message( 
         truecm <- superbPlot(dta9, WSFactor = "moment(3)",
           adjustments=list(decorrelation="CM"),
           errorbar = "CI", showPlot=T,
@@ -395,14 +456,14 @@ test_that("Testing pre and post processing", {
     )
     altcm <- superbPlot(dta9, WSFactor = "moment(3)", 
       adjustments=list(decorrelation="none"),
-      preprocessfct = "subject_centering_transform",
-      postprocessfct = c("bias_correction_transform"),
+      preprocessfct = "subjectCenteringTransform",
+      postprocessfct = c("biasCorrectionTransform"),
       errorbar = "CI", showPlot=T,
       variables = c("DV.1","DV.2","DV.3") 
     )+ labs(title="with pre and post processing")
     pcm <- grid.arrange(truecm,altcm,ncol=2)
 
-    expect_warning( 
+    expect_message( 
         truelm <- superbPlot(dta9, WSFactor = "moment(3)", 
           adjustments=list(decorrelation="LM"),
           errorbar = "CI", showPlot=T,
@@ -411,23 +472,23 @@ test_that("Testing pre and post processing", {
     )
     altlm <- superbPlot(dta9, WSFactor = "moment(3)", 
       adjustments=list(decorrelation="none"),
-      preprocessfct = "subject_centering_transform",
-      postprocessfct = c("bias_correction_transform","pool_sd_transform"),
+      preprocessfct = "subjectCenteringTransform",
+      postprocessfct = c("biasCorrectionTransform","poolSDTransform"),
       errorbar = "CI", showPlot=T,
       variables = c("DV.1","DV.2","DV.3") 
     )+ labs(title="with pre and post processing")
     plm <- grid.arrange(truelm,altlm,ncol=2)
 
-    expect_warning( 
+    expect_message( 
         truecmvslm <- superbPlot(dta9, WSFactor = "moment(3)", 
           adjustments=list(decorrelation="LM"),
           errorbar = "CI", showPlot=T,
           variables = c("DV.1","DV.2","DV.3") 
         )+ labs(title="with decorrelation = LM") 
     )
-    expect_warning( altcmvslm <- superbPlot(dta9, WSFactor = "moment(3)", 
+    expect_message( altcmvslm <- superbPlot(dta9, WSFactor = "moment(3)", 
         adjustments=list(decorrelation="CM"),
-        postprocessfct = c("pool_sd_transform"),
+        postprocessfct = c("poolSDTransform"),
         errorbar = "CI", showPlot=T,
         variables = c("DV.1","DV.2","DV.3") 
         )+ labs(title="with decorrelation = CM and pooling") 
@@ -440,7 +501,159 @@ test_that("Testing pre and post processing", {
     expect_equal( "ggplot" %in% class(altlm), TRUE)
     expect_equal( "ggplot" %in% class(truecmvslm), TRUE)
     expect_equal( "ggplot" %in% class(altcmvslm), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
 })
+
+
+#########################################
+# testing multiple formats!
+#########################################
+
+test_that("Many tests with TMB1964r", {
+    options(superb.feedback = c('none'))
+    library(ggplot2)
+    mee = TMB1964r[TMB1964r$Language == "English"|TMB1964r$Language == "French",]
+
+    mp <- function(style, ...) {
+        superbPlot(mee,
+            WSFactor = "T(7)",
+            BSFactor = c("Condition","Sex"),
+            variables = c("T1","T2","T3","T4","T5","T6","T7"),
+            adjustments = list(purpose="difference", decorrelation="CM"),
+            plotStyle = style,
+            ...
+        ) 
+    }
+    ###### BASIC PLOTS ######
+    plt1 <- mp("bar",
+        errorbarParams = list(size=0.75, position = position_dodge(.95) ),
+        barParams = list(size=0.5)
+    ) + 
+    scale_colour_manual( name = "asdf", 
+        labels = c("Context 0", "Context 2", "Context 4", "Context 8"), 
+        values = c("blue", "black", "purple", "red")) +
+    scale_fill_manual( name = "asdf", 
+        labels = c("Context 0", "Context 2", "Context 4", "Context 8"), 
+        values = c("blue", "black", "purple", "red")) +
+    theme_bw(base_size = 16) +
+    labs(x = "Exposure duration (ms)", y = "Mean of correct responses" )+ 
+    scale_x_discrete(labels=c("1" = "16.67", "2" = "33.33",
+        "3"="50.00", "4" = "66.67", "5"="83.33", "6"="100.00", "7"="116.67"))
+
+    plt2 <- mp("line",
+        errorbarParams = list(size=0.75, width = 0.2, position = position_dodge(.5) ),
+        pointParams = list(size=2.5, position = position_dodge(.5)),
+        lineParams = list(size=0.25)
+    )
+
+    plt3 <- mp("point",
+        errorbarParams = list(position = position_dodge(.5) ),
+        pointParams = list(size=2.5, position = position_dodge(.5))
+    )
+
+    ###### ADVANCED PLOTS ######
+    plt4 <- mp("pointjitter",
+        errorbarParams = list(position = position_dodge(.5) ),
+        pointParams = list(size=3.5, position = position_dodge(.5)),
+        jitterParams = list(size = 0.5)
+    )
+
+    plt5 <- mp("pointjitterviolin",
+        errorbarParams = list(position = position_dodge(.5) ),
+        pointParams = list(size=3.5, position = position_dodge(.5)),
+        jitterParams = list(size = 0.5),
+        violinParams = list(alpha =0.7)
+    )
+
+    expect_equal( "ggplot" %in% class(plt1), TRUE)
+    expect_equal( "ggplot" %in% class(plt2), TRUE)
+    expect_equal( "ggplot" %in% class(plt3), TRUE)
+    expect_equal( "ggplot" %in% class(plt4), TRUE)
+    expect_equal( "ggplot" %in% class(plt5), TRUE)
+
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
+})
+
+
+test_that("Heterogeneous variances", {
+    options(superb.feedback = c('none'))
+    dta <- GRD(
+        BSFactors = "dif(3) : grp (2)", 
+        WSFactors="day(1,2)",
+        SubjectsPerGroup = 3,
+        Population=list(
+            mean = 100, 
+            scores = "rnorm(1, mean = GM, sd = 100 * (grp-1) +0.1)"
+        )
+    )
+    options(superb.feedback = c('warnings'))
+    expect_message( 
+        superbPlot(dta,
+            BSFactor = c("dif","grp"),
+            WSFactor = "day(2)",
+            variables = c("DV.1","DV.2"),
+            adjustment = list( purpose = "difference") )
+    )
+
+    plt <- superbPlot(dta,
+        BSFactor = c("dif","grp"),
+        WSFactor = "day(2)",
+        variables = c("DV.1","DV.2"),
+        adjustment = list( purpose = "tryon") )
+
+    expect_equal( "ggplot" %in% class(plt), TRUE )
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
+})
+
+
+test_that("Tryon vs. difference", {
+    options(superb.feedback = c('warnings'))
+    #lets have data with massively heterogeneous variances
+    dta <-GRD( BSFactors="grp(3)",
+        RenameDV = "score",
+        Population=list(
+            mean = 100, 
+            scores = "rnorm(1, mean = GM, sd = 10 * grp)"
+                        ),
+        SubjectsPerGroup = 25,
+        Effects = list("grp" = slope(15) ) 
+    )
+    # do the plot twice with transparant background
+    expect_message(plt1 <- superbPlot(dta, 
+        BSFactor = "grp", plotStyle="line",
+        variables = "score",  
+        errorbarParams = list(color="blue",position = position_nudge(-0.1) ),
+        adjustments = list( purpose = "difference") ) + 
+     labs(title="(blue) Difference-adjusted 95% confidence intervals\n(red) Tryon 95% confidence intervals") +
+     coord_cartesian( ylim = c(65,135) ) + 
+     theme(panel.background = element_rect(fill = "transparent"),
+           plot.background = element_rect(fill = "transparent", color = "white")) 
+    )
+    plt2 <- superbPlot(dta, 
+        BSFactor = c("grp"), plotStyle="line",
+        variables = "score",  
+        errorbarParams = list(color="red",position = position_nudge(+0.1) ),
+        adjustments = list( purpose = "tryon") ) +
+     labs(title="(blue) Difference-adjusted 95% confidence intervals\n(red) Tryon 95% confidence intervals") +
+     coord_cartesian( ylim = c(65,135) ) + 
+     theme(panel.background = element_rect(fill = "transparent"),
+           plot.background = element_rect(fill = "transparent", color = "white"))
+    # transform the plots in manipulable objets
+    plt1g <- ggplotGrob(plt1)
+    plt2g <- ggplotGrob(plt2)
+    # put the two grob onto an empty ggplot (as the positions are the same, they will be overlayed)
+    plt <- ggplot() + 
+        annotation_custom(grob=plt1g) + 
+        annotation_custom(grob=plt2g)
+    expect_equal( "ggplot" %in% class(plt), TRUE)
+    # restores default information
+    options(superb.feedback = c('design','warnings','summary'))
+})
+
+
 
 
 

@@ -1,15 +1,15 @@
-citHeader("To cite superb in publications use:")
+citHeader("To cite superb version 0.9.5.0 (codename '95% confident') in publications use:")
 
 citEntry(
   entry    = "Article",
   title    = "Summary statistics plotted with correct error bars: The superb framework and library for {R}",
-  author   = personList(as.person("Denis Cousineau"), as.person("Marc-André Goulet"), as.person("Bradley Harding")),
+  author   = personList(as.person("Denis Cousineau"), as.person("Marc-Andre Goulet"), as.person("Bradley Harding")),
   journal  = "Advances in Methods and Practices in Psychological Science",
   year     = "Submitted",
   volume   = "Submitted",
   number   = "Submitted",
   pages    = "1--46",
-  url      = "https://github.com/dcousin3/superb",
+  url      = "https://dcousin3.github.io/superb",
   textVersion = paste(
     "Cousineau, D., Goulet, M.A., & Harding. B (submitted) ",
     "Summary statistics plotted with correct error bars: The superb framework and library for {R}",
@@ -19,5 +19,5 @@ citEntry(
 
 citFooter(paste(
     "We have invested a lot of time and effort in creating superb.",
-    "Please cite it when using it for plots. Academic retribution is citation!")
+    "Please cite it when using it. Academic retribution is citation!")
 )

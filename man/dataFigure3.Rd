@@ -15,7 +15,7 @@ data(dataFigure3)
 }
 \description{
 The data, inspired from \insertCite{cl16}{superb}, is an example where the
-"stand-alone" 95% confidence interval of the means returns
+"stand-alone" 95\% confidence interval of the means returns
 a result in contradiction with the result of a statistical test.
 The paradoxical result is resolved by using adjusted confidence intervals,
 here the cluster- and different-adjusted confidence interval.
@@ -25,15 +25,17 @@ library(ggplot2)
 library(gridExtra)
 data(dataFigure3)
 
+options(superb.feedback = 'none') # shut down 'warnings' and 'design' interpretation messages
+
 ## realize the plot with unadjusted (left) and ajusted (right) 95\% confidence intervals
-plt3a <- superbPlot(dataFigure3, BSFactor = "grp", 
-    adjustments=list(purpose = "difference", samplingDesign = "SRS"), Quiet = TRUE,
+plt3a <- superbPlot(dataFigure3, BSFactors = "grp", 
+    adjustments=list(purpose = "difference", samplingDesign = "SRS"), 
     variables = c("VD"), plotStyle="bar" ) + 
   xlab("Group") + ylab("Score") + labs(title="Difference-adjusted 95\% CI\n") +
   coord_cartesian( ylim = c(85,115) ) +
   geom_hline(yintercept = 100, colour = "black", size = 0.5, linetype=2)
-plt3b <- superbPlot(dataFigure3, BSFactor = "grp", 
-    adjustments=list(purpose = "difference", samplingDesign = "CRS"), Quiet = TRUE,
+plt3b <- superbPlot(dataFigure3, BSFactors = "grp", 
+    adjustments=list(purpose = "difference", samplingDesign = "CRS"), 
     variables = c("VD"), plotStyle="bar", clusterColumn = "cluster" ) + 
   xlab("Group") + ylab("Score") + labs(title="Cluster and difference-adjusted\n95\% CI") +
   coord_cartesian( ylim = c(85,115) ) + 
@@ -45,9 +47,10 @@ res   <- t.test(dataFigure3$VD[dataFigure3$grp==1],
                dataFigure3$VD[dataFigure3$grp==2],
                var.equal=TRUE)
 micc  <- mean(c(0.491334683772226, 0.20385744842838)) # mean ICC given by superbPlot
-lam   <- lambda(c(micc, 5,5,5,5,5,5))
+lam   <- CousineauLaurencelleLambda(c(micc, 5,5,5,5,5,5))
 tcorr <- res$statistic / lam
-pcorr <- 1-pt(tcorr,4)#' 
+pcorr <- 1-pt(tcorr,4)
+
 
 }
 \references{
