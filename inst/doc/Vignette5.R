@@ -30,7 +30,7 @@ mp <- function(data, style, ...) {
     )+labs(title = paste("Layout is ''",style,"''",sep=""))
 }
 
-## ---- fig.width= 7, fig.height = 7, fig.cap = "Figure 1a: Look of the six built-in layouts on the same random dataset"----
+## ---- fig.width= 7, fig.height = 7, fig.cap = "**Figure 1a**. Look of the six built-in layouts on the same random dataset"----
 p1 <- mp(testdata, "bar")
 p2 <- mp(testdata, "point")
 p3 <- mp(testdata, "line")
@@ -41,10 +41,10 @@ p6 <- mp(testdata, "pointindividualline")
 library(gridExtra)
 grid.arrange(p1,p2,p3,p4,p5,p6,ncol=2)
 
-## ---- fig.width =7, fig.height = 7, fig.cap = "Figure 1b: The seventh layout, the raincloud"----
+## ---- fig.width =7, fig.height = 3.5, fig.cap = "**Figure 1b**. The seventh layout, the raincloud"----
 mp(testdata, "raincloud") + coord_flip()
 
-## ---- fig.width= 7, fig.height = 7, fig.cap = "Figure 2: The six built-in template with ornamental styling added."----
+## ---- fig.width= 7, fig.height = 7, fig.cap = "**Figure 2a**. The six built-in template with ornamental styling added."----
 ornate = list( 
     scale_colour_manual( name = "Difference", 
         labels = c("Easy", "Hard", "Unthinkable"), 
@@ -65,7 +65,7 @@ grid.arrange(
     p4+ornate, p5+ornate, p6+ornate,
     ncol=2)
 
-## ---- fig.width= 7, fig.height = 7, fig.cap = "Figure 2b: The raincloud with ornamental styling added."----
+## ---- fig.width= 7, fig.height = 3.5, fig.cap = "**Figure 2b**. The raincloud with ornamental styling added."----
 mp(testdata, "raincloud") + coord_flip() + ornate
 
 ## -----------------------------------------------------------------------------
@@ -81,7 +81,7 @@ superbPlot.foo <- function(
     return(plot)
 }
 
-## ---- message=FALSE, echo=FALSE, fig.cap="Figure 3: Mean score with 95% confidence interval using the ``simple`` plot layout."----
+## ---- message=FALSE, echo=FALSE, fig.cap="**Figure 3**. Mean score with 95% confidence interval using the ``simple`` plot layout."----
 superbPlot.simple <- function( summarydata, xfactor, groupingfactor, addfactors, rawdata ) {
     plot <- ggplot(
         data = summarydata,
@@ -102,7 +102,7 @@ superbPlot(TMB1964r,
 
 ## -----------------------------------------------------------------------------
 superbPlot.simple <- function(
-    summarydata, xfactor, groupingfactor, addfactors, rawdata 
+    summarydata, xfactor, groupingfactor, addfactors, rawdata
 ) {
     plot <- ggplot(
         data = summarydata, 
@@ -136,7 +136,7 @@ superbPlot(TMB1964r,
 ## -----------------------------------------------------------------------------
 superbPlot.simpleWithOptions <- function(
     summarydata, xfactor, groupingfactor, addfactors, rawdata,
-    myownParams = list()  ## add the optional arguments to the function
+    myownParams = list()  ## will be used to add the optional arguments to the function
 ) {
     plot <- ggplot(
         data = summarydata, 
@@ -157,13 +157,14 @@ superbPlot.simpleWithOptions <- function(
 }
 superb:::is.superbPlot.function("superbPlot.simpleWithOptions")
 
-## ---- message=FALSE, echo=TRUE, results='hide', fig.show='show', fig.cap="Figure 4: A simple figure with optional arguments"----
+## ---- message=FALSE, echo=TRUE, results='hide', fig.show='show', fig.cap="**Figure 4**. A simple figure with optional arguments"----
 superbPlot(TMB1964r,
     WSFactors = "T(7)",      
     BSFactors = "Condition",
     variables = c("T1","T2","T3","T4","T5","T6","T7"),
     plotStyle = "simpleWithOptions", 
-    myownParams = list(size=1, color="purple", position = position_dodge(width = 0.3) ) ## here goes the optional arguments
+    ## here goes the optional arguments
+    myownParams = list(size=1, color="purple", position = position_dodge(width = 0.3) ) 
 )
 
 ## ---- eval=FALSE, message=FALSE, echo=TRUE, results='hide'--------------------
@@ -173,7 +174,7 @@ superbPlot(TMB1964r,
 #    list( "var1InTheFct", "var2InTheFct", "varetcInTheFct")
 #  )
 
-## ---- message=FALSE, echo=TRUE, results='hide', fig.show='hide'---------------
+## ---- message=TRUE, echo=TRUE, results='hide', fig.show='hide'----------------
 superbPlot.empty <- function(
     summarydata, xfactor, groupingfactor, addfactors, rawdata 
 ) {
@@ -194,7 +195,7 @@ superbPlot(TMB1964r,
 ## ---- message=FALSE, echo=TRUE, results='hide', fig.show='hide'---------------
 superbPlot.simple(summary, "T", "Condition", ".~.", raw)
 
-## -----------------------------------------------------------------------------
+## ---- message=FALSE, echo=TRUE, warning=FALSE---------------------------------
 # install.packages("emojifont")
 library(emojifont)
 
@@ -229,7 +230,7 @@ superbPlot.smiley <- function(
 ## -----------------------------------------------------------------------------
 superb:::is.superbPlot.function("superbPlot.smiley")
 
-## ---- fig.width= 7, fig.height = 6, fig.cap = "Figure 5: smile!"--------------
+## ---- fig.width= 7, fig.height = 6, fig.cap = "**Figure 5**. smile!"----------
 superbPlot(TMB1964r,
      WSFactors = "T(7)",      
      BSFactors = "Condition", 

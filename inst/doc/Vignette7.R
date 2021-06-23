@@ -4,8 +4,10 @@ library(superb)
 library(ggplot2)
 
 ## -----------------------------------------------------------------------------
-grp1 <- c(56., 54., 73., 46., 59., 62., 55., 53., 77., 60., 69., 66., 63., 62., 53., 82., 74., 70., 65., 70., 72., 65., 56., 58., 83.)
-grp2 <- c(51., 99., 194., 123., 40., 83., 87., 117., 46., 89., 61., 81., 53., 141., 52., 53., 39., 96., 14., 81., 63., 66., 80., 113., 82.)
+grp1 <- c( 56,  54,  73,  46,  59,  62,  55,  53,  77,  60,  69,  66,  63, 
+           62,  53,  82,  74,  70,  65,  70,  72,  65,  56,  58,  83)
+grp2 <- c( 51,  99, 194, 123,  40,  83,  87, 117,  46,  89,  61,  81,  53, 
+          141,  52,  53,  39,  96,  14,  81,  63,  66,  80, 113,  82)
 
 ## -----------------------------------------------------------------------------
 dtaHetero <- data.frame( cbind(
@@ -17,8 +19,7 @@ head(dtaHetero)
 
 ## -----------------------------------------------------------------------------
 library(superb)             # to make the summary plot
-library(ggplot2)            # for all the graph directives
-library(grid)               # for grid.text
+library(ggplot2)            # for all the graphic directives
 library(gridExtra)          # for grid.arrange
 
 ornate = list(
@@ -26,11 +27,11 @@ ornate = list(
     scale_x_discrete(labels=c("Pre-\nTreatment","Post-\nTreatment")),
     ylab("Score"),
     coord_cartesian( ylim = c(40,+110) ),
-    theme_light(base_size = 24) +
+    theme_light(base_size = 14) +
     theme( plot.subtitle = element_text(size=24))
 )
 
-## ---- fig.height=5, fig.width=3, fig.cap = "Figure 1: Plot of dtaHerero showing heterogeneous error bars."----
+## ---- fig.height=4, fig.width=3, fig.cap = "**Figure 1**. Plot of dtaHerero showing heterogeneous error bars."----
 pt <- superbPlot(dtaHetero, 
                  BSFactors    = "group", 
                  variables   = "score", 
@@ -47,7 +48,7 @@ pt
 # Welch's rectified degrees of freedom
 wdf <- WelchDegreeOfFreedom(dtaHetero, "score","group")
 
-## ---- fig.height=5, fig.width=3, fig.cap = "Figure 2: Plot of dtaHerero with rectified degree of freedom."----
+## ---- fig.height=4, fig.width=3, fig.cap = "**Figure 2**. Plot of dtaHerero with rectified degree of freedom."----
 pw <- superbPlot(dtaHetero, 
                  BSFactors   = "group", 
                  variables   = "score", 
@@ -60,7 +61,7 @@ pw <- superbPlot(dtaHetero,
 ) + ornate
 pw
 
-## ---- fig.height=5, fig.width=3, fig.cap = "Figure 3: Plot of dtaHerero with rectified degree of freedom and Tryon' difference-adjusted error bars."----
+## ---- fig.height=4, fig.width=3, fig.cap = "**Figure 3**. Plot of dtaHerero with rectified degree of freedom and Tryon' difference-adjusted error bars."----
 pwt <- superbPlot(dtaHetero, 
                   BSFactors   = "group", 
                   variables   = "score", 
@@ -82,12 +83,12 @@ t <- superbData(dtaHetero,
                 gamma       = 0.95,
                 statistic   = "mean", errorbar = "CI"
 )
-# keep only the summary statistics, not the rawData structure:
+# keep only the summary statistics:
 t2 <- t$summaryStatistics
 
 # the length is in column "upperwidth", for lines 1 and 2,
 # so lets do the mean in the square sense:
-tmean2 <- sqrt((t2$upperwidth[1]^2+t2$upperwidth[2]^2)/2)
+tmean2 <- sqrt( (t2$upperwidth[1]^2 + t2$upperwidth[2]^2)/2 )
 
 ## -----------------------------------------------------------------------------
 tmean    <- (t2$upperwidth[1] + t2$upperwidth[2] )/2
@@ -104,7 +105,7 @@ wt <- superbData(dtaHetero,
 wt2 <- wt$summaryStatistics
 wmean <- (wt2$upperwidth[1]+wt2$upperwidth[2]) / 2
 
-## ----fig.height=5, fig.width=12, fig.cap = "Figure 4: All three plots with relevant markers in red."----
+## ----fig.height=5, fig.width=12, fig.cap = "**Figure 4**. All three plots with relevant markers in red."----
 # showing all three plots, with reference lines in red
 grid.arrange(
     pt + labs(subtitle="Difference-adjusted 95% CI\n with default degree of freedom") + 
@@ -130,5 +131,6 @@ grid.arrange(
  ncol=3)
 
 ## -----------------------------------------------------------------------------
-t.test(grp1, grp2, alternative="two.sided", var.equal=FALSE)
+t.test( grp1, grp2, 
+        var.equal=FALSE)
 

@@ -4,7 +4,7 @@
 \name{superb-package}
 \alias{superb}
 \alias{superb-package}
-\title{superb: Get Precision of Means Under Various Designs and Sampling Schemes}
+\title{superb: Summary Plots with Adjusted Error Bars}
 \description{
 Computes standard error and confidence interval of various descriptive statistics under 
     various designs and sampling schemes. The main function, superbPlot(), can either return a plot 
@@ -65,6 +65,14 @@ and example datasets described in the paper:  \itemize{
      \item{\code{dataFigure3}} illustrate the paradox of using stand-alone CI in cluster-randomized sampling study;
      \item{\code{dataFigure4}} illustrate the paradox of using stand-alone CI with population of finite size.
 }
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://dcousin3.github.io/superb/}
+  \item Report bugs at \url{https://github.com/dcousin3/superb/issues/}
+}
+
 }
 \author{
 \strong{Maintainer}: Denis Cousineau \email{denis.cousineau@uottawa.ca}

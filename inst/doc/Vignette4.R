@@ -3,7 +3,7 @@ cat("this will be hidden; use for general initializations.")
 library(superb)
 library(ggplot2)
 
-## ---- message=FALSE, echo=TRUE, fig.cap="Figure 1: Various statistics and various measures of precisions"----
+## ---- message=FALSE, echo=TRUE, fig.cap="**Figure 1**. Various statistics and various measures of precisions"----
 # shut down 'warnings', 'design' and 'summary' messages
 options(superb.feedback = 'none') 
 
@@ -47,75 +47,62 @@ superb:::is.errorbar.function("SE.mean")
 superb:::is.gamma.required("SE.mean")
 
 ## ---- message=FALSE, echo=TRUE------------------------------------------------
-    # create a descriptive statistics
-    d1 <- function(X) {
-      mean(X-100)/sd(X) 
-    } 
+    # create a descriptive statistics, the 20% trimmed mean
+    trimmedmean    <- function(x) mean(x, trim = 0.2)
 
     # we can test it with the data from group 1...
     grp1 <- dataFigure1$score[dataFigure1$grp==1]
     grp2 <- dataFigure1$score[dataFigure1$grp==2]
-    d1(grp1)
+    trimmedmean(grp1)
 
     # or check that it is a valid statistic function
-    superb:::is.stat.function("d1")
+    superb:::is.stat.function("trimmedmean")
 
-## ---- message=FALSE, echo=TRUE, fig.cap="Figure 2: ``superbPlot`` with a custom-made descriptive statistic function "----
+## ---- message=FALSE, echo=TRUE, fig.height=4, fig.width=3, fig.cap="**Figure 2**. ``superbPlot`` with a custom-made descriptive statistic function "----
     superbPlot(dataFigure1, 
         BSFactors = "grp", 
-        statistic = "d1", errorbar = "none",
+        statistic = "trimmedmean", errorbar = "none", #HERE the statistic name is given
         plotStyle="line",
         adjustments = list(purpose = "difference"),
         variable = "score",
         errorbarParams = list(width=0) # so that the null-width error bar is invisible
-    )+ ylab("Cohen's d_1") +
-    labs(title="d_1 with no error bars") +
-    coord_cartesian( ylim = c(-0.5,+1.5) ) 
+    )+ ylab("20% trimmed mean") +
+    theme_gray(base_size=10) +
+    labs(title="20% trimmed mean with \nno error bars") +
+    coord_cartesian( ylim = c(85,115) ) 
 
-## -----------------------------------------------------------------------------
-    library(sadists)
+## ---- message=FALSE-----------------------------------------------------------
+    library(psych)      # for winsor.sd
 
-    CI.d1 <- function(X, gamma = .95) {
-        n    <- length(X)
-        dlow <- qlambdap(1/2-gamma/2, df = n-1, t = d1(X) * sqrt(n) ) 
-        dhig <- qlambdap(1/2+gamma/2, df = n-1, t = d1(X) * sqrt(n) ) 
-        c(dlow, dhig) / sqrt(n)
+    CI.trimmedmean <- function(x, gamma = 0.95){
+        trim <- 0.2
+        g    <- floor(length(x) * 0.4)
+        tc   <- qt(1/2+gamma/2, df=(length(x)-g-1) )
+        lo   <- tc * winsor.sd(x, trim =0.2) / ((1-2*trim)*sqrt(length(x)))
+        c(trimmedmean(x) -lo, trimmedmean(x)+lo)
     }
 
     # we test as an example the data from group 1
-    CI.d1(grp1)  
+    CI.trimmedmean(grp1)  
 
     # or check that it is a valid interval function
-    superb:::is.errorbar.function("CI.d1")
+    superb:::is.errorbar.function("CI.trimmedmean")
 
-## ---- message=FALSE, echo=TRUE, fig.cap="Figure 3: superbPlot with a custom-made descriptive sttistic function "----
+## ---- message=FALSE, echo=TRUE, fig.height=4, fig.width=3, fig.cap="**Figure 3**. `superbPlot` with a custom-made descriptive sttistic function "----
     superbPlot(dataFigure1, 
         BSFactors = "grp", 
-        statistic = "d1", errorbar = "CI",
+        statistic = "trimmedmean", errorbar = "CI",
         plotStyle="line",
-        adjustments = list(purpose = "single"),
+        adjustments = list(purpose = "difference"),
         variable = "score"
-    )+ ylab("Cohen's d_1") +
-    labs(title="d_1 with 95% confidence interval of d_1") +
-    coord_cartesian( ylim = c(-0.5,+1.5) ) 
+    )+ ylab("20% trimmed mean") +
+    theme_gray(base_size=10) +
+    labs(title="20% trimmed mean with \n95% confidence interval of 20% trimmed mean") +
+    coord_cartesian( ylim = c(85,115) ) 
 
 ## -----------------------------------------------------------------------------
-    # compute the Cohen's dp
-    dp <- (mean(grp1)-mean(grp2))/ sqrt((var(grp1)+var(grp2))/2)
-    dp
-
-    # get the confidence interval of this 
-    lecoutre2007 <- function(dp, n, gamma = .95) {
-        dlow <- qlambdap(1/2-gamma/2, df = 2*(n-1), t = dp * sqrt(n/2) ) 
-        dhig <- qlambdap(1/2+gamma/2, df = 2*(n-1), t = dp * sqrt(n/2) ) 
-        limits <- c(dlow, dhig) / sqrt(n/2)
-        limits
-    }
-    lecoutre2007(dp, length(grp1) )
-
-## -----------------------------------------------------------------------------
-    # we define myBootstrapCI which subsample the whole sample, here called X
-    myBootstrapCI.mean <- function(X, gamma = 0.95) {
+    # we define myBootstrapPI which subsample the whole sample, here called X
+    myBootstrapPI.mean <- function(X, gamma = 0.95) {
       res = c()
       for (i in 1:10000) {
         res[i] <- mean(sample(X, length(X), replace = T))
@@ -124,14 +111,14 @@ superb:::is.gamma.required("SE.mean")
     }
 
     # we check that it is a valid interval function
-    superb:::is.errorbar.function("myBootstrapCI.mean")
+    superb:::is.errorbar.function("myBootstrapPI.mean")
 
-## ---- message=FALSE, echo=TRUE, fig.cap="Figure 4: superbPlot with a custom-made interval function."----
+## ---- message=FALSE, echo=TRUE, fig.cap="**Figure 4**. `superbPlot` with a custom-made interval function."----
     plt1 <- superbPlot(dataFigure1, 
         BSFactors = "grp", 
         variable = c("score"), 
         plotStyle="line",
-        statistic = "mean", errorbar = "myBootstrapCI",
+        statistic = "mean", errorbar = "CI",
         adjustments = list(purpose = "difference")
     ) + 
     xlab("Group") + ylab("Score") + 
@@ -144,7 +131,7 @@ superb:::is.gamma.required("SE.mean")
         BSFactors = "grp", 
         variable = c("score"), 
         plotStyle="line",
-        statistic = "mean", errorbar = "CI",
+        statistic = "mean", errorbar = "myBootstrapPI",
         adjustments = list(purpose = "difference")
     ) + 
     xlab("Group") + ylab("Score") + 

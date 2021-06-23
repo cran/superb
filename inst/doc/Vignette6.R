@@ -47,7 +47,7 @@ hist(dta$IQ)
 dta <- GRD(
     BSFactors = "Group(2)",
     Population = list(
-        mean = 100,         # this set GM to 100
+        mean   = 100,         # this set GM to 100
         stddev = 15,        # this set STDDEV to 15
         scores = "rnorm(1, mean = GM, sd = STDDEV )"
     )
@@ -76,7 +76,7 @@ dta <- GRD(SubjectsPerGroup = 5000,
 )
 hist(dta$RT,breaks=seq(250,425,by=5))
 
-## -----------------------------------------------------------------------------
+## ---- message=FALSE-----------------------------------------------------------
 dta <- GRD(
     BSFactors = 'Therapy(CBT, Control, Exercise)',
     WSFactors = 'Contrast(3)',
@@ -88,7 +88,7 @@ superbPlot(dta,
     variables = c("DV.1","DV.2","DV.3"),
     plotStyle = "line" )
 
-## -----------------------------------------------------------------------------
+## ---- message=FALSE-----------------------------------------------------------
 dta <- GRD(
     BSFactors = 'Therapy(CBT,Control,Exercise)',
     WSFactors = 'Contrast(3) ',
@@ -103,7 +103,7 @@ superbPlot(dta,
     variables = c("DV.1","DV.2","DV.3"),
     plotStyle = "line" )
 
-## -----------------------------------------------------------------------------
+## ---- fig.width=5, fig.height=5-----------------------------------------------
 dta <- GRD(
     WSFactors = 'Difficulty(1, 2)',
     SubjectsPerGroup = 1000,
@@ -111,7 +111,7 @@ dta <- GRD(
 )
 plot(dta$DV.1, dta$DV.2)
 
-## -----------------------------------------------------------------------------
+## ---- fig.width=5, fig.height=5-----------------------------------------------
 dta <- GRD(
     WSFactors = 'Difficulty(1, 2)',
     SubjectsPerGroup = 1000,

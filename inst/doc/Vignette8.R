@@ -17,7 +17,7 @@ pCM <- superbPlot(dta, WSFactors = "moment(3)",
   adjustments=list(decorrelation="none"),
   preprocessfct = "subjectCenteringTransform",
   postprocessfct = "biasCorrectionTransform",
-  plotStyle = "line",
+  plotStyle = "pointjitter",
   errorbarParams = list(color="red", width= 0.1, position = position_nudge(-0.05) )
 )
 
@@ -37,11 +37,11 @@ pNKM <- superbPlot(dta, WSFactors = "moment(3)",
   adjustments=list(decorrelation="none"),
   preprocessfct = "subjectCenteringTransform",
   postprocessfct = c("poolSDTransform"),
-  plotStyle = "pointjitter",
+  plotStyle = "line",
   errorbarParams = list(color="blue", width= 0.1, position = position_nudge(+0.05) )
 )
 
-## ---- fig.height=5, fig.width=8, fig.cap = "Figure 1: Plot of the tree decorrelation methods based on subject transformation."----
+## ---- fig.height=5, fig.width=8, fig.cap = "**Figure 1**. Plot of the tree decorrelation methods based on subject transformation."----
 tlbl <- paste( "(red)    Subject centering & Bias correction == CM\n",
                "(orange) Subject centering, Bias correction & Pooling SDs == LM\n",
                "(blue)   Subject centering & Pooling SDs == NKM", sep="")
@@ -51,15 +51,13 @@ ornate <- list(
     ylab("Score"),
     labs(   title=tlbl),
     coord_cartesian( ylim = c(12,18) ),
-    theme_light(base_size=16),
-    theme(plot.subtitle=element_text(size=12, color="black"), 
-          panel.background = element_rect(fill = "transparent"),
-          plot.background = element_rect(fill = "transparent", color = "white"))
+    theme_light(base_size=16)
 )
 
+# the plots on top are made transparent
 pCM2 <- ggplotGrob(pCM + ornate)
-pLM2 <- ggplotGrob(pLM + ornate)
-pNKM2 <- ggplotGrob(pNKM + ornate)
+pLM2 <- ggplotGrob(pLM + ornate + makeTransparent() )
+pNKM2 <- ggplotGrob(pNKM + ornate + makeTransparent() )
 
 # put the grobs onto an empty ggplot 
 ggplot() + 

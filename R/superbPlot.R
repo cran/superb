@@ -1,5 +1,5 @@
 ######################################################################################
-#' @title Plot summary statistics with correct error bars.
+#' @title summary plot of any statistics with adjusted error bars.
 #'
 #' @md
 #'
@@ -8,24 +8,31 @@
 #'      according to the ``suberb`` framework. See \insertCite{c17}{superb} for more.
 #'
 #' @param data Dataframe in wide format
+#'
 #' @param BSFactors The name of the columns containing the between-subject factor(s)
 #' @param WSFactors The name of the within-subject factor(s)
-#' @param factorOrder Order of factors as shown in the graph (in that order: x axis,
-#'       groups, horizontal panels, vertical panels)
+#' @param WSDesign the within-subject design if not a full factorial design (default "fullfactorial")
 #' @param variables The dependent variable(s) as strings
+#'
 #' @param statistic The summary statistic function to use as a string
 #' @param errorbar The function that computes the error bar. Should be "CI" or "SE" or 
 #'      any function name if you defined a custom function. Default to "CI"
 #' @param gamma The coverage factor; necessary when ``errorbar == "CI"``. Default is 0.95.
+#' @param factorOrder Order of factors as shown in the graph (in that order: x axis,
+#'       groups, horizontal panels, vertical panels)
+#'
 #' @param adjustments List of adjustments as described below.
 #'      Default is ``adjustments = list(purpose = "single", popSize = Inf, decorrelation = "none",
 #'              samplingDesign = "SRS")``
+#' @param clusterColumn used in conjunction with samplingDesign = "CRS", indicates which column contains the cluster membership
+#'
 #' @param showPlot Defaults to TRUE. Set to FALSE if you want the output to be the summary statistics and intervals.
 #' @param plotStyle The type of object to plot on the graph. See full list below.
 #'      Defaults to "bar".
-#' @param clusterColumn used in conjunction with samplingDesign = "CRS", indicates which column contains the cluster membership
+#'
 #' @param preprocessfct  is a transform (or vector of) to be performed first on data matrix of each group
 #' @param postprocessfct is a transform (or vector of)
+#'
 #' @param ...  In addition to the parameters above, superbPlot also accept a number of 
 #'  optional arguments that will be transmitted to the plotting function, such as
 #'  pointParams (a list of ggplot2 parameters to input inside geoms; see ?geom_bar2) and
@@ -112,14 +119,16 @@
 #' @importFrom lsr wideToLong
 #' @importFrom plyr ddply
 #' @import ggplot2
+#' @importFrom utils capture.output
 #
 ######################################################################################
 
 
 superbPlot <- function(data, 
-    BSFactors      = NULL,            # vector of the between-subject factor columns
-    WSFactors      = NULL,            # vector of the names of the within-subject factors
-    factorOrder,                     # order of the factors for plots
+    BSFactors     = NULL,            # vector of the between-subject factor columns
+    WSFactors     = NULL,            # vector of the names of the within-subject factors
+    WSDesign      = "fullfactorial", # or ws levels of each variable if not a full factorial ws design
+    factorOrder   = NULL,            # order of the factors for plots
     variables,                       # dependent variable name(s)
     statistic     = "mean",          # descriptive statistics
     errorbar      = "CI",            # content of the error bars
@@ -197,19 +206,32 @@ superbPlot <- function(data,
             WSFactors[i] <-            unlist(strsplit(WSFactors[i], '[()]'))[1]
         }
     }
-
     wslevel <- prod(wsLevels)
-    if (!(length(variables) == wslevel)) 
-            stop("superb::ERROR: The number of levels of the within-subject level(s) does not match the number of variables. Exiting...")
-    if ((wslevel == 1)&&(!(adjustments$decorrelation == "none"))) 
-            stop("superb::ERROR: Decorrelation is not to be used when there is no within-subject factors. Exiting...")
-    if(missing(factorOrder))  {
+
+    # 1.4c: setting factorOrder in case it is null
+    if(is.null(factorOrder))  {
         factorOrder <- c(WSFactors, BSFactors)
         if (('design' %in% getOption("superb.feedback") ) & (length(factorOrder[factorOrder != wsMissing])) > 1)  
-                cat(paste("superb::FYI: The variables will be plotted in that order: ",
+                message(paste("superb::FYI: The variables will be plotted in that order: ",
                           paste(factorOrder[factorOrder != wsMissing],collapse=", "),
-                          " (use factorOrder to change).\n", sep=""))
+                          " (use factorOrder to change).", sep=""))
     }
+
+    # 1.4d: checking WSFactors based on WSDesign
+    if (all(WSDesign == "fullfactorial")) {
+        if (!(length(variables) == wslevel)) 
+                stop("superb::ERROR: The number of levels of the within-subject level(s) does not match the number of variables. Exiting...")
+        if ((wslevel == 1)&&(!(adjustments$decorrelation == "none"))) 
+                stop("superb::ERROR: Decorrelation is not to be used when there is no within-subject factors. Exiting...")
+    } else {
+        if (!is.list(WSDesign) )
+                    stop("superb::ERROR: the WSdesign is not 'fullfactorial' (default) or a list. Exiting...")
+        if (length(WSDesign) != length(variables))
+                    stop("superb::ERROR: the WSDesign list is not of the same length as the variable vector. Exiting...")
+        if (!all(lapply(WSDesign, length)==length(WSFactors)))
+                    stop("superb::ERROR: the WSDesign does not contain vectors of factor levels, one per factor. Exiting...")
+    }
+
 
     # 1.5: invalid column names where column names must be listed
     if (!(all(variables %in% names(data)))) 
@@ -229,21 +251,26 @@ superbPlot <- function(data,
 
     # 1.7: align levels and corresponding variables
     weird        <-"+!+" # to make sure that these characters are not in the column names
-    combinaisons <- expand.grid(lapply(wsLevels,seq))
+    if (all(WSDesign == "fullfactorial")) {
+        combinaisons <- expand.grid(lapply(wsLevels,seq))
+    } else {
+        combinaisons <- data.frame(matrix(as.integer(unlist(WSDesign)),nrow=length(WSDesign), byrow = TRUE))
+    }
     newnames     <- paste("DV", apply(combinaisons,1,paste,collapse=weird) ,sep=weird)
     design       <- cbind(combinaisons, variables, newnames)
     colnames(design)[1:length(WSFactors)] <- WSFactors
     colnames(design)[length(WSFactors)+1] <- "variable"
     colnames(design)[length(WSFactors)+2] <- "newvars"
     if ( (length(wsLevels)>1) & ('design' %in% getOption("superb.feedback") ) ) {
-        cat("superb::FYI: Here is how the within-subject variables are understood:\n")
-        print( design[,c(WSFactors, "variable") ]) 
+        message("superb::FYI: Here is how the within-subject variables are understood:")
+        temp = paste0(capture.output(print(design[,c(WSFactors, "variable") ], row.names=F)),collapse="\n")
+        message(temp) 
     }
 
     # 1.8: invalid functions 
     widthfct <- paste(errorbar, statistic, sep = ".")
     if (errorbar == "none") { # create a fake function
-         eval(parse(text=paste(widthfct, "<-function(X) 0",sep="")), envir = globalenv())
+        eval(parse(text=paste(widthfct, "<-function(X) 0",sep="")), envir = globalenv())
     }
     if ( !(is.stat.function(statistic)) )
             stop("superb::ERROR: The function ", statistic, " is not a known descriptive statistic function. Exiting...")
@@ -258,6 +285,11 @@ superbPlot <- function(data,
         # make sure that column cluster is defined.
         if(!(clusterColumn %in% names(data))) 
             stop("superb::ERROR: With samplingDesign = \"CRS\", you must specify a valid column with ClusterColumn. Exiting...")
+    }
+
+    # 1.10: is there missing data in the scores?
+    if (any(is.na(data[,variables])) ) {
+        message("superb::WARNING: There are misssing data in your dependent variable(s).\n\tsuperb may show empty summaries... consult help(measuresWithMissingData)")
     }
 
     # We're clear to go!
@@ -317,7 +349,14 @@ superbPlot <- function(data,
         WSFactors    <- NULL # remove the dummy factor
         factorOrder <- factorOrder[ factorOrder != wsMissing]
     }
-    
+
+    # if the function has an initializer, run it on the long-format data
+    if (has.init.function(statistic)) {
+        iname = paste("init",statistic, sep=".")
+        message("superb::FYI: Running initializer ", iname)
+        do.call(iname, list(data.untransformed.long) )
+    }
+
     runDebug("superb.3", "End of Step 3: Reformat data frame into long format", 
         c("data.transformed.long2","factorOrder3"), list(data.transformed.long,factorOrder) )
 
@@ -432,7 +471,7 @@ superbPlot <- function(data,
 
         # 6.2: if deccorrelate is CA: show rbar, test Winer
         if (adjustments$decorrelation == "CA") {
-            message(paste("superb::FYI: The average correlation per group is ", paste(unique(round(rs,4)), collapse=" ")) )
+            message(paste("superb::FYI: The average correlation per group is ", paste(unique(sprintf("%.4f",round(rs,4))), collapse=" ")) )
 
             winers <- suppressWarnings(plyr::ddply(data, .fun = "WinerCompoundSymmetryTest", .variables= BSFactors, variables)) 
             winers <- winers[,length(winers)]
@@ -444,7 +483,7 @@ superbPlot <- function(data,
         if (adjustments$decorrelation %in% c("CM","LM")) {
             epsGG <- suppressWarnings(plyr::ddply(data, .fun = "HyunhFeldtEpsilon", .variables= BSFactors, variables)) 
             epsGG <- epsGG[,length(epsGG)]
-            message(paste("superb::FYI: The HyunhFeldtEpsilon measure of sphericity per group are ", paste(round(epsGG,4), collapse=" ")) )
+            message(paste("superb::FYI: The HyunhFeldtEpsilon measure of sphericity per group are ", paste(sprintf("%.3f",round(epsGG, 4)), collapse=" ")) )
 
             winers <- suppressWarnings(plyr::ddply(data, .fun = "WinerCompoundSymmetryTest", .variables= BSFactors, variables) )
             winers <- winers[,length(winers)]
@@ -459,12 +498,12 @@ superbPlot <- function(data,
         
         # 6.4: if samplingDesign is CRS: print ICC, check that more than 8 clusters
         if (adjustments$samplingDesign == "CRS") {
-            message(paste("superb::FYI: The ICC1 per group are ", paste(round(ICCs,4), collapse=" ")) )
+            message(paste("superb::FYI: The ICC1 per group are ", paste(sprintf("%.3f",round(ICCs,3)), collapse=" ")) )
         }
 
         # 6.5: if objective is tryon: print tryon adjustment
         if (adjustments$purpose == "tryon") {
-            message(paste("superb::FYI: The tryon adjustments per measures are ", paste(round(padj,4), " compared to 1.4142.", collapse=" ")) )
+            message(paste("superb::FYI: The tryon adjustments per measures are ", paste("Measure ", 1:length(padj), ": ", sprintf("%.4f",round(padj,4)), sep="",collapse=", "), ", all compared to 1.4142.") )
         }
     }
     

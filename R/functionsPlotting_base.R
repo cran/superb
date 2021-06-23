@@ -23,7 +23,7 @@
 #' @param addfactors a string with up to two additional factors to make the rows and columns panels, in the form "fact1 ~ fact2";
 #' @param rawdata always contains "DV" for each participants and each level of the factors
 #' @param barParams (optional) list of graphic directives that are sent to the geom_bar layer
-#' @param errorbarParams (optional) list of graphic directives that are sent to the geom_errorbar layer
+#' @param errorbarParams (optional) list of graphic directives that are sent to the geom_superberrorbar layer
 #' @param facetParams (optional) list of graphic directives that are sent to the facet_grid layer
 #' @param xAsFactor (optional) Boolean to indicate if the factor on the horizontal should continuous or discrete (default is discrete)
 #'
@@ -61,7 +61,7 @@ superbPlot.bar <- function(
     rawdata        = NULL,     # unused
     # what follows are optional
     barParams      = list(),   # merged into geom_bar
-    errorbarParams = list(),   # merged into geom_errorbar
+    errorbarParams = list(),   # merged into geom_superberrorbar
     facetParams    = list(),   # merged into facet_grid
     xAsFactor      = TRUE      # should the horizontal axis be continuous?
 ) {
@@ -87,7 +87,7 @@ superbPlot.bar <- function(
         barParams
     )) +
     # the error bars; do.call so that errorbarParams can be integrated
-    do.call( geom_errorbar, modifyList(
+    do.call( geom_superberrorbar, modifyList(
         list(width = .6, position = position_dodge(.95), mapping = aes_string(ymin = "center + lowerwidth", ymax = "center + upperwidth") ),
         errorbarParams
     )) +
@@ -121,7 +121,7 @@ superbPlot.bar <- function(
 #' @param rawdata always contains "DV" for each participants and each level of the factors
 #' @param pointParams (optional) list of graphic directives that are sent to the geom_bar layer
 #' @param lineParams (optional) list of graphic directives that are sent to the geom_bar layer
-#' @param errorbarParams (optional) list of graphic directives that are sent to the geom_errorbar layer
+#' @param errorbarParams (optional) list of graphic directives that are sent to the geom_superberrorbar layer
 #' @param facetParams (optional) list of graphic directives that are sent to the facet_grid layer
 #' @param xAsFactor (optional) Boolean to indicate if the factor on the horizontal should continuous or discrete (default is discrete)
 #'
@@ -164,7 +164,9 @@ superbPlot.line <- function(
     facetParams    = list(),
     xAsFactor = TRUE      # should the horizontal axis be continuous?
 ) {
-    runDebug("line", "Entering superbPlot.line", c("xfactor2", "groupingfactor2", "addfactors2", "params"), list(xfactor, groupingfactor, addfactors, list(pointParams=pointParams, lineParams=lineParams, errorbarParams=errorbarParams)))
+    runDebug("line", "Entering superbPlot.line", c("xfactor2", "groupingfactor2", "addfactors2", "params"), 
+        list(xfactor, groupingfactor, addfactors, list(pointParams=pointParams, lineParams=lineParams, errorbarParams=errorbarParams))
+    )
 
     # depending on the scale of the x-axis.
     if (!xAsFactor) 
@@ -191,7 +193,7 @@ superbPlot.line <- function(
         lineParams
     )) +
     # the error bars
-    do.call(geom_errorbar, modifyList(
+    do.call(geom_superberrorbar, modifyList(
         list(width = 0.1, size = 0.75, position = position_dodge(.15),
             mapping = aes_string(group = groupingfactor) ),
         errorbarParams
@@ -225,7 +227,7 @@ superbPlot.line <- function(
 #' @param addfactors a string with up to two additional factors to make the rows and columns panels, in the form "fact1 ~ fact2";
 #' @param rawdata always contains "DV" for each participants and each level of the factors
 #' @param pointParams (optional) list of graphic directives that are sent to the geom_bar layer
-#' @param errorbarParams (optional) list of graphic directives that are sent to the geom_errorbar layer
+#' @param errorbarParams (optional) list of graphic directives that are sent to the geom_superberrorbar layer
 #' @param facetParams (optional) list of graphic directives that are sent to the facet_grid layer
 #' @param xAsFactor (optional) Boolean to indicate if the factor on the horizontal should continuous or discrete (default is discrete)
 #'
@@ -288,7 +290,7 @@ superbPlot.point <- function(
         pointParams
     )) +
     # the error bars
-    do.call(geom_errorbar, modifyList(
+    do.call(geom_superberrorbar, modifyList(
          list(width = 0.2, size = 0.5, position = position_dodge(.15), mapping = aes_string(ymin = "center + lowerwidth", ymax = "center + upperwidth") ),
          errorbarParams
     )) +
@@ -328,7 +330,7 @@ superbPlot.point <- function(
 #' @param rawdata always contains "DV" for each participants and each level of the factors
 #' @param pointParams (optional) list of graphic directives that are sent to the geom_bar layer
 #' @param jitterParams (optional) list of graphic directives that are sent to the geom_bar layer
-#' @param errorbarParams (optional) list of graphic directives that are sent to the geom_errorbar layer
+#' @param errorbarParams (optional) list of graphic directives that are sent to the geom_superberrorbar layer
 #' @param facetParams (optional) list of graphic directives that are sent to the facet_grid layer
 #' @param xAsFactor (optional) Boolean to indicate if the factor on the horizontal should continuous or discrete (default is discrete)
 #'
@@ -373,6 +375,9 @@ superbPlot.pointjitter <- function(
     runDebug("pointjitter", "Entering superbPlot.pointjitter", 
         c("xfactor2", "groupingfactor2", "addfactors2","pointParams2","jitterParams2","errorbarParams2"), list(xfactor, groupingfactor, addfactors, pointParams, jitterParams, errorbarParams))
 
+    # rename column "DV" to "center"
+    rawdata$center <- rawdata$DV
+
     # depending on the scale of the x-axis.
     if (!xAsFactor) {
         summarydata[[xfactor]] = as.numeric(summarydata[[xfactor]])
@@ -383,14 +388,14 @@ superbPlot.pointjitter <- function(
     if (is.null(groupingfactor)) {
         do_jitters = do.call(geom_jitter, modifyList(
                         list(data = rawdata, alpha = 0.2, width = 0.2, height = 0.0,
-                             mapping = aes_string(y = "DV" ) ),
+                             mapping = aes_string(y = "center" ) ),
                         jitterParams
                     ) )
     } else {
         do_jitters = do.call(geom_point, modifyList(
                         list(data = rawdata , alpha = 0.2,
                             position = position_jitterdodge(jitter.width=0.1 , dodge.width=0.5 ),
-                            mapping = aes_string(y = "DV", color = groupingfactor  ) ),
+                            mapping = aes_string(y = "center", color = groupingfactor  ) ),
                         jitterParams
                     ) )
     }
@@ -410,7 +415,7 @@ superbPlot.pointjitter <- function(
         pointParams
     )) + 
     # the error bars; define ymin, ymax only in errorbar
-    do.call(geom_errorbar, modifyList(
+    do.call(geom_superberrorbar, modifyList(
         list(position = position_dodge(.5), width = 0.1, size = 0.75,
             mapping = aes_string(group = groupingfactor, ymin = "center + lowerwidth", ymax = "center + upperwidth") ),
         errorbarParams
@@ -446,7 +451,7 @@ superbPlot.pointjitter <- function(
 #' @param pointParams (optional) list of graphic directives that are sent to the geom_bar layer
 #' @param jitterParams (optional) list of graphic directives that are sent to the geom_bar layer
 #' @param violinParams (optional) list of graphic directives that are sent to the geom_bar layer
-#' @param errorbarParams (optional) list of graphic directives that are sent to the geom_errorbar layer
+#' @param errorbarParams (optional) list of graphic directives that are sent to the geom_superberrorbar layer
 #' @param facetParams (optional) list of graphic directives that are sent to the facet_grid layer
 #'
 #' @return a ggplot object
@@ -490,16 +495,19 @@ superbPlot.pointjitterviolin <- function(
     runDebug("pointjitterviolin", "Entering superbPlot.pointjitterviolin", 
         c("xfactor2", "groupingfactor2", "addfactors2","pointParams2","jitterParams2","violinParams2","errorbarParams2"), list(xfactor, groupingfactor, addfactors, pointParams, jitterParams, violinParams, errorbarParams))
 
+    # rename column "DV" as "center"
+    rawdata$center <- rawdata$DV
+
     # determining the type of jitter based on the presence or not of a groupingfac
     if (is.null(groupingfactor)) {
         do_jitters = do.call(geom_jitter, modifyList(
                         list(data = rawdata, alpha = 0.2, width = 0.2, height = 0.0,
-                             mapping = aes_string( y = "DV" ) ),
+                             mapping = aes_string( y = "center" ) ),
                         jitterParams
                     ) )
         do_violins = do.call( geom_violin, modifyList(
                         list(data     = rawdata,
-                             mapping  = aes_string( y = "DV" ), 
+                             mapping  = aes_string( y = "center" ), 
                              scale    = "area", trim = FALSE, alpha = 0.25),
                         violinParams
                     ) )
@@ -507,13 +515,13 @@ superbPlot.pointjitterviolin <- function(
         do_jitters = do.call(geom_point, modifyList(
                         list(data = rawdata , alpha = 0.2,
                             position = position_jitterdodge(jitter.width=0.1 , dodge.width=.75 ),
-                            mapping = aes_string(y = "DV", group = groupingfactor  ) ),
+                            mapping = aes_string(y = "center", group = groupingfactor  ) ),
                         jitterParams
                     ) )
         do_violins = do.call( geom_violin, modifyList(
                         list(data    = rawdata, 
                              position= position_dodge(.75), #"dodge",
-                             mapping = aes_string( y = "DV", fill = groupingfactor), 
+                             mapping = aes_string( y = "center", fill = groupingfactor), 
                              scale   = "area", trim = FALSE, alpha = 0.25),
                         violinParams
                     ) )
@@ -523,16 +531,16 @@ superbPlot.pointjitterviolin <- function(
     plot <- ggplot(data    = summarydata, 
                    mapping = aes_string(x = xfactor, colour = groupingfactor )
         ) +
-        # violin in the back
+        # violins in the back
         do_violins +
-        # jitter second
+        # jitters second
         do_jitters +
-        # and finally the point and the error bars
+        # and finally the points and the error bars
         do.call( geom_point, modifyList(
             list(mapping = aes_string(group = groupingfactor, y = "center"), 
                 size = 3, position = position_dodge(.75) ),
             pointParams) ) +
-        do.call( geom_errorbar, modifyList(
+        do.call( geom_superberrorbar, modifyList(
             list(mapping = aes_string(group = groupingfactor, ymin = "center+lowerwidth", ymax = "center+upperwidth"), 
                 position = position_dodge(.75), width = 0.1, size = .75),
             errorbarParams) )+
@@ -566,7 +574,7 @@ superbPlot.pointjitterviolin <- function(
 #' @param rawdata always contains "DV" for each participants and each level of the factors
 #' @param pointParams (optional) list of graphic directives that are sent to the geom_bar layer
 #' @param lineParams (optional) list of graphic directives that are sent to the geom_bar layer
-#' @param errorbarParams (optional) list of graphic directives that are sent to the geom_errorbar layer
+#' @param errorbarParams (optional) list of graphic directives that are sent to the geom_superberrorbar layer
 #' @param facetParams (optional) list of graphic directives that are sent to the facet_grid layer
 #'
 #' @return a ggplot object
@@ -622,6 +630,9 @@ superbPlot.pointindividualline <- function(
     runDebug("pointindividualline", "Entering superbPlot.pointindividualline", 
         c("xfactor2", "groupingfactor2", "addfactors2","pointParams2","lineParams2","errorbarParams2"), list(xfactor, groupingfactor, addfactors, pointParams, lineParams, errorbarParams))
 
+    # rename column "DV" as "center"
+    rawdata$center <- rawdata$DV
+
     # let's do the plot!
     plot <- ggplot(
         data = summarydata, 
@@ -633,13 +644,13 @@ superbPlot.pointindividualline <- function(
     do.call(geom_line, modifyList(
         list(data = rawdata,
             size=0.2, alpha = 0.25,
-            mapping = aes_string( y = "DV", group = "id" ) ),
+            mapping = aes_string( y = "center", group = "id" ) ),
         lineParams
     )) +
     # the individual points 
     do.call(geom_point, modifyList(
         list(data = rawdata, alpha = 0.25,
-            mapping = aes_string(y = "DV", group = "id") ),
+            mapping = aes_string(y = "center", group = "id") ),
         pointParams
     )) + 
     # the points 
@@ -650,7 +661,7 @@ superbPlot.pointindividualline <- function(
         pointParams
     )) + 
     # the error bars; define ymin, ymax only in errorbar
-    do.call(geom_errorbar, modifyList(
+    do.call(geom_superberrorbar, modifyList(
         list(position = position_dodge(.5), width = 0.1, size = 0.75,
             mapping = aes_string(group = groupingfactor, ymin = "center + lowerwidth", ymax = "center + upperwidth") ),
         errorbarParams

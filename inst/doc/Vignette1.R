@@ -27,7 +27,7 @@ dta <- matrix( c(
 colnames(dta) <- c("Week 1", "Week 2", "Week 3")
 dta           <- as.data.frame(dta)
 
-## ---- message=FALSE, echo=FALSE, fig.cap="Figure 1: Mean scores along with 95% confidence interval per week for a program to stop smoking."----
+## ---- message=FALSE, echo=FALSE, fig.cap="**Figure 1**. Mean scores along with 95% confidence interval per week for a program to stop smoking."----
 superbPlot(dta, WSFactors = "Moment(3)",
         variables = c("Week 1", "Week 2", "Week 3"),
         statistic = "mean", errorbar = "CI",
@@ -49,7 +49,7 @@ superbPlot(dta,
     plotStyle="line"
     )
 
-## ---- message=FALSE, echo=FALSE, fig.cap="Figure 2: Mean scores along with difference-adjusted 95% confidence interval per week for a program to stop smoking."----
+## ---- message=FALSE, echo=FALSE, fig.cap="**Figure 2**. Mean scores along with difference-adjusted 95% confidence interval per week for a program to stop smoking."----
 superbPlot(dta, 
     WSFactors = "Moment(3)",
     variables = c("Week 1", "Week 2", "Week 3"),
@@ -73,8 +73,7 @@ superbPlot(dta,
     variables = c("Week 1", "Week 2", "Week 3"),
     statistic = "mean", errorbar = "CI",
     adjustments = list(purpose = "difference"),
-    plotStyle="line",
-    errorbarParams = list(width = .2)
+    plotStyle="line"
 ) + 
 coord_cartesian( ylim = c(50,100) ) +
 ylab("Mean +- 95% CI") +
@@ -87,7 +86,7 @@ superbPlot(dta,
     WSFactors = "Moment(3)",
     variables = c("Week 1", "Week 2", "Week 3"),
     statistic = "mean", errorbar = "CI",
-    adjustments = list(purpose = "difference", decorrelation = "CM"),
+    adjustments = list(purpose = "difference", decorrelation = "CM"), #new!
     plotStyle="line",
     errorbarParams = list(width = .2)
 ) + 
@@ -108,7 +107,7 @@ superbPlot(dta,
     WSFactors = "Moment(3)",
     variables = c("Week 1", "Week 2", "Week 3"),
     adjustments = list(purpose = "difference", decorrelation = "CM",
-                       samplingDesign = "CRS", popSize = 100),
+                       samplingDesign = "CRS", popSize = 100),        #new!
     plotStyle = "line",
     clusterColumn = "cluster",  # identify the column containing cluster membership
     errorbarParams = list(width = .2)
