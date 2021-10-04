@@ -5,7 +5,7 @@
 #'
 #' @description The function ``suberbPlot()`` plots standard error or confidence interval for various descriptive 
 #'      statistics under various designs, sampling schemes, population size and purposes,
-#'      according to the ``suberb`` framework. See \insertCite{c17}{superb} for more.
+#'      according to the ``suberb`` framework. See \insertCite{cgh21}{superb} for more.
 #'
 #' @param data Dataframe in wide format
 #'
@@ -165,8 +165,9 @@ superbPlot <- function(data,
     # STEP 1: Input validation
     ##############################################################################
     # 1.0: is the data actually data!
+	data <- as.data.frame(data) # coerce to data.frame if tibble or compatible
     if(!(is.data.frame(data)))
-            stop("superb::ERROR: data is not a data.frame. Exiting...")
+            stop("superb::ERROR: data is not a data.frame or similar data structure. Exiting...")
 
     # 1.1: missing adjustements
     if(is.null(adjustments$purpose))        {adjustments$purpose        <- "single"}
@@ -326,7 +327,7 @@ superbPlot <- function(data,
     }
     
     runDebug("superb.2", "End of Step 2: Data post decorrelation", 
-        c("data.transformed2"), list(data.transformed) )
+        c("data.transformed2", "newnames2"), list(data.transformed, newnames) )
 
 
     ##############################################################################
@@ -334,8 +335,9 @@ superbPlot <- function(data,
     ##############################################################################
 
     # replace variable names with names based on design...
-    colnames(data.untransformed)[grep(paste(variables,collapse="|"),names(data.untransformed))] = newnames
-    colnames(data.transformed)[grep(paste(variables,collapse="|"),names(data.transformed))] = newnames
+    temp <- paste("^", variables, "$", collapse="|", sep="")
+    colnames(data.untransformed)[grep(temp, names(data.untransformed))] = newnames
+    colnames(data.transformed)[grep(temp, names(data.transformed))] = newnames
 
     # set data to long format using lsr (Navarro, 2015)
     data.untransformed.long <- suppressWarnings(lsr::wideToLong(data.untransformed, within = WSFactors, sep = weird))

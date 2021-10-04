@@ -8,18 +8,18 @@ library(gridExtra)          # for grid.arrange
 head(dataFigure1)
 
 ## ---- message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 1a**. Left panel of Figure 1."----
-plt1a = superbPlot(dataFigure1, 
+plt1a <- superbPlot(dataFigure1, 
             BSFactors   = "grp", 
             variables   = "score", 
             plotStyle   = "line" ) 
 plt1a
 
 ## ---- message=FALSE, echo=TRUE, eval=TRUE-------------------------------------
-ornateBS = list(
+ornateBS <- list(
     xlab("Group"), 
     ylab("Attitude towards class activities"),
-    scale_x_discrete(labels=c("Collaborative\ngames", "Unstructured\nactivities")), #new!
-    coord_cartesian( ylim = c(75,125) ),
+    scale_x_discrete(labels = c("Collaborative\ngames", "Unstructured\nactivities")), #new!
+    coord_cartesian( ylim = c(70,130) ),
     geom_hline(yintercept = 100, colour = "black", size = 0.5, linetype=2),
     theme_light(base_size = 14) +
     theme( plot.subtitle = element_text(size=12))
@@ -30,7 +30,7 @@ plt1a <- plt1a + ornateBS + labs(subtitle="(stand-alone)\n95% CI")
 plt1a
 
 ## ---- message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 1c**. Making and decorating central panel of Figure 1."----
-plt1b = superbPlot(dataFigure1, 
+plt1b <- superbPlot(dataFigure1, 
             BSFactors    = "grp", 
             variables    = "score", 
             adjustments  = list(purpose = "difference"), #new!
@@ -39,14 +39,14 @@ plt1b <- plt1b + ornateBS + labs(subtitle="Difference-adjusted\n95% CI")
 plt1b
 
 ## ---- message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 1d**. Making and decorating right panel of Figure 1."----
-    plt1c = superbPlot(dataFigure1, 
-                BSFactors    = "grp", 
-                variables    = "score", 
-                adjustments  = list(purpose = "difference"),
-                plotStyle    = "raincloud",                         # new layout!
-                violinParams = list(fill = "green", alpha = 0.2) ) # changed color to the violin
-    plt1c <- plt1c + ornateBS + labs(subtitle="Difference-adjusted\n95% CI") 
-    plt1c
+plt1c <- superbPlot(dataFigure1, 
+            BSFactors    = "grp", 
+            variables    = "score", 
+            adjustments  = list(purpose = "difference"),
+            plotStyle    = "raincloud",                         # new layout!
+            violinParams = list(fill = "green", alpha = 0.2) ) # changed color to the violin
+plt1c <- plt1c + ornateBS + labs(subtitle="Difference-adjusted\n95% CI") 
+plt1c
 
 ## ---- message=FALSE, echo=TRUE, eval=TRUE, fig.width=9, fig.height=4, fig.cap="**Figure 1**. The complete Figure 1."----
 grid.arrange(plt1a, plt1b, plt1c, ncol=3)
@@ -62,7 +62,7 @@ t.test(dataFigure1$score[dataFigure1$grp==1],
        )
 
 ## ---- message=FALSE, echo=TRUE, eval=TRUE-------------------------------------
-ornateWS = list(
+ornateWS <- list(
     xlab("Moment"),                                                #different!
     scale_x_discrete(labels=c("Pre\ntreatment", "Post\ntreatment")), 
     ylab("Statistics understanding"),
@@ -103,7 +103,7 @@ plt2c <- plt2c + ornateWS + labs(subtitle="Correlation and difference-\nadjusted
 plt2c 
 
 ## -----------------------------------------------------------------------------
-ornateWS2 = list(
+ornateWS2 <- list(
     xlab("Difference"),                                      
     scale_x_discrete(labels=c("Post minus Pre\ntreatment")), 
     ylab("Statistics understanding"),
@@ -114,7 +114,7 @@ ornateWS2 = list(
 )
 
 ## ---- message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 2d**. Making right panel of Figure 2."----
-dataFigure2$diff = dataFigure2$post - dataFigure2$pre
+dataFigure2$diff <- dataFigure2$post - dataFigure2$pre
 plt2d <- superbPlot(dataFigure2, 
             WSFactor     = "Moment(1)", 
             variables    = c("diff"), 
@@ -136,7 +136,7 @@ grid.arrange(plt2a, plt2b, plt2c, plt2d,  ncol=4)
 t.test(dataFigure2$pre, dataFigure2$post, paired=TRUE)
 
 ## ---- message=FALSE, echo=TRUE, eval=TRUE-------------------------------------
-ornateCRS = list(
+ornateCRS <- list(
     xlab("Group"), 
     ylab("Quality of policies"),
     scale_x_discrete(labels=c("From various\nfields", "From the\nsame field")), #new!
@@ -147,7 +147,7 @@ ornateCRS = list(
 )
 
 ## ---- message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 3a**. The left panel of Figure 3."----
-plt3a = superbPlot(dataFigure3, 
+plt3a <- superbPlot(dataFigure3, 
     BSFactors     = "grp", 
     variables     = "VD", 
     adjustments   = list(purpose = "single", samplingDesign = "SRS"),
@@ -199,7 +199,7 @@ cat(paste("t-test corrected for cluster-randomized sampling: t(",
     ", p = ", round(pcorrected, 3),"\n", sep= ""))
 
 ## ---- message=FALSE, echo=TRUE, eval=TRUE-------------------------------------
-ornateBS = list(
+ornateBS <- list(
     xlab(""), 
     ylab("Metabolic score"),
     scale_x_discrete(labels=c("Response to treatment")), #new!
@@ -235,7 +235,7 @@ plt4c <- superbPlot(dataFigure4,
 plt4c <- plt4c + ornateBS + labs(subtitle="Population size-\nadjusted 95% CI") 
 
 ## ---- message=FALSE, echo=TRUE, eval=TRUE, fig.width=9, fig.height=4, fig.cap="**Figure 4**. The complete Figure 4."----
-plt4 = grid.arrange(plt4a, plt4b, plt4c, ncol=3)
+plt4 <- grid.arrange(plt4a, plt4b, plt4c, ncol=3)
 
 ## ---- message=FALSE, echo=TRUE, eval=FALSE------------------------------------
 #  png(filename = "Figure4.png", width = 640, height = 320)
@@ -243,9 +243,9 @@ plt4 = grid.arrange(plt4a, plt4b, plt4c, ncol=3)
 #  dev.off()
 
 ## ---- message=FALSE, echo=TRUE, eval=TRUE-------------------------------------
-res = t.test(dataFigure4$score, mu=100)
-tcorrected = res$statistic /sqrt(1-nrow(dataFigure4) / 50)
-pcorrected = 1-pt(tcorrected, 24)
+res <- t.test(dataFigure4$score, mu=100)
+tcorrected <- res$statistic /sqrt(1-nrow(dataFigure4) / 50)
+pcorrected <- 1-pt(tcorrected, 24)
 
 cat(paste("t-test corrected for finite-population size: t(",
     nrow(dataFigure4)-1,") = ", round(tcorrected, 3),

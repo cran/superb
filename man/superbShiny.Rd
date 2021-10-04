@@ -13,9 +13,13 @@ A plot that can be cut-and-paste.
 The function \code{suberbShiny()} provides a simple user interface
 to plot standard error or confidence interval for various descriptive
 statistics under various designs, population size and purposes,
-according to the \code{suberb} framework. See \insertCite{c17}{superb} for more.
+according to the \code{suberb} framework. See \insertCite{cgh21}{superb} for more.
+Also see this \href{https://www.youtube.com/watch?v=rw_6ll5nVus/}{video}
+from \insertCite{w21}{superb} for a demo using
+the shinyapps.io installation accessible at
+\href{https://dcousin3.shinyapps.io/superbshiny/}{dcousin3.shinyapps.io/superbshiny}
 Limitations: it is not possible to use custom-made statistics with the
-user interface, nor is it possible to request an adjustment for cluster-
+graphical user interface, nor is it possible to request an adjustment for cluster-
 randomized sampling. These options are available with \code{superbPlot()}.
 }
 \examples{

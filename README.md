@@ -1,4 +1,4 @@
-
+﻿
 # superb: Summary plots with adjusted error bars
 
 <img src="logo.png" align="right" alt="" width="120" />
@@ -118,13 +118,13 @@ testdata <- GRD(
 head(testdata)
 ```
 
-    ##   id Difficulty  score.1  score.2
-    ## 1  1          A 84.56973 80.01478
-    ## 2  2          A 93.67914 80.75442
-    ## 3  3          A 96.85334 91.65504
-    ## 4  4          A 59.45858 51.95677
-    ## 5  5          A 66.49529 56.73964
-    ## 6  6          A 64.11034 57.53032
+    ##   id Difficulty  score.1   score.2
+    ## 1  1          A 87.50433 102.15152
+    ## 2  2          A 60.07547  51.97630
+    ## 3  3          A 75.34846  59.80454
+    ## 4  4          A 60.93139  55.34069
+    ## 5  5          A 81.91479  86.32453
+    ## 6  6          A 83.31082  84.09887
 
 The simulated scores are illustrated using using a more elaborated
 layout, the `pointjitterviolin` which, in addition to the mean and
@@ -160,5 +160,18 @@ The complete documentation is available on this
 [site](https://dcousin3.github.io/superb/).
 
 A general introduction to the `superb` framework underlying this library
-is under consideration at *Advances in Methods and Practices in
-Psychological Sciences*.
+is in press at *Advances in Methods and Practices in Psychological
+Sciences* (Cousineau, Goulet, & Harding, in press).
+
+# References
+
+<p>Cousineau D, Goulet M, Harding B (2021).
+“Summary plots with adjusted error bars: The superb framework with an implementation in R.”
+<em>Advances in Methods and Practices in Psychological Science</em>, <b>2021</b>, 1--46.
+doi: https://doi.org/10.1177/25152459211035109
+</p>
+<p>Walker, J. A. L. (2021).
+“Summary plots with adjusted error bars (superb).”
+<em>Youtube video</em>, <b><a href="https://www.youtube.com/watch?v=rw_6ll5nVus">accessible here</a>)</b>.
+</p>
+
