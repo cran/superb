@@ -3,7 +3,7 @@ cat("this will be hidden; use for general initializations.")
 library(superb)
 library(ggplot2)
 
-## ---- message=FALSE, echo=TRUE, fig.cap="**Figure 1**. Various statistics and various measures of precisions"----
+## ---- message=FALSE, echo=TRUE, fig.height=4, fig.cap="**Figure 1**. Various statistics and various measures of precisions"----
 # shut down 'warnings', 'design' and 'summary' messages
 options(superb.feedback = 'none') 
 
@@ -113,7 +113,7 @@ superb:::is.gamma.required("SE.mean")
     # we check that it is a valid interval function
     superb:::is.errorbar.function("myBootstrapPI.mean")
 
-## ---- message=FALSE, echo=TRUE, fig.cap="**Figure 4**. `superbPlot` with a custom-made interval function."----
+## ---- message=FALSE, echo=TRUE,  fig.height=4, fig.cap="**Figure 4**. `superbPlot` with a custom-made interval function."----
     plt1 <- superbPlot(dataFigure1, 
         BSFactors = "grp", 
         variable = c("score"), 

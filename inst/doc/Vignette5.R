@@ -65,9 +65,6 @@ grid.arrange(
     p4+ornate, p5+ornate, p6+ornate,
     ncol=2)
 
-## ---- fig.width= 7, fig.height = 3.5, fig.cap = "**Figure 2b**. The raincloud with ornamental styling added."----
-mp(testdata, "raincloud") + coord_flip() + ornate
-
 ## -----------------------------------------------------------------------------
 superbPlot.foo <- function(
     summarydata,
@@ -157,15 +154,15 @@ superbPlot.simpleWithOptions <- function(
 }
 superb:::is.superbPlot.function("superbPlot.simpleWithOptions")
 
-## ---- message=FALSE, echo=TRUE, results='hide', fig.show='show', fig.cap="**Figure 4**. A simple figure with optional arguments"----
-superbPlot(TMB1964r,
-    WSFactors = "T(7)",      
-    BSFactors = "Condition",
-    variables = c("T1","T2","T3","T4","T5","T6","T7"),
-    plotStyle = "simpleWithOptions", 
-    ## here goes the optional arguments
-    myownParams = list(size=1, color="purple", position = position_dodge(width = 0.3) ) 
-)
+## ---- message=FALSE, eval=FALSE, echo=TRUE, results='hide', fig.show='show', fig.cap="**Figure 4**. A simple figure with optional arguments"----
+#  superbPlot(TMB1964r,
+#      WSFactors = "T(7)",
+#      BSFactors = "Condition",
+#      variables = c("T1","T2","T3","T4","T5","T6","T7"),
+#      plotStyle = "simpleWithOptions",
+#      ## here goes the optional arguments
+#      myownParams = list(size=1, color="purple", position = position_dodge(width = 0.3) )
+#  )
 
 ## ---- eval=FALSE, message=FALSE, echo=TRUE, results='hide'--------------------
 #  options(superb.feedback = 'all')

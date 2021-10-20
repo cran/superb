@@ -40,7 +40,7 @@ library(superb)
 library(ggplot2)
 library(scales)     # for asn_trans() non-linear scale
 
-## ---- message=FALSE, echo=TRUE, fig.width = 5, fig.cap="**Figure 1**. Anscombe-transformed scores as a function of group."----
+## ---- message=FALSE, echo=TRUE, fig.width = 3, fig.cap="**Figure 1**. Anscombe-transformed scores as a function of group."----
 # ornate to decorate the plot a little bit...
 ornate = list( 
     theme_bw(base_size = 16),
@@ -78,7 +78,7 @@ CI.prop <- function(v, gamma = 0.95) {
     c(cilenlo, cilenhi)
 }
 
-## ---- message=FALSE, echo=TRUE, fig.width = 5, fig.cap="**Figure 2**. Proportion as a function of group."----
+## ---- message=FALSE, echo=TRUE, fig.width = 3, fig.cap="**Figure 2**. Proportion as a function of group."----
 superbPlot(dta, 
     BSFactors = "group",
     variables = "scores",

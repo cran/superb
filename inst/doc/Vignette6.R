@@ -103,7 +103,7 @@ superbPlot(dta,
     variables = c("DV.1","DV.2","DV.3"),
     plotStyle = "line" )
 
-## ---- fig.width=5, fig.height=5-----------------------------------------------
+## ---- fig.width=4, fig.height=4-----------------------------------------------
 dta <- GRD(
     WSFactors = 'Difficulty(1, 2)',
     SubjectsPerGroup = 1000,
@@ -111,7 +111,7 @@ dta <- GRD(
 )
 plot(dta$DV.1, dta$DV.2)
 
-## ---- fig.width=5, fig.height=5-----------------------------------------------
+## ---- fig.width=4, fig.height=4-----------------------------------------------
 dta <- GRD(
     WSFactors = 'Difficulty(1, 2)',
     SubjectsPerGroup = 1000,

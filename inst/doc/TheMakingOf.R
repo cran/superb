@@ -48,8 +48,8 @@ plt1c <- superbPlot(dataFigure1,
 plt1c <- plt1c + ornateBS + labs(subtitle="Difference-adjusted\n95% CI") 
 plt1c
 
-## ---- message=FALSE, echo=TRUE, eval=TRUE, fig.width=9, fig.height=4, fig.cap="**Figure 1**. The complete Figure 1."----
-grid.arrange(plt1a, plt1b, plt1c, ncol=3)
+## ---- message=FALSE, echo=TRUE, eval=FALSE, fig.width=9, fig.height=4, fig.cap="**Figure 1**. The complete Figure 1."----
+#  grid.arrange(plt1a, plt1b, plt1c, ncol=3)
 
 ## ---- message=FALSE, echo=TRUE, eval=FALSE------------------------------------
 #  png(filename = "Figure1.png", width = 640, height = 320)
@@ -124,8 +124,8 @@ plt2d <- superbPlot(dataFigure2,
 plt2d <- plt2d + ornateWS2 + labs(subtitle="95% CI \nof the difference")
 plt2d
 
-## ---- message=FALSE, echo=TRUE, eval=TRUE, fig.width=9, fig.height=4, fig.cap="**Figure 2**. The complete Figure 2."----
-grid.arrange(plt2a, plt2b, plt2c, plt2d,  ncol=4)
+## ---- message=FALSE, echo=TRUE, eval=FALSE, fig.width=9, fig.height=4, fig.cap="**Figure 2**. The complete Figure 2."----
+#  grid.arrange(plt2a, plt2b, plt2c, plt2d,  ncol=4)
 
 ## ---- message=FALSE, echo=TRUE, eval=FALSE------------------------------------
 #  png(filename = "Figure2.png", width = 850, height = 320)
@@ -175,8 +175,8 @@ plt3c <- superbPlot(dataFigure3,
     clusterColumn = "cluster" )
 plt3c <- plt3c + ornateCRS + labs(subtitle="Cluster and difference-\nadjusted 95% CI")
 
-## ---- message=FALSE, echo=TRUE, eval=TRUE, fig.width=8, fig.height=4, fig.cap="**Figure 3**. The complete Figure 3."----
-grid.arrange(plt3a, plt3b, plt3c, ncol=3)
+## ---- message=FALSE, echo=TRUE, eval=FALSE, fig.width=8, fig.height=4, fig.cap="**Figure 3**. The complete Figure 3."----
+#  grid.arrange(plt3a, plt3b, plt3c, ncol=3)
 
 ## ---- message=FALSE, echo=TRUE, eval=FALSE------------------------------------
 #  png(filename = "Figure3.png", width = 640, height = 320)
@@ -234,8 +234,8 @@ plt4c <- superbPlot(dataFigure4,
     violinParams = list(fill = "green", alpha = 0.2)  ) 
 plt4c <- plt4c + ornateBS + labs(subtitle="Population size-\nadjusted 95% CI") 
 
-## ---- message=FALSE, echo=TRUE, eval=TRUE, fig.width=9, fig.height=4, fig.cap="**Figure 4**. The complete Figure 4."----
-plt4 <- grid.arrange(plt4a, plt4b, plt4c, ncol=3)
+## ---- message=FALSE, echo=TRUE, eval=FALSE, fig.width=9, fig.height=4, fig.cap="**Figure 4**. The complete Figure 4."----
+#  plt4 <- grid.arrange(plt4a, plt4b, plt4c, ncol=3)
 
 ## ---- message=FALSE, echo=TRUE, eval=FALSE------------------------------------
 #  png(filename = "Figure4.png", width = 640, height = 320)

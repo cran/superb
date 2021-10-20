@@ -307,7 +307,7 @@ plt3 <- superbPlot(glucoselevels,
                                   position = position_nudge(-0.15) ),
             plotStyle = "line" ) + ornate + makeTransparent()
 
-## ---- message=FALSE, echo=TRUE, fig.width = 5, fig.cap="**Figure 3a**. Mean glucose level and 95% reference intervals with 95% confidence intervals."----
+## ---- message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3a**. Mean glucose level and 95% reference intervals with 95% confidence intervals."----
 # transform the three plots into visual objects
 plt1 <- ggplotGrob(plt1)
 plt2 <- ggplotGrob(plt2)
@@ -319,7 +319,7 @@ ggplot() +
     annotation_custom(grob=plt2) + 
     annotation_custom(grob=plt3)
 
-## ---- message=FALSE, echo=TRUE, fig.width = 5, fig.cap="**Figure 3b**. Jittered dots showing mean glucose level and 95% reference intervals with 95% confidence intervals."----
+## ---- message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3b**. Jittered dots showing mean glucose level and 95% reference intervals with 95% confidence intervals."----
 # redo plt1; the other 2 are still in memory
 plt1 <- superbPlot(glucoselevels, 
             BSFactors = "concentration",  
@@ -340,7 +340,7 @@ ggplot() +
     annotation_custom(grob=plt2) + 
     annotation_custom(grob=plt3)
 
-## ---- message=FALSE, echo=TRUE, fig.width = 5, fig.cap="**Figure 3c**. Jittered dots and violins showing mean glucose level and 95% reference intervals with 95% confidence intervals of the tips' position."----
+## ---- message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3c**. Jittered dots and violins showing mean glucose level and 95% reference intervals with 95% confidence intervals of the tips' position."----
 # redo plt1; the other 2 are still in memory
 plt1 <- superbPlot(glucoselevels, 
             BSFactors = "concentration",  
@@ -355,11 +355,11 @@ plt1 <- superbPlot(glucoselevels,
 # transform the three plots into visual objects
 plt1 <- ggplotGrob(plt1)
 
-# superimpose the grobs onto an empty ggplot 
-ggplot() + 
-    annotation_custom(grob=plt1) + 
-    annotation_custom(grob=plt2) + 
-    annotation_custom(grob=plt3)
+# you may superimpose the grobs onto an empty ggplot 
+#ggplot() + 
+#    annotation_custom(grob=plt1) + 
+#    annotation_custom(grob=plt2) + 
+#    annotation_custom(grob=plt3)
 
 ## ---- message=FALSE-----------------------------------------------------------
 plt4 <- superbPlot(glucoselevels, 
@@ -372,7 +372,7 @@ plt4 <- superbPlot(glucoselevels,
             gamma     = 0.95,
             plotStyle = "line" ) + ornate + makeTransparent()
 
-## ---- message=FALSE, echo=TRUE, fig.width = 5, fig.cap="**Figure 3d**. Jittered dots and violins showing mean glucose level +-95% confidence intervals of the mean, and 95% reference intervals with 95% confidence intervals."----
+## ---- message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3d**. Jittered dots and violins showing mean glucose level +-95% confidence intervals of the mean, and 95% reference intervals with 95% confidence intervals."----
 # transform that plot too into visual objects
 plt4 <- ggplotGrob(plt4)
 

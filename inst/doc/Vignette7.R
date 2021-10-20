@@ -105,7 +105,7 @@ wt <- superbData(dtaHetero,
 wt2 <- wt$summaryStatistics
 wmean <- (wt2$upperwidth[1]+wt2$upperwidth[2]) / 2
 
-## ----fig.height=5, fig.width=12, fig.cap = "**Figure 4**. All three plots with relevant markers in red."----
+## ----fig.height=4, fig.width=9, fig.cap = "**Figure 4**. All three plots with relevant markers in red."----
 # showing all three plots, with reference lines in red
 grid.arrange(
     pt + labs(subtitle="Difference-adjusted 95% CI\n with default degree of freedom") + 

@@ -12,7 +12,7 @@ Fulldta <- dta <- GRD(
                 Population = list(mean = 400, stddev = 50)
 )
 
-## ---- message=FALSE, echo=TRUE, fig.width = 5, fig.cap="**Figure 1**. Mean response times to say **Word** or **Non-word**."----
+## ---- message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 1**. Mean response times to say **Word** or **Non-word**."----
 superbPlot(Fulldta,
     WSFactors = c("Nletters(4)","Nuppercase(4)"),
     variables = c("DV.1.1","DV.2.1","DV.3.1","DV.4.1",
@@ -31,7 +31,7 @@ dta$DV.2.3 = NULL
 dta$DV.2.4 = NULL
 dta$DV.3.4 = NULL
 
-## ---- message=FALSE, echo=TRUE, fig.width = 5, fig.cap="**Figure 2**. Mean response times to say **Word** or **Non-word**."----
+## ---- message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 2**. Mean response times to say **Word** or **Non-word**."----
 superbPlot(dta,
     WSFactors = c("Nletters(4)","Nuppercase(4)"),
     variables = c("DV.1.1","DV.2.1","DV.3.1","DV.4.1","DV.2.2","DV.3.2",
