@@ -223,7 +223,7 @@ glucoselevels$gl[glucoselevels$gl<10]<-10
 ## -----------------------------------------------------------------------------
 head(glucoselevels)
 
-## ---- message=FALSE, echo=TRUE, fig.width = 5, fig.cap="**Figure 1**. Mean glucose level as a function of concentration."----
+## ---- message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 1**. Mean glucose level as a function of concentration."----
 superbPlot(glucoselevels, 
             BSFactors = "concentration",  
             variables = "gl", 
@@ -241,7 +241,7 @@ RI.mean <- function(data, gamma = 0.95) {
     refLimit(data, refConf = gamma)$Ref_Int
 }
 
-## ---- message=FALSE, echo=TRUE, fig.width = 5, fig.cap="**Figure 2**. Mean glucose level and 95% reference intervals as a function of concentration."----
+## ---- message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 2**. Mean glucose level and 95% reference intervals as a function of concentration."----
 superbPlot(glucoselevels, 
             BSFactors = "concentration",  
             variables = "gl", 
@@ -258,7 +258,7 @@ cihiRI.mean <- function(data, gamma = c(0.95, 0.90) ) {
     refLimit(data, refConf = gamma[1], limitConf = gamma[2] )$Conf_Int[3:4]
 }
 
-## ---- message=FALSE, echo=TRUE, fig.width = 5, fig.cap="**Figure 3**. Mean glucose level and 90% confidence intervals of the upper RI tips."----
+## ---- message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3**. Mean glucose level and 90% confidence intervals of the upper RI tips."----
 superbPlot(glucoselevels, 
             BSFactors = "concentration",  
             variables = "gl", 

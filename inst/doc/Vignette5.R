@@ -78,7 +78,7 @@ superbPlot.foo <- function(
     return(plot)
 }
 
-## ---- message=FALSE, echo=FALSE, fig.cap="**Figure 3**. Mean score with 95% confidence interval using the ``simple`` plot layout."----
+## ---- message=FALSE, echo=FALSE, fig.height=3, fig.width=4, fig.cap="**Figure 3**. Mean score with 95% confidence interval using the ``simple`` plot layout."----
 superbPlot.simple <- function( summarydata, xfactor, groupingfactor, addfactors, rawdata ) {
     plot <- ggplot(
         data = summarydata,
@@ -227,7 +227,7 @@ superbPlot.smiley <- function(
 ## -----------------------------------------------------------------------------
 superb:::is.superbPlot.function("superbPlot.smiley")
 
-## ---- fig.width= 7, fig.height = 6, fig.cap = "**Figure 5**. smile!"----------
+## ---- fig.width= 4, fig.height = 3, fig.cap = "**Figure 5**. smile!"----------
 superbPlot(TMB1964r,
      WSFactors = "T(7)",      
      BSFactors = "Condition", 

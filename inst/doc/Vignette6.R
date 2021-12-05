@@ -53,7 +53,7 @@ dta <- GRD(
     )
 )
 
-## -----------------------------------------------------------------------------
+## ---- fig.height=3, fig.width=4-----------------------------------------------
 dta <- GRD(
     BSFactors = "Group(2)",
     Population = list(
@@ -76,7 +76,7 @@ dta <- GRD(SubjectsPerGroup = 5000,
 )
 hist(dta$RT,breaks=seq(250,425,by=5))
 
-## ---- message=FALSE-----------------------------------------------------------
+## ---- message=FALSE, fig.height=3, fig.width=4--------------------------------
 dta <- GRD(
     BSFactors = 'Therapy(CBT, Control, Exercise)',
     WSFactors = 'Contrast(3)',
@@ -88,7 +88,7 @@ superbPlot(dta,
     variables = c("DV.1","DV.2","DV.3"),
     plotStyle = "line" )
 
-## ---- message=FALSE-----------------------------------------------------------
+## ---- message=FALSE, fig.height=3, fig.width=4--------------------------------
 dta <- GRD(
     BSFactors = 'Therapy(CBT,Control,Exercise)',
     WSFactors = 'Contrast(3) ',
