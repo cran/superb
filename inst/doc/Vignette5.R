@@ -164,14 +164,14 @@ superb:::is.superbPlot.function("superbPlot.simpleWithOptions")
 #      myownParams = list(size=1, color="purple", position = position_dodge(width = 0.3) )
 #  )
 
-## ---- eval=FALSE, message=FALSE, echo=TRUE, results='hide'--------------------
-#  options(superb.feedback = 'all')
-#  runDebug( 'where are we?', "Text to show when we get there",
-#    c("variable1", "variable2", "etc"),
-#    list( "var1InTheFct", "var2InTheFct", "varetcInTheFct")
-#  )
+## ---- eval=TRUE, message=TRUE, echo=TRUE--------------------------------------
+options(superb.feedback = 'all')
+runDebug( 'where are we?', "Text to show when we get there",
+  c("variable1", "variable2", "etc"),
+  list( "var1InTheFct", "var2InTheFct", "varetcInTheFct")
+)
 
-## ---- message=TRUE, echo=TRUE, results='hide', fig.show='hide'----------------
+## ---- eval=TRUE, message=TRUE, echo=TRUE, fig.show='hide'---------------------
 superbPlot.empty <- function(
     summarydata, xfactor, groupingfactor, addfactors, rawdata 
 ) {
@@ -227,7 +227,7 @@ superbPlot.smiley <- function(
 ## -----------------------------------------------------------------------------
 superb:::is.superbPlot.function("superbPlot.smiley")
 
-## ---- fig.width= 4, fig.height = 3, fig.cap = "**Figure 5**. smile!"----------
+## ---- fig.width= 4, fig.height = 3, fig.cap = "**Figure 5**. smile!", fig.show='hide'----
 superbPlot(TMB1964r,
      WSFactors = "T(7)",      
      BSFactors = "Condition", 
