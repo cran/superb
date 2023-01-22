@@ -3,8 +3,7 @@ title: "Why use difference-adjusted confidence intervals?"
 bibliography: "../inst/REFERENCES.bib"
 csl: "../inst/apa-6th.csl"
 output: 
-  html_document:
-    toc: TRUE
+  rmarkdown::html_vignette
 description: >
   This vignette explains the difference between a regular confidence interval
   and a difference-adjusted confidence interval.
@@ -15,7 +14,7 @@ vignette: >
 ---
 
 
-```{r, echo = FALSE, message = FALSE, results = 'hide'}
+```{r, echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'}
 cat("this will be hidden; use for general initializations.")
 library(superb)
 library(ggplot2)
@@ -44,7 +43,7 @@ superbPlot(dataFigure1,
     xlab("Group") + ylab("Score") + 
     labs(title="(stand-alone)\n95% confidence intervals") +
     coord_cartesian( ylim = c(85,115) ) +
-    theme_gray(base_size=16) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity"))
 ```
 
@@ -114,7 +113,7 @@ superbPlot(dataFigure1,
     xlab("Group") + ylab("Score") + 
     labs(title="Difference-adjusted\n95% confidence intervals") +
     coord_cartesian( ylim = c(85,115) ) + 
-    theme_gray(base_size=16) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity"))
 ```
 
@@ -135,7 +134,7 @@ plt1 <- superbPlot(dataFigure1,
     xlab("Group") + ylab("Score") + 
     labs(title="(stand-alone)\n95% confidence intervals") +
     coord_cartesian( ylim = c(85,115) ) +
-    theme_gray(base_size=16) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity")) 
 
 plt2 <- superbPlot(dataFigure1, 
@@ -146,7 +145,7 @@ plt2 <- superbPlot(dataFigure1,
     xlab("Group") + ylab("Score") + 
     labs(title="Difference-adjusted\n95% confidence intervals") +
     coord_cartesian( ylim = c(85,115) ) + 
-    theme_gray(base_size=16) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity")) 
 
 plt <- grid.arrange(plt1, plt2, ncol=2)
@@ -165,7 +164,7 @@ plt1 <- superbPlot(dataFigure1,
     xlab("Group") + ylab("Score") + 
     labs(title="(red) Difference-adjusted 95% confidence intervals\n(blue) (stand-alone) 95% confidence intervals") +
     coord_cartesian( ylim = c(85,115) ) +
-    theme_gray(base_size=12) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity")) 
 
 
@@ -178,7 +177,7 @@ plt2 <- superbPlot(dataFigure1,
     xlab("Group") + ylab("Score") + 
     labs(title="(red) Difference-adjusted 95% confidence intervals\n(blue) (stand-alone) 95% confidence intervals") +
     coord_cartesian( ylim = c(85,115) ) + 
-    theme_gray(base_size=12) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity"))
 
 # transform the ggplots into "grob" so that they can be manipulated
@@ -218,7 +217,7 @@ comparisons.
 
 ## In conclusion
 
-Adjusting the confidence intervals is important to have coherence between the text 
+Adjusting the confidence intervals is important to have coherence between the test 
 and the figure. If you are to claim that there is no difference but show Figure 1,
 an examinator (you know, a reviewer) may raise a red flag and cast doubt on your
 conclusions (opening the door to many rounds of reviews or rejection if this is a 

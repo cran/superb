@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE, results = 'hide'-------------------------
+## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
@@ -27,8 +27,8 @@ ornate = list(
     scale_x_discrete(labels=c("Pre-\nTreatment","Post-\nTreatment")),
     ylab("Score"),
     coord_cartesian( ylim = c(40,+110) ),
-    theme_light(base_size = 14) +
-    theme( plot.subtitle = element_text(size=24))
+    theme_light(base_size = 10) +
+    theme( plot.subtitle = element_text(size=16))
 )
 
 ## ---- fig.height=4, fig.width=3, fig.cap = "**Figure 1**. Plot of dtaHerero showing heterogeneous error bars."----
@@ -111,8 +111,8 @@ grid.arrange(
     pt + labs(subtitle="Difference-adjusted 95% CI\n with default degree of freedom") + 
         geom_text( x = 1.15, y = mean(grp1)+(mean(grp2)-mean(grp1))/2, label = "power-2 mean", angle = 90) +
         geom_text( x = 1.55, y = mean(grp1)+(mean(grp2)-mean(grp1))/2, label = "regular mean", angle = 90) +
-        geom_hline(yintercept = mean(grp1)+(mean(grp2)-mean(grp1))/2-tmean2/2, colour = "red", size = 0.5, linetype=2) + 
-        geom_hline(yintercept = mean(grp1)+(mean(grp2)-mean(grp1))/2+tmean2/2, colour = "red", size = 0.5, linetype=2) + 
+        geom_hline(yintercept = mean(grp1)+(mean(grp2)-mean(grp1))/2-tmean2/2, colour = "red", linewidth = 0.5, linetype=2) + 
+        geom_hline(yintercept = mean(grp1)+(mean(grp2)-mean(grp1))/2+tmean2/2, colour = "red", linewidth = 0.5, linetype=2) + 
         # arrow for the power-2 mean
         geom_segment(arrow = arrow(length =unit(0.4,"cm")), x=1.33, y=mean(grp1)+(mean(grp2)-mean(grp1))/2, 
                 xend=1.33, yend=mean(grp1)+(mean(grp2)-mean(grp1))/2+tmean2/2) +
@@ -126,8 +126,8 @@ grid.arrange(
     pw  + labs(subtitle="Difference-adjusted 95% CI\nwith df from Welch"),
 
     pwt + labs(subtitle="Tryon-adjusted 95% CI\nwith df from Welch") +
-        geom_hline(yintercept = mean(grp1)+wt2$upperwidth[1]/2, colour = "red", size = 0.5, linetype=2) + 
-        geom_hline(yintercept = mean(grp2)+wt2$lowerwidth[2]/2, colour = "red", size = 0.5, linetype=2),
+        geom_hline(yintercept = mean(grp1)+wt2$upperwidth[1]/2, colour = "red", linewidth = 0.5, linetype=2) + 
+        geom_hline(yintercept = mean(grp2)+wt2$lowerwidth[2]/2, colour = "red", linewidth = 0.5, linetype=2),
  ncol=3)
 
 ## -----------------------------------------------------------------------------

@@ -303,9 +303,14 @@ superbPlot <- function(data,
     # STEP 2: Decorrelate repeated-measure variables if needed; apply transforms
     ##############################################################################
 
+    complement <- function(x, U) {U[is.na(pmatch(U,x))]}
+    x <- c(BSFactors, variables)
+    U <- names(data)
+
     # keep a copy before transforming the data
-    data.untransformed <- data
-    data.transformed   <- data
+    # 2022.11.17: sort the columns, bsfactors & wsvariables first
+    data.untransformed <- data[ c(x, complement(x,U)) ]
+    data.transformed   <- data[ c(x, complement(x,U)) ]
 
     # We do this step for each group and only on columns with repeated measures.
     if (adjustments$decorrelation == "CM" || adjustments$decorrelation == "LM") {
@@ -345,10 +350,15 @@ superbPlot <- function(data,
 
     # needed because lsr turns the within indicators into strings, not numeric, causing order problems in plots (e.g., 1, 10, 2, ...)
     # new 15 january 2022, version 0.9.7.9 
+
+    ###CALISS! new May 11th, 2022, version 0.95.1
+    as.numeric.factor <- function(x) {strtoi(x)}
+
     data.untransformed.long[WSFactors] <- mapply(
-        as.numeric, data.untransformed.long[WSFactors])
+        as.numeric.factor, data.untransformed.long[WSFactors])
     data.transformed.long[WSFactors] <- mapply(
-        as.numeric, data.transformed.long[WSFactors])
+        as.numeric.factor, data.transformed.long[WSFactors])
+
 
     # if there was no within-subject factor, a dummy had been added
     if (WSFactors[1]  == wsMissing) {
@@ -559,7 +569,7 @@ superbPlot <- function(data,
 
 meanCorrelation <- function(X, cols) {
     # the mean pair-wise correlations from many columns of the dataframe X
-    rs   <- cor(X[cols])
+    rs   <- cor(X[cols], use = "pairwise.complete.obs" )
     rbar <- mean(rs[upper.tri(rs)])
     rbar
 }

@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE, results = 'hide'-------------------------
+## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 options("superb.feedback" = c("warnings","design"))
@@ -51,7 +51,7 @@ ornate <- list(
     ylab("Score"),
     labs(   title=tlbl),
     coord_cartesian( ylim = c(12,18) ),
-    theme_light(base_size=16)
+    theme_light(base_size=10)
 )
 
 # the plots on top are made transparent

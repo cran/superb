@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE, results = 'hide'-------------------------
+## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)

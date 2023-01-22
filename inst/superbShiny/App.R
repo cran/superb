@@ -12,8 +12,9 @@ library(superb)
 library(ggplot2)
 library(foreign) # for read.spss
 library(stringr) # for str_remove_all and str_replace_all
+library(dplyr)
 
-appversion <- "App version 3.1b; shipped with superb 0.9.7.8"
+appversion <- "App version 3.4; shipped with superb 0.95.7"
 
 ##########################################################
 ##########################################################
@@ -342,11 +343,11 @@ thePage <- fluidPage(
                     selectInput("superbPlotorder", "Select the order in which factors are plotted", 
                         multiple = TRUE, choices=c(""), selected="" ),
                     selectInput("superbLayout", "Select the plots' layout",
-                        choices=c("bar","point","line","pointjitter","pointjitterviolin","pointindividualline","raincloud","halfwidthline"),
+                        choices=c("bar","point","line","lineBand","pointjitter","pointjitterviolin","pointindividualline","raincloud","halfwidthline","lineBand"),
                         multiple = FALSE, selectize = FALSE),
                     strong("Specific graphic attributes (comma separated)"),br(),
                     div(style="display:inline-block", # if one choice is named, they must all be?
-                        selectInput("directive1", NULL, choices=c("Choose one" = "", "errorbarParams"="errorbarParams","facetParams"="facetParams","barParams"="barParams","pointParams"="pointParams","lineParams"="lineParams","jitterParams"="jitterParams","violinParams"="violinParams","errorbarlightParams"="errorbarlightParams"), 
+                        selectInput("directive1", NULL, choices=c("Choose one" = "", "errorbarParams"="errorbarParams","facetParams"="facetParams","barParams"="barParams","pointParams"="pointParams","lineParams"="lineParams","jitterParams"="jitterParams","violinParams"="violinParams","errorbandParams"="errorbandParams"), 
                             width="140px", selectize = FALSE )
                     ),
                     div(style="display:inline-block", 

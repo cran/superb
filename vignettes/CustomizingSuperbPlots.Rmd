@@ -3,13 +3,12 @@ title: "Customizing `superb` plots"
 bibliography: "../inst/REFERENCES.bib"
 csl: "../inst/apa-6th.csl"
 output: 
-  html_document:
-    toc: TRUE
+  rmarkdown::html_vignette
 description: >
   This vignette shows how to fully customize your plot
   produced by superb.
 vignette: >
-  %\VignetteIndexEntry{Customizing superb plots}
+  %\VignetteIndexEntry{Customizing `superb` plots}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -24,7 +23,7 @@ scientific articles.
 
 In the following, we need the following libraries:
 
-```{r, message=FALSE, echo=TRUE, eval=TRUE}
+```{r, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE}
 ## Load relevant packages
 library(superb)             # for superbPlot
 library(ggplot2)            # for all the graphic directives

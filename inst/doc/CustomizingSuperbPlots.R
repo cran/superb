@@ -1,4 +1,4 @@
-## ---- message=FALSE, echo=TRUE, eval=TRUE-------------------------------------
+## ---- message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE----------------------
 ## Load relevant packages
 library(superb)             # for superbPlot
 library(ggplot2)            # for all the graphic directives

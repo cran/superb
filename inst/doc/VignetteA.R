@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE, results = 'hide'-------------------------
+## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
@@ -554,7 +554,7 @@ ornate = list(
                         "\n(purple) 90% confidence intervals of lower 95% RI",
                         "\n(blue)    95% confidence intervals of the mean")),
         coord_cartesian( ylim = c(000,200) ),
-        theme_light(base_size=14) # smaller font
+        theme_light(base_size=10) # smaller font
 )
 
 ## ---- message=FALSE-----------------------------------------------------------

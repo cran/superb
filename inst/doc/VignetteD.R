@@ -1,10 +1,9 @@
-## ---- echo = FALSE, message = FALSE, results = 'hide', warning = FALSE--------
+## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide', warning = FALSE----
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
 library(png)
 options(superb.feedback = c('design','warnings') )
-
 
 ## ---- echo=TRUE, eval=FALSE---------------------------------------------------
 #  setwd("c:")
@@ -28,7 +27,7 @@ data <- read.spss(file, to.data.frame = TRUE)
 #      pointParams    = list( size = 2, color = "purple")
 #  )
 
-## ----fig2, echo=FALSE, fig.cap="**Figure 2: Syntax to generate a plot**", fig.width = 5, fig.height = 5----
+## ----fig2, echo=FALSE, fig.cap="**Figure 2: Syntax to generate a plot**", fig.width = 8, fig.height = 8----
 library(png)
 fle1 <- system.file("extdata", "Syntax1.png", package = "superb")
 img1 <- readPNG(fle1)

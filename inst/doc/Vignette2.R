@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE, results = 'hide'-------------------------
+## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
 cat("this will be hidden; use for general initializations.")
 library(superb)
 library(ggplot2)
@@ -11,7 +11,7 @@ superbPlot(dataFigure1,
     xlab("Group") + ylab("Score") + 
     labs(title="(stand-alone)\n95% confidence intervals") +
     coord_cartesian( ylim = c(85,115) ) +
-    theme_gray(base_size=16) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity"))
 
 ## ---- message=FALSE, warning=FALSE, echo=TRUE---------------------------------
@@ -34,7 +34,7 @@ superbPlot(dataFigure1,
     xlab("Group") + ylab("Score") + 
     labs(title="Difference-adjusted\n95% confidence intervals") +
     coord_cartesian( ylim = c(85,115) ) + 
-    theme_gray(base_size=16) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity"))
 
 ## ---- message=FALSE, echo=TRUE, fig.height=4, fig.cap="**Figure 3**. Two representation of the data with unadjusted (left) and adjusted (right) 95% confidence intervals"----
@@ -46,7 +46,7 @@ plt1 <- superbPlot(dataFigure1,
     xlab("Group") + ylab("Score") + 
     labs(title="(stand-alone)\n95% confidence intervals") +
     coord_cartesian( ylim = c(85,115) ) +
-    theme_gray(base_size=16) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity")) 
 
 plt2 <- superbPlot(dataFigure1, 
@@ -57,7 +57,7 @@ plt2 <- superbPlot(dataFigure1,
     xlab("Group") + ylab("Score") + 
     labs(title="Difference-adjusted\n95% confidence intervals") +
     coord_cartesian( ylim = c(85,115) ) + 
-    theme_gray(base_size=16) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity")) 
 
 plt <- grid.arrange(plt1, plt2, ncol=2)
@@ -73,7 +73,7 @@ plt1 <- superbPlot(dataFigure1,
     xlab("Group") + ylab("Score") + 
     labs(title="(red) Difference-adjusted 95% confidence intervals\n(blue) (stand-alone) 95% confidence intervals") +
     coord_cartesian( ylim = c(85,115) ) +
-    theme_gray(base_size=12) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity")) 
 
 
@@ -86,7 +86,7 @@ plt2 <- superbPlot(dataFigure1,
     xlab("Group") + ylab("Score") + 
     labs(title="(red) Difference-adjusted 95% confidence intervals\n(blue) (stand-alone) 95% confidence intervals") +
     coord_cartesian( ylim = c(85,115) ) + 
-    theme_gray(base_size=12) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity"))
 
 # transform the ggplots into "grob" so that they can be manipulated

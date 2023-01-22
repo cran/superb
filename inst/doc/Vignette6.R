@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE, results = 'hide'-------------------------
+## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
@@ -36,7 +36,7 @@ dta <- GRD(
 )
 dta
 
-## -----------------------------------------------------------------------------
+## ---- dpi=72, fig.height=3, fig.width=4---------------------------------------
 dta <- GRD(
     RenameDV = "IQ",
     Population=list(mean=100,stddev=15)
@@ -53,7 +53,7 @@ dta <- GRD(
     )
 )
 
-## ---- fig.height=3, fig.width=4-----------------------------------------------
+## ---- dpi=72, fig.height=3, fig.width=4---------------------------------------
 dta <- GRD(
     BSFactors = "Group(2)",
     Population = list(
@@ -67,7 +67,7 @@ superbPlot(dta,
     variables = "DV",
     plotStyle = "pointjitterviolin" )
 
-## -----------------------------------------------------------------------------
+## ---- dpi=72, fig.height=3, fig.width=4---------------------------------------
 dta <- GRD(SubjectsPerGroup = 5000,
     RenameDV = "RT",
     Population=list(
@@ -76,7 +76,7 @@ dta <- GRD(SubjectsPerGroup = 5000,
 )
 hist(dta$RT,breaks=seq(250,425,by=5))
 
-## ---- message=FALSE, fig.height=3, fig.width=4--------------------------------
+## ---- message=FALSE, dpi=72, fig.height=3, fig.width=4------------------------
 dta <- GRD(
     BSFactors = 'Therapy(CBT, Control, Exercise)',
     WSFactors = 'Contrast(3)',
@@ -88,7 +88,7 @@ superbPlot(dta,
     variables = c("DV.1","DV.2","DV.3"),
     plotStyle = "line" )
 
-## ---- message=FALSE, fig.height=3, fig.width=4--------------------------------
+## ---- message=FALSE, dpi=72, fig.height=3, fig.width=4------------------------
 dta <- GRD(
     BSFactors = 'Therapy(CBT,Control,Exercise)',
     WSFactors = 'Contrast(3) ',
@@ -103,7 +103,7 @@ superbPlot(dta,
     variables = c("DV.1","DV.2","DV.3"),
     plotStyle = "line" )
 
-## ---- fig.width=4, fig.height=4-----------------------------------------------
+## ---- dpi=72, fig.width=4, fig.height=4---------------------------------------
 dta <- GRD(
     WSFactors = 'Difficulty(1, 2)',
     SubjectsPerGroup = 1000,
@@ -111,7 +111,7 @@ dta <- GRD(
 )
 plot(dta$DV.1, dta$DV.2)
 
-## ---- fig.width=4, fig.height=4-----------------------------------------------
+## ---- dpi=72, fig.width=4, fig.height=4---------------------------------------
 dta <- GRD(
     WSFactors = 'Difficulty(1, 2)',
     SubjectsPerGroup = 1000,
@@ -119,14 +119,14 @@ dta <- GRD(
 )
 plot(dta$DV.1, dta$DV.2)
 
-## -----------------------------------------------------------------------------
+## ---- dpi=72, fig.height=3, fig.width=4---------------------------------------
 dta <- GRD(SubjectsPerGroup = 5000,
     Population= list( mean=100, stddev = 15 ),
     Contaminant=list( mean=200, stddev = 15, proportion = 0.10 )
 )
 hist(dta$DV,breaks=seq(-25,300,by=2.5))
 
-## -----------------------------------------------------------------------------
+## ---- dpi=72, fig.height=3, fig.width=4---------------------------------------
 dta <- GRD(SubjectsPerGroup = 10000,
     Population=list( mean=100, stddev = 15 ),
     Contaminant=list( proportion = 0.10,

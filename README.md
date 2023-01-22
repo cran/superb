@@ -12,7 +12,8 @@ Status](https://www.r-pkg.org/badges/version/superb)](https://cran.r-project.org
 The library `superb` offers two main functionalities. First, it can be
 used to obtain plots with adjusted error bars. The main function is
 `superbPlot()` but you can also use `superbShiny()` for a graphical user
-interface requiring no programming nor scripting.
+interface requiring no programming nor scripting. See the nice tutorial
+by Walker (2021).
 
 The purpose of `superbPlot()` is to provide a plot with summary
 statistics and correct error bars. With simple adjustments, the error
@@ -39,7 +40,7 @@ install.packages("superb")
 library(superb)
 ```
 
-The development version can be accessed through GitHub:
+The development version 0.95.7 can be accessed through GitHub:
 
 ``` r
 devtools::install_github("dcousin3/superb")
@@ -86,8 +87,8 @@ superbPlot(ToothGrowth,
 
 ![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-As a third example, we illustrate the harmonic means `hmedian` along
-with 99.9% confidence intervals using lines:
+As a third example, we illustrate the harmonic means `hmean` along with
+99.9% confidence intervals using lines:
 
 ``` r
 superbPlot(ToothGrowth, 
@@ -118,13 +119,13 @@ testdata <- GRD(
 head(testdata)
 ```
 
-    ##   id Difficulty  score.1   score.2
-    ## 1  1          A 87.50433 102.15152
-    ## 2  2          A 60.07547  51.97630
-    ## 3  3          A 75.34846  59.80454
-    ## 4  4          A 60.93139  55.34069
-    ## 5  5          A 81.91479  86.32453
-    ## 6  6          A 83.31082  84.09887
+    ##   id Difficulty  score.1  score.2
+    ## 1  1          A 86.19905 95.29512
+    ## 2  2          A 57.68604 70.37582
+    ## 3  3          A 58.32737 66.77093
+    ## 4  4          A 69.01123 59.15022
+    ## 5  5          A 76.18286 65.69173
+    ## 6  6          A 64.38957 68.90451
 
 The simulated scores are illustrated using using a more elaborated
 layout, the `pointjitterviolin` which, in addition to the mean and
@@ -160,18 +161,32 @@ The complete documentation is available on this
 [site](https://dcousin3.github.io/superb/).
 
 A general introduction to the `superb` framework underlying this library
-is in press at *Advances in Methods and Practices in Psychological
-Sciences* (Cousineau, Goulet, & Harding, in press).
+is published at *Advances in Methods and Practices in Psychological
+Sciences* (Cousineau, Goulet, & Harding, 2021).
 
 # References
 
-<p>Cousineau D, Goulet M, Harding B (2021).
-"Summary plots with adjusted error bars: The superb framework with an implementation in R."
-<em>Advances in Methods and Practices in Psychological Science</em>, <b>2021</b>, 1--46.
-doi: https://doi.org/10.1177/25152459211035109
+<p>
+Cousineau D, Goulet M, Harding B (2021). “Summary plots with adjusted
+error bars: The superb framework with an implementation in R.”
+<em>Advances in Methods and Practices in Psychological Science</em>,
+<b>2021</b>, 1–46. doi: <https://doi.org/10.1177/25152459211035109>
 </p>
-<p>Walker, J. A. L. (2021).
-"Summary plots with adjusted error bars (superb)."
-<em>Youtube video</em>, <b><a href="https://www.youtube.com/watch?v=rw_6ll5nVus">accessible here</a>)</b>.
+<p>
+Walker, J. A. L. (2021). “Summary plots with adjusted error bars
+(superb).” <em>Youtube video</em>,
+<b><a href="https://www.youtube.com/watch?v=rw_6ll5nVus">accessible
+here</a></b>.
 </p>
 
+<div id="refs" class="references csl-bib-body hanging-indent"
+line-spacing="2">
+
+<div id="ref-w21" class="csl-entry">
+
+Walker, J. A. L. (2021). *Summary plots with adjusted error bars
+(superb)*. Retrieved from <https://www.youtube.com/watch?v=rw_6ll5nVus>
+
+</div>
+
+</div>

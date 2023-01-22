@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE, results = 'hide'-------------------------
+## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
@@ -43,7 +43,7 @@ superbPlot(dta,
         gamma       = 0.95, 
         plotStyle   = "line",
         adjustments = list(purpose="difference")
-) + theme_light(base_size = 16) + 
+) + theme_light(base_size = 10) + 
 coord_cartesian( ylim = c(-0.3,+0.45) ) +
 labs(title = "d_1 with difference-adjusted 95% confidence intervals of d_1",
      y     = "d_1 relative to grand mean") 
@@ -86,7 +86,7 @@ superbPlot(dta, BSFactors  = "Dose", variables = "score",
         statistic = "d1",  errorbar  = "CI", gamma     = 0.95, 
         plotStyle = "line",
         adjustments = list(purpose="difference")
-) + theme_light(base_size = 16) +
+) + theme_light(base_size = 10) +
 coord_cartesian( ylim = c(-0.3,+0.45) ) +
 labs(title   = "d_1 with difference-adjusted 95% confidence intervals of d_1",
      caption = paste("Note: Cohen's d_p and its confidence interval computed with the \n",

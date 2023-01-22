@@ -1,10 +1,9 @@
 ---
-title: "Using a custom statistic with its error bar"
+title: "Using a custom statistic with its error bar within ``superb``"
 bibliography: "../inst/REFERENCES.bib"
 csl: "../inst/apa-6th.csl"
 output: 
-  html_document:
-    toc: TRUE
+  rmarkdown::html_vignette
 description: >
   In superb, it is possible to summarize your data set with any descriptive statistics.
   The most common descriptive statistics are built-in superbPlot, but if you wish to 
@@ -12,13 +11,13 @@ description: >
   vignette explains how to add a custom descriptive statistic and how to add its 
   precision interval to superbPlot.
 vignette: >
-  %\VignetteIndexEntry{Using a custom statistic with its error bar}
+  %\VignetteIndexEntry{Using a custom statistic with its error bar within ``superb``}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
 
-```{r, echo = FALSE, message = FALSE, results = 'hide'}
+```{r, echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'}
 cat("this will be hidden; use for general initializations.")
 library(superb)
 library(ggplot2)
@@ -45,7 +44,7 @@ In what follow, we use ``GRD()`` to generate a random dataset with an interactio
 (see [Vignette 6](https://dcousin3.github.io/superb/articles/Vignette6.html)) 
 then make plots varying the statistics displayed.
 
-```{r, message=FALSE, echo=TRUE, fig.height=4, fig.cap="**Figure 1**. Various statistics and various measures of precisions"}
+```{r, message=FALSE, echo=TRUE, fig.height=4, fig.width=6, fig.cap="**Figure 1**. Various statistics and various measures of precisions"}
 # shut down 'warnings', 'design' and 'summary' messages
 options(superb.feedback = 'none') 
 
@@ -241,7 +240,7 @@ Here, we illustrate this process with the mean. The function must be name
 
 This is all we need to make the plot which we can compare with the parametric CI
 
-```{r, message=FALSE, echo=TRUE,  fig.height=4, fig.cap="**Figure 4**. `superbPlot` with a custom-made interval function."}
+```{r, message=FALSE, echo=TRUE,  fig.height=4, fig.width=6, fig.cap="**Figure 4**. `superbPlot` with a custom-made interval function."}
     plt1 <- superbPlot(dataFigure1, 
         BSFactors = "grp", 
         variable = c("score"), 

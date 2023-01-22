@@ -1,10 +1,9 @@
 ---
-title: "Four steps to make your plot"
+title: "Three steps to make your plot"
 bibliography: "../inst/REFERENCES.bib"
 csl: "../inst/apa-6th.csl"
 output: 
-  html_document:
-    toc: TRUE
+  rmarkdown::html_vignette
 description: >
   This vignette reviews the steps needed to realize your summary plot with correct
   error bars.
@@ -15,7 +14,7 @@ vignette: >
 ---
 
 
-```{r, echo = FALSE, message = FALSE, results = 'hide'}
+```{r, echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'}
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
@@ -105,7 +104,7 @@ superbPlot(dta, WSFactors = "Moment(3)",
     coord_cartesian( ylim = c(50,100) ) +
     ylab("Mean +- 95% CI") +
     labs(title="(stand-alone)\n95% confidence interval")+
-    theme_gray(base_size=14) +
+    theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Week 1", "2" = "Week 2", "3"="Week 3"))
 ``` 
 
@@ -154,7 +153,7 @@ superbPlot(dta,
 coord_cartesian( ylim = c(50,100) ) +
 ylab("Mean +- 95% CI") +
 labs(title="Difference-adjusted\n95% confidence interval")+
-theme_gray(base_size=14) +
+theme_gray(base_size=10) +
 scale_x_discrete(labels=c("1" = "Week 1", "2" = "Week 2", "3"="Week 3"))
 ``` 
 
@@ -189,7 +188,7 @@ superbPlot(dta,
 coord_cartesian( ylim = c(50,100) ) +
 ylab("Mean +- 95% CI") +
 labs(title="Difference-adjusted\n95% confidence interval")+
-theme_gray(base_size=14) +
+theme_gray(base_size=10) +
 scale_x_discrete(labels=c("1" = "Week 1", "2" = "Week 2", "3"="Week 3"))
 ``` 
 
@@ -234,7 +233,7 @@ superbPlot(dta,
 coord_cartesian( ylim = c(50,100) ) +
 ylab("Mean +- 95% CI") +
 labs(title="Correlation- and Difference-adjusted\n95% confidence interval")+
-theme_gray(base_size=14) +
+theme_gray(base_size=10) +
 scale_x_discrete(labels=c("1" = "Week 1", "2" = "Week 2", "3"="Week 3"))
 ``` 
 
@@ -285,7 +284,7 @@ superbPlot(dta,
 coord_cartesian( ylim = c(50,100) ) +
 ylab("Mean +- 95% CI") +
 labs(title="Cluster- Correlation, and Difference-adjusted\n95% confidence interval")+
-theme_gray(base_size=14) +
+theme_gray(base_size=10) +
 scale_x_discrete(labels=c("1" = "Week 1", "2" = "Week 2", "3"="Week 3"))
 ``` 
 

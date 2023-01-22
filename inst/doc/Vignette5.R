@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE, results = 'hide'-------------------------
+## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
@@ -82,10 +82,10 @@ superbPlot.foo <- function(
 superbPlot.simple <- function( summarydata, xfactor, groupingfactor, addfactors, rawdata ) {
     plot <- ggplot(
         data = summarydata,
-        mapping = aes_string( x = xfactor, y = "center", group= groupingfactor)
+        mapping = aes( x = !!sym(xfactor), y = center, group= !!sym(groupingfactor))
     ) +
     geom_point( ) +
-    geom_errorbar( mapping = aes_string(ymin = "center + lowerwidth", ymax = "center + upperwidth")  )+
+    geom_errorbar( mapping = aes(ymin = center + lowerwidth, ymax = center + upperwidth)  )+
     facet_grid( addfactors )
        
     return(plot)
@@ -103,11 +103,11 @@ superbPlot.simple <- function(
 ) {
     plot <- ggplot(
         data = summarydata, 
-        mapping = aes_string( x = xfactor, y = "center", group=groupingfactor)
+        mapping = aes( x = !!sym(xfactor), y = center, group = !!sym(groupingfactor) )
     ) +
     geom_point(  ) +
-    geom_errorbar( mapping = aes_string(ymin = "center + lowerwidth", 
-                                        ymax = "center + upperwidth")  )+ 
+    geom_errorbar( mapping = aes(ymin = center + lowerwidth, 
+                                 ymax = center + upperwidth)  )+ 
     facet_grid( addfactors )
         
     return(plot)
@@ -137,15 +137,15 @@ superbPlot.simpleWithOptions <- function(
 ) {
     plot <- ggplot(
         data = summarydata, 
-        mapping = aes_string( x = xfactor, y = "center", group="Condition")
+        mapping = aes( x = !!sym(xfactor), y = center, group=Condition)
     ) +
     do.call( geom_point, modifyList(
        list( color ="black" ),
         myownParams
     )) + 
     do.call( geom_errorbar, modifyList(
-        list( mapping = aes_string(ymin = "center + lowerwidth", 
-                                   ymax = "center + upperwidth")  ),
+        list( mapping = aes(ymin = center + lowerwidth, 
+                            ymax = center + upperwidth)  ),
         myownParams 
     )) + 
     facet_grid( addfactors )
@@ -197,27 +197,28 @@ superbPlot.simple(summary, "T", "Condition", ".~.", raw)
 library(emojifont)
 
 ## -----------------------------------------------------------------------------
-superbPlot.smiley <- function(
-    summarydata, xfactor, groupingfactor, addfactors, rawdata 
-) {
+superbPlot.smiley <- function( summarydata, xfactor, groupingfactor, addfactors, rawdata ) {
     # the early part bears on summary data with variable "center"
     plot <- ggplot(
-        data = summarydata, 
-        mapping = aes_string(
-            x = xfactor, y = "center", 
-            fill = groupingfactor, 
-            shape = groupingfactor, 
-            colour = groupingfactor)
+        data    = summarydata, 
+        mapping = aes(
+            x      = !!sym(xfactor), 
+            y      = center, 
+            fill   = !!sym(groupingfactor), 
+            shape  = !!sym(groupingfactor), 
+            colour = !!sym(groupingfactor) )
     ) +
     geom_point(position = position_dodge(width = .95)) +
     geom_errorbar( width = .6, position = position_dodge(.95), 
-              mapping = aes_string(ymin = "center + lowerwidth", ymax = "center + upperwidth") 
+              mapping = aes(ymin = center + lowerwidth, ymax = center + upperwidth) 
     )+ 
     # this part bears on the rawdata only with variable "DV"
     geom_text(data = rawdata, 
               position = position_jitter(0.5),
-              family="EmojiOne", label=emoji("smile"), size=6, 
-              mapping=aes_string(x=xfactor, y="DV", group = groupingfactor)
+              family   = "EmojiOne",
+              label    = emoji("smile"), 
+              size     = 6, 
+              mapping  = aes(x = !!sym(xfactor), y = DV, group = !!sym(groupingfactor) )
     ) +
     facet_grid( addfactors )
         
@@ -227,7 +228,7 @@ superbPlot.smiley <- function(
 ## -----------------------------------------------------------------------------
 superb:::is.superbPlot.function("superbPlot.smiley")
 
-## ---- fig.width= 4, fig.height = 3, fig.cap = "**Figure 5**. smile!", fig.show='hide'----
+## ---- fig.width= 4, fig.height = 3, fig.cap = "**Figure 5**. smile!"----------
 superbPlot(TMB1964r,
      WSFactors = "T(7)",      
      BSFactors = "Condition", 

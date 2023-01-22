@@ -1,21 +1,20 @@
 ---
-title: "Illustrating Reference Intervals with ``superb``"
+title: "Plotting Reference Intervals with ``superb``"
 bibliography: "../inst/REFERENCES.bib"
 csl: "../inst/apa-6th.csl"
 output: 
-  html_document:
-    toc: TRUE
+  rmarkdown::html_vignette
 description: >
   This vignette shows how to illustrate reference intervals
   using superb.
 vignette: >
-  %\VignetteIndexEntry{Illustrating reference intervals with superb}
+  %\VignetteIndexEntry{Plotting Reference Intervals with ``superb``}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
 
-```{r, echo = FALSE, message = FALSE, results = 'hide'}
+```{r, echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'}
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
@@ -738,7 +737,7 @@ ornate = list(
                         "\n(purple) 90% confidence intervals of lower 95% RI",
                         "\n(blue)    95% confidence intervals of the mean")),
         coord_cartesian( ylim = c(000,200) ),
-        theme_light(base_size=14) # smaller font
+        theme_light(base_size=10) # smaller font
 )
 ```
 

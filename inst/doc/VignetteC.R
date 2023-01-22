@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE, results = 'hide'-------------------------
+## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
@@ -32,7 +32,7 @@ SE.A <- function(v) {
     0.5 / sqrt(length(v+1/2))
 }
 CI.A <- function(v, gamma = 0.95){
-    SE.A(v) * sqrt( qchisq(gamma, df=1) )
+    SE.A(v) * sqrt(qchisq(gamma, df=1))
 }
 
 ## ---- echo = TRUE, message = FALSE--------------------------------------------
@@ -43,7 +43,7 @@ library(scales)     # for asn_trans() non-linear scale
 ## ---- message=FALSE, echo=TRUE, fig.width = 3, fig.cap="**Figure 1**. Anscombe-transformed scores as a function of group."----
 # ornate to decorate the plot a little bit...
 ornate = list( 
-    theme_bw(base_size = 16),
+    theme_bw(base_size = 10),
     labs(x = "Group" ),
     scale_x_discrete(labels=c("Group A", "Group B", "Group C"))
 )
