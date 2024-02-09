@@ -60,12 +60,12 @@ plt2 <- superbPlot(
     dta,
     BSFactors = c("vocation","gender"),
     variables = "obsfreq",
-    statistic = "count",                           # the function defined above
-    errorbar  = "CI",                              # its CI define above
+    statistic = "count",                                 # the function defined above
+    errorbar  = "CI",                                    # its CI define above
     # the following is for the look of the plot
-    plotStyle      = "line",                       # style of the plot
-    errorbarParams = list( width =0.5, size=0.75 ),# have thicker error bars
-    lineParams     = list( size = 1.0)             # thicker lines as well
+    plotStyle      = "line",                             # style of the plot
+    errorbarParams = list( width =0.5, linewidth =0.75 ),# have thicker error bars
+    lineParams     = list( size = 1.0)                   # thicker lines as well
 )
 plt2
 

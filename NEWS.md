@@ -1,3 +1,29 @@
+# superb 0.95.9 (February 8th, 2024)
+
+* Added a new plot layout, boxplot, to display box plots.
+* Adjusted testthat tests following new release of ggplot2
+* Added unitaryAlpha technique to compute average correlation
+* Simplified documentation for within-subject designs.
+
+# superb 0.95.83 (November 11th, 2023)
+
+* Made a message shown based on option
+
+# superb 0.95.82 (August 19th, 2023)
+
+* Corrected labeling of factors.
+
+# superb 0.95.81 (August 13th, 2023)
+
+* Updated CustomizingSuperbPlots vignettes.
+
+# superb 0.95.8 (June 13th, 2023)
+
+* Added superbToWide to ease the conversion to wide format
+* A few tiny corrections to the documentation
+* Updated references
+* Note that updates are spaced more and more as the library is now very stable
+
 # superb 0.95.7 (January 19th, 2023)
 
 * Added pairwise deletion for the computation of the mean correlation in case of missing data with CA

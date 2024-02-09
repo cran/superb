@@ -24,7 +24,7 @@ mp <- function(data, style, ...) {
         WSFactors = "Day(2)",
         BSFactors = "Difficulty",
         variables = c("score.day1", "score.day2"),
-        adjustments = list(purpose="difference", decorrelation="CM"),
+        adjustments = list(purpose="difference", decorrelation="CA"),
         plotStyle = style,
         ...
     )+labs(title = paste("Layout is ''",style,"''",sep=""))
@@ -43,6 +43,9 @@ grid.arrange(p1,p2,p3,p4,p5,p6,ncol=2)
 
 ## ---- fig.width =7, fig.height = 3.5, fig.cap = "**Figure 1b**. The seventh layout, the raincloud"----
 mp(testdata, "raincloud") + coord_flip()
+
+## ---- fig.width= 5, fig.height = 3, fig.cap = "**Figure 1c**. Box plot of the data"----
+mp(testdata, "boxplot", statistic = "median", pointParams = list(color="orange"))
 
 ## ---- fig.width= 7, fig.height = 7, fig.cap = "**Figure 2a**. The six built-in template with ornamental styling added."----
 ornate = list( 

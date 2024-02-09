@@ -9,6 +9,9 @@ head(dataFigure2)
 ## -----------------------------------------------------------------------------
 t.test(dataFigure2$pre, dataFigure2$post, var.equal=TRUE)
 
+## -----------------------------------------------------------------------------
+t.test(dataFigure2$pre, dataFigure2$post, var.equal=TRUE, paired = TRUE)
+
 ## ---- message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 1**. Representation of the individual participants"----
 library(reshape2)
 
@@ -44,7 +47,17 @@ t.test(dataFigure2$pre, dataFigure2$post, paired=TRUE)
 ## -----------------------------------------------------------------------------
 cor(dataFigure2$pre, dataFigure2$post)
 
-## ---- message=FALSE, warning=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3**. Means and 95% confidence intervals on raw data (left) and on decorrelated data (right)"----
+## ---- message=FALSE, warning=FALSE, echo=TRUE, fig.height = 3, fig.width = 4, fig.cap="**Figure 3a**. Means and difference and correlation-adjusted 95% confidence intervals"----
+superbPlot(dataFigure2, 
+	WSFactors    = "Moment(2)", 
+	adjustments = list(
+					purpose = "difference", 
+					decorrelation = "CA"    ## NEW! use a decorrelation technique
+	), 
+	variables   = c("pre","post"), 
+	plotStyle   = "line" )
+
+## ---- message=FALSE, warning=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3b**. Means and 95% confidence intervals on raw data (left) and on decorrelated data (right)"----
 options(superb.feedback = 'none') # shut down 'warnings' and 'design' interpretation messages
 library(gridExtra)
 
@@ -82,7 +95,8 @@ test <- GRD(WSFactors = "Moment(5)",
 tlbl <- paste( "(red) Difference-adjusted only\n",
             "(blue) Difference adjusted and decorrelated with CM\n",
             "(green) Difference-adjusted and decorrelated with LM\n",
-            "(orange) Difference-adjusted and decorrelated with CA", sep="")
+            "(orange) Difference-adjusted and decorrelated with CA\n",
+			"(bisque) Difference-adjusted and decorrelated with UA", sep="")
 
 # to make the plots all identical except for the decorrelation method
 makeplot <- function(dataset, decorrelationmethod, color, nudge, dir) {
@@ -106,23 +120,26 @@ theme_transparent <- theme(
         )
 
 # generate the plots, nudging the error bars and using distinct colors
-pltrw <- makeplot(test, "none", "red",          -0.15, "both")
-pltCM <- makeplot(test, "CM",   "blue",         -0.05, "left")
-pltLM <- makeplot(test, "LM",   "chartreuse3",  +0.05, "both")
-pltCA <- makeplot(test, "CA",   "orange",       +0.15, "right")
+pltrw <- makeplot(test, "none", "red",           0.0, "both")
+pltCM <- makeplot(test, "CM",   "blue",         -0.2, "left")
+pltLM <- makeplot(test, "LM",   "chartreuse3",  -0.1, "left")
+pltCA <- makeplot(test, "CA",   "orange",       +0.1, "right")
+pltUA <- makeplot(test, "UA",   "bisque4",      +0.2, "right")
 
 # transform the ggplots into "grob" so that they can be manipulated
 pltrwg <- ggplotGrob(pltrw)
 pltCMg <- ggplotGrob(pltCM + theme_transparent)
 pltLMg <- ggplotGrob(pltLM + theme_transparent)
 pltCAg <- ggplotGrob(pltCA + theme_transparent)
+pltUAg <- ggplotGrob(pltUA + theme_transparent)
 
 # put the grobs onto an empty ggplot 
 ggplot() + 
     annotation_custom(grob=pltrwg) + 
     annotation_custom(grob=pltCMg) + 
     annotation_custom(grob=pltLMg) + 
-    annotation_custom(grob=pltCAg)
+    annotation_custom(grob=pltCAg) +
+    annotation_custom(grob=pltUAg)
 
 ## ---- message=FALSE, warning=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 5**. Means and 95% confidence intervals along with individual scores depicted as lines"----
 superbPlot(dataFigure2, 
