@@ -3,8 +3,8 @@
 #'
 #' @md
 #'
-#' @description The function ``suberbPlot()`` plots standard error or confidence interval for various descriptive 
-#'      statistics under various designs, sampling schemes, population size and purposes,
+#' @description The function ``suberbPlot()`` plots standard error or confidence interval for various  
+#'      descriptive statistics under various designs, sampling schemes, population size and purposes,
 #'      according to the ``suberb`` framework. See \insertCite{cgh21}{superb} for more.
 #'
 #' @param data Dataframe in wide format
@@ -24,9 +24,11 @@
 #' @param adjustments List of adjustments as described below.
 #'      Default is ``adjustments = list(purpose = "single", popSize = Inf, decorrelation = "none",
 #'              samplingDesign = "SRS")``
-#' @param clusterColumn used in conjunction with samplingDesign = "CRS", indicates which column contains the cluster membership
+#' @param clusterColumn used in conjunction with samplingDesign = "CRS", indicates which column 
+#'    contains the cluster membership
 #'
-#' @param showPlot Defaults to TRUE. Set to FALSE if you want the output to be the summary statistics and intervals.
+#' @param showPlot Defaults to TRUE. Set to FALSE if you want the output to be the summary 
+#'     statistics and intervals.
 #' @param plotStyle The type of object to plot on the graph. See full list below.
 #'      Defaults to "bar".
 #'
@@ -48,10 +50,13 @@
 #' * purpose: The purpose of the comparisons. Defaults to "single". 
 #'      Can be "single", "difference", or "tryon".
 #' * decorrelation: Decorrelation method for repeated measure designs. 
-#'      Chooses among the methods "CM", "LM", "CA", "UA", or "none". Defaults to 
+#'      Chooses among the methods "CM", "LM", "CA", "UA", "LDr" (with r an integer) or "none". Defaults to 
 #'      "none". "CA" is correlation-adjusted \insertCite{c19}{superb};
-#'      "UA" is based on the unitary Alpha method (derived from the Cronbach alpha);
-#'      see \insertCite{lc22}{superb}.
+#'      "UA" is based on the unitary Alpha method (derived from the Cronbach alpha;
+#'      see \insertCite{lc22}{superb}).
+#'      "LDr" is local decorrelation (useful for long time series with autoregressive 
+#'      correlation structures; see \insertCite{cppf24}{superb});
+#'     .
 #' * samplingDesign: Sampling method to obtain the sample. implemented 
 #'          sampling is "SRS" (Simple Randomize Sampling) and "CRS" (Cluster-Randomized Sampling).
 #'
@@ -69,6 +74,8 @@
 #' \insertAllCited{}
 #'
 #' @examples
+#' ######################################################################
+#'
 #' # Basic example using a built-in dataframe as data. 
 #' # By default, the mean is computed and the error bar are 95% confidence intervals
 #' superbPlot(ToothGrowth, BSFactors = c("dose", "supp"), 
@@ -92,34 +99,69 @@
 #' xlab("Dose") + ylab("Tooth Growth") +
 #' theme_bw()
 #'
-#' # This example is based on repeated measures
+#' ######################################################################
+#'
+#' # The following examples are based on repeated measures
 #' library(gridExtra)
 #' options(superb.feedback = 'none') # shut down 'warnings' and 'design' interpretation messages
 #' 
+#' # A simple example: The sleep data
+#' # The sleep data are paired data showing the additional time of sleep with 
+#' # the soporific drugn #1 (("group = 1") and with the soporific drug #2 ("group = 2"). 
+#' # There is 10 participants with two measurements.
+#' 
+#' # sleep is available in long format so we transform it to the in wide format:
+#' sleep2 <- reshape(sleep, direction = "wide", idvar = "ID", timevar = "group")
+#' sleep2
+#' 
+#' # Makes the plots first without decorrelation:
+#' superbPlot(sleep2, 
+#'   WSFactors = "Times(2)", 
+#'   variables = c("extra.1", "extra.2")
+#' )
+#' # As seen the error bar are very long. Lets take into consideration correlation...
+#' # ...  with decorrelation (technique Correlation-adjusted CA):
+#' superbPlot(sleep2, 
+#'   WSFactors = "Times(2)", 
+#'   variables = c("extra.1", "extra.2"), 
+#'   # only difference:
+#'   adjustments = list(purpose = "difference", decorrelation = "CA")
+#' )
+#' # The error bars shortened as the correlation is substantial (r = .795).
+#' 
+#' 
+#' ######################################################################
+#' 
+#' # Another example: The Orange data
 #' # Use the Orange example, but let's define shorter column names...
 #' names(Orange) <- c("Tree","age","circ")
 #' # ... and turn the data into a wide format using superbToWide:
-#' Orange.wide <- superbToWide(Orange, id = "Tree", WSFactors = c("age"), variable = "circ") 
+#' Orange.wide <- superbToWide(Orange, id = "Tree", WSFactors = "age", variable = "circ") 
 #'
 #' # This example contains 5 trees whose diameter (in mm) has been measured at various age (in days):
-#' head(Orange.wide)
+#' Orange.wide
 #'
 #' # Makes the plots first without decorrelation:
-#' p1=superbPlot( Orange.wide, WSFactors = "age(7)",
+#' p1 <- superbPlot( Orange.wide, WSFactors = "age(7)",
 #'   variables = c("circ_118","circ_484","circ_664","circ_1004","circ_1231","circ_1372","circ_1582"),
 #'   adjustments = list(purpose = "difference", decorrelation = "none")
 #' ) + 
 #'   xlab("Age level") + ylab("Trunk diameter (mm)") +
 #'   coord_cartesian( ylim = c(0,250) ) + labs(title="''Standalone'' confidence intervals")
 #' # ... and then with decorrelation (technique Correlation-adjusted CA):
-#' p2=superbPlot( Orange.wide, WSFactors = "age(7)",
+#' p2 <- superbPlot( Orange.wide, WSFactors = "age(7)",
 #'   variables = c("circ_118","circ_484","circ_664","circ_1004","circ_1231","circ_1372","circ_1582"),
 #'   adjustments = list(purpose = "difference", decorrelation = "CA")
 #' ) + 
 #'   xlab("Age level") + ylab("Trunk diameter (mm)") +
 #'   coord_cartesian( ylim = c(0,250) ) + labs(title="Decorrelated confidence intervals")
-#' grid.arrange(p1,p2,ncol=2)
 #'
+#' # You can present both plots side-by-side
+#' grid.arrange(p1, p2, ncol=2)
+#'
+#' ######################################################################
+#' 
+######################################################################################
 #'
 #' @export superbPlot
 #' @importFrom lsr wideToLong
@@ -190,8 +232,13 @@ superbPlot <- function(data,
             stop("superb::ERROR: popSize should be a positive number or Inf (or a list of these). Exiting...")
     if (!(adjustments$purpose %in% c("single","difference","tryon"))) 
             stop("superb::ERROR: Invalid purpose. Did you mean 'difference'? Exiting...")
-    if (!(adjustments$decorrelation %in% c("none","CM","LM","CA","UA"))) 
+    if (!(substr(adjustments$decorrelation,1,2) %in% c("no","CM","LM","CA","UA","LD"))) 
             stop("superb::ERROR: Invalid decorrelation method. Did you mean 'CM'? Exiting...")
+    if (substr(adjustments$decorrelation,1,2) == "LD") {
+            radius <- suppressWarnings(as.integer(substr(adjustments$decorrelation, 3, 100)))
+            if ((is.na(radius))||(radius<1))
+                stop("superb::ERROR: radius given to LD not an integer or is smaller than 1. Exiting...")
+    }
     if (!(adjustments$samplingDesign %in% c("SRS","CRS"))) 
             stop("superb::ERROR: Invalid samplingDesign. Did you mean 'SRS'? Exiting...")
 
@@ -353,10 +400,7 @@ superbPlot <- function(data,
     data.untransformed.long <- suppressWarnings(lsr::wideToLong(data.untransformed, within = WSFactors, sep = weird))
     data.transformed.long   <- suppressWarnings(lsr::wideToLong(data.transformed, within = WSFactors, sep = weird))
 
-    # needed because lsr turns the within indicators into strings, not numeric, causing order problems in plots (e.g., 1, 10, 2, ...)
-    # new 15 january 2022, version 0.9.7.9 
-
-    ###CALISS! new May 11th, 2022, version 0.95.1
+    # New May 11th, 2022, version 0.95.1
     as.numeric.factor <- function(x) {strtoi(x)}
 
     data.untransformed.long[WSFactors] <- mapply(
@@ -429,7 +473,7 @@ superbPlot <- function(data,
         # Ns the number of subjects per group
         Ns  <- plyr::ddply(data, .fun = dim, .variables = BSFactors )$V1
         # the Ns must be expanded for each repeated measures
-        Ns  <- rep(Ns, wslevel)
+        Ns  <- rep(Ns, length(variables))
         sqrt(1 - Ns / adjustments$popSize )        
     } else {1}
 
@@ -442,7 +486,7 @@ superbPlot <- function(data,
         sds <- suppressWarnings(plyr::ddply(data.transformed.long, .fun = colSDs, .variables = c(WSFactors,BSFactors) )$DV)
         es <- sqrt(sum(sds^2/Ns)) / sum(sqrt(sds^2/Ns))
         # the es must be expanded for each repeated measures
-        es  <- rep(es, wslevel)
+        es  <- rep(es, length(variables))
         2 * es * sqrt(length(Ns)) / sqrt(2) # 2 because contrary to Tryon, 2001, superb does not want to avoid overlap
     } else {1}
 
@@ -456,22 +500,27 @@ superbPlot <- function(data,
         ICCsKNNs <- cbind(ICCs, KNSs)
         lambdas  <- apply(ICCsKNNs, 1, CousineauLaurencelleLambda) # one lambda per group
         # the lambdas must be expanded for each repeated measures
-        lambdas  <- rep(lambdas, wslevel)
+        lambdas  <- rep(lambdas, length(variables))
         ICCs     <- ICCs$V1 # downcast to a vector for latter display
         lambdas
-
     } else {1}
 
-    # 5.4: Adjust for correlation if decorrelation == "CA"
+    # 5.4: Adjust for correlation if decorrelation == "CA", "UA", ou "LDr"
     radj <- if (adjustments$decorrelation == "CA") {
         rs <- plyr::ddply(data, .fun = meanCorrelation, .variables = BSFactors, cols = variables)$V1
         # the rs must be expanded for each repeated measures
-        rs  <- rep(rs, wslevel)
+        rs  <- rep(rs, length(variables))
         sqrt(1- rs)
     } else if (adjustments$decorrelation == "UA") {
         rs <- plyr::ddply(data, .fun = unitaryAlpha, .variables = BSFactors, cols = variables)$V1
         # the rs must be expanded for each repeated measures
-        rs  <- rep(rs, wslevel)
+        rs  <- rep(rs, length(variables))
+        sqrt(1- rs)
+    } else if (substr(adjustments$decorrelation,1,2) == "LD") {
+        rs <- plyr::ddply(data, .fun = meanLocalCorrelation, .variables = BSFactors, cols = variables, w = radius)
+#        rs <- unlist(rs[,!is.na(rs)])
+        rs <- suppressWarnings(as.numeric(unlist(rs))[!is.na(as.numeric(unlist(rs)))])
+        # the rs is a vector containing one rLD for each measurement
         sqrt(1- rs)
     } else {1}
 
@@ -494,6 +543,8 @@ superbPlot <- function(data,
             ps   <- c()
             for (var in variables ) {
                 out <- split(data[,var], crit )
+                # 2024.05.30: exlude empty conditions
+                out <- out[lengths(out)>1]
                 p   <- stats::bartlett.test(out)$p.value
                 ps  <- c(ps, p)
             }
@@ -502,8 +553,8 @@ superbPlot <- function(data,
         }
 
         # 6.2: if deccorrelate is CA: show rbar, test Winer
-        if ((adjustments$decorrelation == "CA")||(adjustments$decorrelation == "UA")) {
-            message(paste("superb::FYI: The average","","correlation per group is ", paste(unique(sprintf("%.4f",round(rs,4))), collapse=" ")) )
+        if ((adjustments$decorrelation == "CA")||(adjustments$decorrelation == "UA")||(substr(adjustments$decorrelation,1,2) == "LD")) {
+            message(paste("superb::FYI: The average correlation per group is ", paste(unique(sprintf("%.4f",mean(round(rs,4)))), collapse=" ")) )
 
             winers <- suppressWarnings(plyr::ddply(data, .fun = "WinerCompoundSymmetryTest", .variables= BSFactors, variables)) 
             winers <- winers[,length(winers)]
@@ -575,20 +626,27 @@ superbPlot <- function(data,
 
 
 #################################################################################
-# statistics functions: colSDs; meanCorrelation; unitaryAlpha
+# Statistics functions: colSDs; meanCorrelation; unitaryAlpha
 #################################################################################
+
+mycor <- function(X) {
+    # a wrapper for cor() that checks if there are constant columns...
+    rs <- suppressWarnings( cor(X, use = "pairwise.complete.obs") )
+    if (any(is.na(rs))) {
+        message("superb::FYI: Some of the measurements are constant. Use CM or use error bars with caution." )
+        rs[is.na(rs)] <- 1
+    }
+    rs
+}
 
 meanCorrelation <- function(X, cols) {
     # the mean pair-wise correlations from many columns of the dataframe X
-    rs   <- cor(X[cols], use = "pairwise.complete.obs" )
+    rs   <- mycor( X[cols] )
     rbar <- mean(rs[upper.tri(rs)])
     rbar
 }
 
 unitaryAlpha <- function(X, cols) {
-#print(head(X))
-#print(str(X))
-#x<<- X
 	m <- as.matrix(X[,cols])
 
 	k <- dim(m)[2]
@@ -604,6 +662,27 @@ colSDs = function (x) {
     else if (is.data.frame(x)) apply(x, 2, sd)
     else "what the fuck??"
 }
+
+
+##################################################################   
+# Functions for local decorrelation
+##################################################################   
+
+# The gaussian kernel
+gA <- function(w, mu, dim) {
+    s1 <- exp(-((1:dim)-mu)^2/(2*w^2))/(w*sqrt(2*pi))
+    s1[mu] <- 0 # Is a gaussian kernel with a hole a donut?
+    s1 / sum(s1)
+}
+
+meanLocalCorrelation <- function(X, cols, w) {
+    mat <- mycor( X[cols] )
+    nrw <- dim(mat)[2]
+    sapply( 1:nrw, 
+            \(i) sum(mat[i,] * gA(w,i,nrw) )
+    )
+}
+# that simple!
 
 
 

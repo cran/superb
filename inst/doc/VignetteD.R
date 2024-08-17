@@ -1,22 +1,22 @@
-## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide', warning = FALSE----
+## ----echo = FALSE, warning=FALSE, message = FALSE, results = 'hide', warning = FALSE----
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
 library(png)
 options(superb.feedback = c('design','warnings') )
 
-## ---- echo=TRUE, eval=FALSE---------------------------------------------------
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
 #  setwd("c:")
 #  file <- "Demo_SPSS.sav"
 
-## ---- echo=FALSE, results="hide"----------------------------------------------
+## ----echo=FALSE, results="hide"-----------------------------------------------
 file <- system.file("extdata", "SPSS_Demo.sav", package = "superb")
 
 ## -----------------------------------------------------------------------------
 library(foreign)
 data <- read.spss(file, to.data.frame = TRUE)
 
-## ---- fig.width = 4, eval=FALSE, fig.cap="**Figure 1: A plot with SPSS data within R**"----
+## ----fig.width = 4, eval=FALSE, fig.cap="**Figure 1: A plot with SPSS data within R**"----
 #  superbPlot( data,
 #      WSFactors      = "Temps(2)",
 #      variables      = c("time1","time2"),

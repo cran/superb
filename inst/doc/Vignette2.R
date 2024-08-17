@@ -1,9 +1,9 @@
-## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
+## ----echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'-----------
 cat("this will be hidden; use for general initializations.")
 library(superb)
 library(ggplot2)
 
-## ---- message=FALSE, echo=FALSE, fig.height=4, fig.width=3, fig.cap="**Figure 1**. Mean scores along with 95% confidence interval for two groups of students on the quality of learning behavior."----
+## ----message=FALSE, echo=FALSE, fig.height=4, fig.width=3, fig.cap="**Figure 1**. Mean scores along with 95% confidence interval for two groups of students on the quality of learning behavior."----
 superbPlot(dataFigure1, 
         BSFactors = "grp", 
         variables = "score", 
@@ -14,18 +14,18 @@ superbPlot(dataFigure1,
     theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity"))
 
-## ---- message=FALSE, warning=FALSE, echo=TRUE---------------------------------
+## ----message=FALSE, warning=FALSE, echo=TRUE----------------------------------
 t.test(dataFigure1$score[dataFigure1$grp==1], 
         dataFigure1$score[dataFigure1$grp==2],
         var.equal=T)
 
-## ---- message=FALSE, echo=TRUE------------------------------------------------
+## ----message=FALSE, echo=TRUE-------------------------------------------------
 t.test(dataFigure1$score[dataFigure1$grp==1], mu=100)
 
-## ---- message=FALSE, echo=TRUE------------------------------------------------
+## ----message=FALSE, echo=TRUE-------------------------------------------------
 t.test(dataFigure1$score[dataFigure1$grp==2], mu=105)
 
-## ---- message=FALSE, echo=TRUE, fig.height=4, fig.width=3, fig.cap="**Figure 2**. Mean scores along with difference-adjusted 95% confidence interval for two groups of students on the quality of learning behavior."----
+## ----message=FALSE, echo=TRUE, fig.height=4, fig.width=3, fig.cap="**Figure 2**. Mean scores along with difference-adjusted 95% confidence interval for two groups of students on the quality of learning behavior."----
 superbPlot(dataFigure1, 
         BSFactors = "grp", 
         adjustments=list(purpose = "difference"),  # the only new thing here
@@ -37,7 +37,7 @@ superbPlot(dataFigure1,
     theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Collaborative\ngames", "2" = "Unstructured\nactivity"))
 
-## ---- message=FALSE, echo=TRUE, fig.height=4, fig.cap="**Figure 3**. Two representation of the data with unadjusted (left) and adjusted (right) 95% confidence intervals"----
+## ----message=FALSE, echo=TRUE, fig.height=4, fig.cap="**Figure 3**. Two representation of the data with unadjusted (left) and adjusted (right) 95% confidence intervals"----
 library(gridExtra)
 plt1 <- superbPlot(dataFigure1, 
         BSFactors = "grp", 
@@ -62,7 +62,7 @@ plt2 <- superbPlot(dataFigure1,
 
 plt <- grid.arrange(plt1, plt2, ncol=2)
 
-## ---- message=FALSE, echo=TRUE, fig.height=4, fig.width=6, fig.cap="**Figure 4**. Two representations of the results with adjusted and unadjusted error bars on the same plot"----
+## ----message=FALSE, echo=TRUE, fig.height=4, fig.width=6, fig.cap="**Figure 4**. Two representations of the results with adjusted and unadjusted error bars on the same plot"----
 # generate the two plots, nudging the error bars, using distinct colors, and 
 # having the second plot's background transparent (with ``makeTransparent()`` )
 plt1 <- superbPlot(dataFigure1, 

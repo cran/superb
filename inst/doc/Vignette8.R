@@ -1,4 +1,4 @@
-## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
+## ----echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'-----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 options("superb.feedback" = c("warnings","design"))
@@ -41,7 +41,7 @@ pNKM <- superbPlot(dta, WSFactors = "moment(3)",
   errorbarParams = list(color="blue", width= 0.1, position = position_nudge(+0.05) )
 )
 
-## ---- fig.height=4, fig.width=7, fig.cap = "**Figure 1**. Plot of the tree decorrelation methods based on subject transformation."----
+## ----fig.height=4, fig.width=7, fig.cap = "**Figure 1**. Plot of the tree decorrelation methods based on subject transformation."----
 tlbl <- paste( "(red)    Subject centering & Bias correction == CM\n",
                "(orange) Subject centering, Bias correction & Pooling SDs == LM\n",
                "(blue)   Subject centering & Pooling SDs == NKM", sep="")

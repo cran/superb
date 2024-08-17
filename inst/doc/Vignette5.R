@@ -1,4 +1,4 @@
-## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
+## ----echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'-----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
@@ -30,7 +30,7 @@ mp <- function(data, style, ...) {
     )+labs(title = paste("Layout is ''",style,"''",sep=""))
 }
 
-## ---- fig.width= 7, fig.height = 7, fig.cap = "**Figure 1a**. Look of the six built-in layouts on the same random dataset"----
+## ----fig.width= 7, fig.height = 7, fig.cap = "**Figure 1a**. Look of the six built-in layouts on the same random dataset"----
 p1 <- mp(testdata, "bar")
 p2 <- mp(testdata, "point")
 p3 <- mp(testdata, "line")
@@ -41,13 +41,13 @@ p6 <- mp(testdata, "pointindividualline")
 library(gridExtra)
 grid.arrange(p1,p2,p3,p4,p5,p6,ncol=2)
 
-## ---- fig.width =7, fig.height = 3.5, fig.cap = "**Figure 1b**. The seventh layout, the raincloud"----
+## ----fig.width =7, fig.height = 3.5, fig.cap = "**Figure 1b**. The seventh layout, the raincloud"----
 mp(testdata, "raincloud") + coord_flip()
 
-## ---- fig.width= 5, fig.height = 3, fig.cap = "**Figure 1c**. Box plot of the data"----
+## ----fig.width= 5, fig.height = 3, fig.cap = "**Figure 1c**. Box plot of the data"----
 mp(testdata, "boxplot", statistic = "median", pointParams = list(color="orange"))
 
-## ---- fig.width= 7, fig.height = 7, fig.cap = "**Figure 2a**. The six built-in template with ornamental styling added."----
+## ----fig.width= 7, fig.height = 7, fig.cap = "**Figure 2a**. The six built-in template with ornamental styling added."----
 ornate = list( 
     scale_colour_manual( name = "Difference", 
         labels = c("Easy", "Hard", "Unthinkable"), 
@@ -81,7 +81,7 @@ superbPlot.foo <- function(
     return(plot)
 }
 
-## ---- message=FALSE, echo=FALSE, fig.height=3, fig.width=4, fig.cap="**Figure 3**. Mean score with 95% confidence interval using the ``simple`` plot layout."----
+## ----message=FALSE, echo=FALSE, fig.height=3, fig.width=4, fig.cap="**Figure 3**. Mean score with 95% confidence interval using the ``simple`` plot layout."----
 superbPlot.simple <- function( summarydata, xfactor, groupingfactor, addfactors, rawdata ) {
     plot <- ggplot(
         data = summarydata,
@@ -119,7 +119,7 @@ superbPlot.simple <- function(
 ## -----------------------------------------------------------------------------
 superb:::is.superbPlot.function("superbPlot.simple")
 
-## ---- message=FALSE, echo=TRUE, results='hide', fig.show='hide'---------------
+## ----message=FALSE, echo=TRUE, results='hide', fig.show='hide'----------------
 superbPlot(TMB1964r,
      WSFactors = "T(7)",      
      BSFactors = "Condition",
@@ -127,7 +127,7 @@ superbPlot(TMB1964r,
      plotStyle = "simple"
 )
 
-## ---- eval = FALSE, message=FALSE, echo=TRUE, error=FALSE, results='hide'-----
+## ----eval = FALSE, message=FALSE, echo=TRUE, error=FALSE, results='hide'------
 #      do.call( geom_point, modifyList(
 #         list( size= 3 ##etc., the default directives##
 #         ), myownParams
@@ -157,7 +157,7 @@ superbPlot.simpleWithOptions <- function(
 }
 superb:::is.superbPlot.function("superbPlot.simpleWithOptions")
 
-## ---- message=FALSE, eval=FALSE, echo=TRUE, results='hide', fig.show='show', fig.cap="**Figure 4**. A simple figure with optional arguments"----
+## ----message=FALSE, eval=FALSE, echo=TRUE, results='hide', fig.show='show', fig.cap="**Figure 4**. A simple figure with optional arguments"----
 #  superbPlot(TMB1964r,
 #      WSFactors = "T(7)",
 #      BSFactors = "Condition",
@@ -167,14 +167,14 @@ superb:::is.superbPlot.function("superbPlot.simpleWithOptions")
 #      myownParams = list(size=1, color="purple", position = position_dodge(width = 0.3) )
 #  )
 
-## ---- eval=TRUE, message=TRUE, echo=TRUE--------------------------------------
+## ----eval=TRUE, message=TRUE, echo=TRUE---------------------------------------
 options(superb.feedback = 'all')
 runDebug( 'where are we?', "Text to show when we get there",
   c("variable1", "variable2", "etc"),
   list( "var1InTheFct", "var2InTheFct", "varetcInTheFct")
 )
 
-## ---- eval=TRUE, message=TRUE, echo=TRUE, fig.show='hide'---------------------
+## ----eval=TRUE, message=TRUE, echo=TRUE, fig.show='hide'----------------------
 superbPlot.empty <- function(
     summarydata, xfactor, groupingfactor, addfactors, rawdata 
 ) {
@@ -192,10 +192,10 @@ superbPlot(TMB1964r,
      plotStyle = "empty" 
 )
 
-## ---- message=FALSE, echo=TRUE, results='hide', fig.show='hide'---------------
+## ----message=FALSE, echo=TRUE, results='hide', fig.show='hide'----------------
 superbPlot.simple(summary, "T", "Condition", ".~.", raw)
 
-## ---- message=FALSE, echo=TRUE, warning=FALSE---------------------------------
+## ----message=FALSE, echo=TRUE, warning=FALSE----------------------------------
 # install.packages("emojifont")
 library(emojifont)
 
@@ -231,7 +231,7 @@ superbPlot.smiley <- function( summarydata, xfactor, groupingfactor, addfactors,
 ## -----------------------------------------------------------------------------
 superb:::is.superbPlot.function("superbPlot.smiley")
 
-## ---- fig.width= 4, fig.height = 3, fig.cap = "**Figure 5**. smile!"----------
+## ----fig.width= 4, fig.height = 3, fig.cap = "**Figure 5**. smile!"-----------
 superbPlot(TMB1964r,
      WSFactors = "T(7)",      
      BSFactors = "Condition", 

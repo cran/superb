@@ -1,4 +1,4 @@
-## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
+## ----echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'-----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
@@ -27,7 +27,7 @@ dta <- matrix( c(
 colnames(dta) <- c("Week 1", "Week 2", "Week 3")
 dta           <- as.data.frame(dta)
 
-## ---- message=FALSE, echo=FALSE, fig.height=3, fig.width=4, fig.cap="**Figure 1**. Mean scores along with 95% confidence interval per week for a program to stop smoking."----
+## ----message=FALSE, echo=FALSE, fig.height=3, fig.width=4, fig.cap="**Figure 1**. Mean scores along with 95% confidence interval per week for a program to stop smoking."----
 superbPlot(dta, WSFactors = "Moment(3)",
         variables = c("Week 1", "Week 2", "Week 3"),
         statistic = "mean", errorbar = "CI",
@@ -41,7 +41,7 @@ superbPlot(dta, WSFactors = "Moment(3)",
     theme_gray(base_size=10) +
     scale_x_discrete(labels=c("1" = "Week 1", "2" = "Week 2", "3"="Week 3"))
 
-## ---- message=FALSE, echo=TRUE, results='hide', fig.show='hide'---------------
+## ----message=FALSE, echo=TRUE, results='hide', fig.show='hide'----------------
 superbPlot(dta, 
     WSFactors = "Moment(3)",
     variables = c("Week 1", "Week 2", "Week 3"),
@@ -49,7 +49,7 @@ superbPlot(dta,
     plotStyle="line"
     )
 
-## ---- message=FALSE, echo=FALSE, fig.height=3, fig.width=4, fig.cap="**Figure 2**. Mean scores along with difference-adjusted 95% confidence interval per week for a program to stop smoking."----
+## ----message=FALSE, echo=FALSE, fig.height=3, fig.width=4, fig.cap="**Figure 2**. Mean scores along with difference-adjusted 95% confidence interval per week for a program to stop smoking."----
 superbPlot(dta, 
     WSFactors = "Moment(3)",
     variables = c("Week 1", "Week 2", "Week 3"),
@@ -67,7 +67,7 @@ scale_x_discrete(labels=c("1" = "Week 1", "2" = "Week 2", "3"="Week 3"))
 ## -----------------------------------------------------------------------------
 head(dta)
 
-## ---- message=FALSE, echo=TRUE, fig.height=3, fig.width=4, results='hide', fig.show='hide'----
+## ----message=FALSE, echo=TRUE, fig.height=3, fig.width=4, results='hide', fig.show='hide'----
 superbPlot(dta, 
     WSFactors = "Moment(3)",
     variables = c("Week 1", "Week 2", "Week 3"),
@@ -81,7 +81,7 @@ labs(title="Difference-adjusted\n95% confidence interval")+
 theme_gray(base_size=10) +
 scale_x_discrete(labels=c("1" = "Week 1", "2" = "Week 2", "3"="Week 3"))
 
-## ---- message=TRUE, echo=TRUE, fig.height=3, fig.width=4----------------------
+## ----message=TRUE, echo=TRUE, fig.height=3, fig.width=4-----------------------
 superbPlot(dta, 
     WSFactors = "Moment(3)",
     variables = c("Week 1", "Week 2", "Week 3"),
@@ -96,10 +96,10 @@ labs(title="Correlation- and Difference-adjusted\n95% confidence interval")+
 theme_gray(base_size=10) +
 scale_x_discrete(labels=c("1" = "Week 1", "2" = "Week 2", "3"="Week 3"))
 
-## ---- echo = FALSE------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 options(superb.feedback = 'none')
 
-## ---- message=FALSE, echo=TRUE , results='hide', fig.height=3, fig.width=4----
+## ----message=FALSE, echo=TRUE , results='hide', fig.height=3, fig.width=4-----
 # add (ficticious) cluster membership for each participant in the column "cluster"
 dta$cluster <- sort(rep(1:5, 3))
 

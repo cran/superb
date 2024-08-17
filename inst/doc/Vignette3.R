@@ -1,4 +1,4 @@
-## ---- echo = FALSE, warning=FALSE, message = FALSE,  results = 'hide'---------
+## ----echo = FALSE, warning=FALSE, message = FALSE,  results = 'hide'----------
 cat("this will be hidden; use for general initializations.")
 library(superb)
 library(ggplot2)
@@ -12,7 +12,7 @@ t.test(dataFigure2$pre, dataFigure2$post, var.equal=TRUE)
 ## -----------------------------------------------------------------------------
 t.test(dataFigure2$pre, dataFigure2$post, var.equal=TRUE, paired = TRUE)
 
-## ---- message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 1**. Representation of the individual participants"----
+## ----message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 1**. Representation of the individual participants"----
 library(reshape2)
 
 # first transform the data in long format; the pre-post scores will go into column "variable"
@@ -27,7 +27,7 @@ ggplot(data=dl, aes(x=variable, y=value, group=id, alpha = trans)) +
     coord_cartesian( ylim = c(70,150) ) +
     geom_abline(intercept = 102.5, slope = 0, colour = "red", linetype=2)
 
-## ---- message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 2**. Representation of the *subject-centered* individual participants"----
+## ----message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 2**. Representation of the *subject-centered* individual participants"----
 # use subjectCenteringTransform function 
 library(superb)
 df2 <- subjectCenteringTransform(dataFigure2, c("pre","post"))
@@ -47,7 +47,7 @@ t.test(dataFigure2$pre, dataFigure2$post, paired=TRUE)
 ## -----------------------------------------------------------------------------
 cor(dataFigure2$pre, dataFigure2$post)
 
-## ---- message=FALSE, warning=FALSE, echo=TRUE, fig.height = 3, fig.width = 4, fig.cap="**Figure 3a**. Means and difference and correlation-adjusted 95% confidence intervals"----
+## ----message=FALSE, warning=FALSE, echo=TRUE, fig.height = 3, fig.width = 4, fig.cap="**Figure 3a**. Means and difference and correlation-adjusted 95% confidence intervals"----
 superbPlot(dataFigure2, 
 	WSFactors    = "Moment(2)", 
 	adjustments = list(
@@ -57,7 +57,7 @@ superbPlot(dataFigure2,
 	variables   = c("pre","post"), 
 	plotStyle   = "line" )
 
-## ---- message=FALSE, warning=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3b**. Means and 95% confidence intervals on raw data (left) and on decorrelated data (right)"----
+## ----message=FALSE, warning=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3b**. Means and 95% confidence intervals on raw data (left) and on decorrelated data (right)"----
 options(superb.feedback = 'none') # shut down 'warnings' and 'design' interpretation messages
 library(gridExtra)
 
@@ -84,7 +84,7 @@ plt2b <- superbPlot(dataFigure2,
     scale_x_discrete(labels=c("1" = "Collaborative games", "2" = "Unstructured activity"))
 plt2  <- grid.arrange(plt2a,plt2b,ncol=2)
 
-## ---- message=FALSE, warning=FALSE, echo=FALSE, fig.width = 4, fig.cap="**Figure 4**. All three decorelation techniques on the same plot along with un-decorrelated error bars"----
+## ----message=FALSE, warning=FALSE, echo=FALSE, fig.width = 4, fig.cap="**Figure 4**. All three decorelation techniques on the same plot along with un-decorrelated error bars"----
 # using GRD to generate data with correlation of .8 and a moderate effect
 options(superb.feedback = 'none') # shut down 'warnings' and 'design' interpretation messages
 test <- GRD(WSFactors = "Moment(5)", 
@@ -141,7 +141,7 @@ ggplot() +
     annotation_custom(grob=pltCAg) +
     annotation_custom(grob=pltUAg)
 
-## ---- message=FALSE, warning=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 5**. Means and 95% confidence intervals along with individual scores depicted as lines"----
+## ----message=FALSE, warning=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 5**. Means and 95% confidence intervals along with individual scores depicted as lines"----
 superbPlot(dataFigure2, 
     WSFactors    = "Moment(2)", 
     adjustments = list(purpose = "difference", decorrelation = "CM"), 

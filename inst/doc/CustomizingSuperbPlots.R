@@ -1,4 +1,4 @@
-## ---- message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE----------------------
+## ----message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE-----------------------
 ## Load relevant packages
 library(superb)             # for superbPlot
 library(ggplot2)            # for all the graphic directives
@@ -29,7 +29,7 @@ colnames(dtaB) <- c("Verbal", "Numerical", "Spatial", "Creativity", "Intraperson
 mycolors <- c("seagreen","chocolate2","mediumpurple3","deeppink","chartreuse4", "darkgoldenrod1")
 mylabels <- c("Verbal", "Numerical", "Spatial", "Creativity", "Intrapersonal", "Interpersonal")
 
-## ---- message=FALSE, fig.width=6.7, fig.height=2.5, fig.cap="Figure 2, preliminary version"----
+## ----message=FALSE, fig.width=6.7, fig.height=2.5, fig.cap="Figure 2, preliminary version"----
 pltA <- superbPlot(dtaA,        # plot for the first data set...
     WSFactors = "Domain(6)",    # ...a within-subject design with 6 levels
     variables = mylabels,       # ...whose variables are contained in the above list
@@ -47,7 +47,7 @@ pltA <- superbPlot(dtaA,        # plot for the first data set...
 )
 pltA
 
-## ---- message=FALSE, fig.width=6.7, fig.height=2.5, fig.cap="Figure 2, version with colors"----
+## ----message=FALSE, fig.width=6.7, fig.height=2.5, fig.cap="Figure 2, version with colors"----
 pltA + aes(fill = factor(Domain), colour = factor(Domain)) 
 
 ## -----------------------------------------------------------------------------
@@ -73,7 +73,7 @@ commonstyle <- list(
     scale_discrete_manual(aesthetic =c("fill","colour"), values = mycolors)
 )
 
-## ---- message=FALSE, fig.width=6.7, fig.height=2.5, fig.cap="Figure 2, final version"----
+## ----message=FALSE, fig.width=6.7, fig.height=2.5, fig.cap="Figure 2, final version"----
 finalpltA <- pltA + aes(fill = factor(Domain), colour = factor(Domain)) + 
     commonstyle +                           # all the above directive are added;
     coord_cartesian( ylim = c(1,10) ) +     # the y-axis bounds are given ;
@@ -81,7 +81,7 @@ finalpltA <- pltA + aes(fill = factor(Domain), colour = factor(Domain)) +
     ylab("Self-worth relevance")            # and the y-axis label given.
 finalpltA
 
-## ---- message=FALSE, fig.width=6.7, fig.height=2.5, fig.cap="Figure 2, bottom row"----
+## ----message=FALSE, fig.width=6.7, fig.height=2.5, fig.cap="Figure 2, bottom row"----
 pltB <- superbPlot(dtaB,        # plot for the second data set...
     WSFactors = "Domain(6)",    # ...a within-subject design with 6 levels
     variables = mylabels,       # ...whose variables are contained in the above list
@@ -103,10 +103,10 @@ finalpltB <- pltB + aes(fill = factor(Domain), colour = factor(Domain)) +
     ylab("Judgment certainty")              # and the y-axis label differns.
 finalpltB
 
-## ---- message=FALSE, fig.width=6.7, fig.height=5.0, fig.cap="Figure 2, final version"----
+## ----message=FALSE, fig.width=6.7, fig.height=5.0, fig.cap="Figure 2, final version"----
 finalplt <- grid.arrange(finalpltA, finalpltB, ncol=1)
 
-## ---- echo=TRUE, eval=FALSE---------------------------------------------------
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
 #  ggsave( "Figure2.png",
 #      plot=finalplt,
 #      device = "png",
@@ -116,7 +116,7 @@ finalplt <- grid.arrange(finalpltA, finalpltB, ncol=1)
 #      height = 13
 #  )
 
-## ---- message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE---------------------
+## ----message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE----------------------
 # load manually the data for the purpose of the vignette
 cleandata <- data.frame(
   subject   = c(201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224),
@@ -143,7 +143,7 @@ shift_trans = function(d = 0) {
   scales::trans_new("shift", transform = function(x) x - d, inverse = function(y) y + d)
 }
 
-## ---- fig.width=3, fig.height=4, fig.cap="Figure 1, preliminary version"------
+## ----fig.width=3, fig.height=4, fig.cap="Figure 1, preliminary version"-------
 # defaults are means with 95% confidence intervals, so not specified
 pltA <- superbPlot( cleandata,
     WSFactors = "target(2)",
@@ -155,7 +155,7 @@ pltA <- superbPlot( cleandata,
 )
 pltA
 
-## ---- fig.width=3, fig.height=4, fig.cap="Figure 2, version with adequate vertical scale"----
+## ----fig.width=3, fig.height=4, fig.cap="Figure 2, version with adequate vertical scale"----
 # attached the shifted scale to it
 pltA <- pltA + scale_y_continuous(
     trans = shift_trans(720),      # use translated bars
@@ -164,7 +164,7 @@ pltA <- pltA + scale_y_continuous(
     expand = c(0,0) )              # no expansions over the plotting area
 pltA
 
-## ---- fig.width=3, fig.height=4, fig.cap="Figure 3, version  with theme and details adjusted"----
+## ----fig.width=3, fig.height=4, fig.cap="Figure 3, version  with theme and details adjusted"----
 ornaments <- list(
     theme_classic(base_size = 14) + theme( legend.position = "none" ),
     aes(width = 0.5, fill = factor(target), colour = factor(target) ),
@@ -174,7 +174,7 @@ ornaments <- list(
 pltA <- pltA + ornaments + ylab("Reaction time (ms)")
 pltA
 
-## ---- fig.width=3, fig.height=4, fig.cap="Figure 4, final version for RTs"----
+## ----fig.width=3, fig.height=4, fig.cap="Figure 4, final version for RTs"-----
 pltA <- pltA + showSignificance( c(1,2), 870, -8, 
     "Singleton presence\nbenefit, p < .001",
     segmentParams = list(linewidth = 1))
@@ -182,7 +182,7 @@ pltA <- pltA + showSignificance( c(1,2), 870, -8,
 # this is it! Check the result   
 pltA
 
-## ---- fig.width=3, fig.height=4, fig.cap="Figure 5, final version for mean accuracies"----
+## ----fig.width=3, fig.height=4, fig.cap="Figure 5, final version for mean accuracies"----
 pltB <- superbPlot( cleandata,
     WSFactors = "target(2)",
     variables = c("absentacc", "presentacc"),
@@ -205,7 +205,7 @@ showSignificance( c(1,2), 0.985, -0.005,
 # this is it! Check the result   
 pltB
 
-## ---- fig.width=6, fig.height=4, fig.cap="Figure 6, final version"------------
+## ----fig.width=6, fig.height=4, fig.cap="Figure 6, final version"-------------
 finalplt <- grid.arrange(pltA, pltB, ncol=2)
 #ggsave( "Figure2b.png",
 #    plot=finalplt,

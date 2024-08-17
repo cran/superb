@@ -1,9 +1,9 @@
-## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
+## ----echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'-----------
 cat("this will be hidden; use for general initializations.")
 library(superb)
 library(ggplot2)
 
-## ---- message=FALSE, echo=TRUE, fig.height=4, fig.width=6, fig.cap="**Figure 1**. Various statistics and various measures of precisions"----
+## ----message=FALSE, echo=TRUE, fig.height=4, fig.width=6, fig.cap="**Figure 1**. Various statistics and various measures of precisions"----
 # shut down 'warnings', 'design' and 'summary' messages
 options(superb.feedback = 'none') 
 
@@ -46,7 +46,7 @@ superb:::is.errorbar.function("SE.mean")
 ## -----------------------------------------------------------------------------
 superb:::is.gamma.required("SE.mean")
 
-## ---- message=FALSE, echo=TRUE------------------------------------------------
+## ----message=FALSE, echo=TRUE-------------------------------------------------
     # create a descriptive statistics, the 20% trimmed mean
     trimmedmean    <- function(x) mean(x, trim = 0.2)
 
@@ -58,7 +58,7 @@ superb:::is.gamma.required("SE.mean")
     # or check that it is a valid statistic function
     superb:::is.stat.function("trimmedmean")
 
-## ---- message=FALSE, echo=TRUE, fig.height=4, fig.width=3, fig.cap="**Figure 2**. ``superbPlot`` with a custom-made descriptive statistic function "----
+## ----message=FALSE, echo=TRUE, fig.height=4, fig.width=3, fig.cap="**Figure 2**. ``superbPlot`` with a custom-made descriptive statistic function "----
     superbPlot(dataFigure1, 
         BSFactors = "grp", 
         statistic = "trimmedmean", errorbar = "none", #HERE the statistic name is given
@@ -71,7 +71,7 @@ superb:::is.gamma.required("SE.mean")
     labs(title="20% trimmed mean with \nno error bars") +
     coord_cartesian( ylim = c(85,115) ) 
 
-## ---- message=FALSE-----------------------------------------------------------
+## ----message=FALSE------------------------------------------------------------
     library(psych)      # for winsor.sd
 
     CI.trimmedmean <- function(x, gamma = 0.95){
@@ -88,7 +88,7 @@ superb:::is.gamma.required("SE.mean")
     # or check that it is a valid interval function
     superb:::is.errorbar.function("CI.trimmedmean")
 
-## ---- message=FALSE, echo=TRUE, fig.height=4, fig.width=3, fig.cap="**Figure 3**. `superbPlot` with a custom-made descriptive sttistic function "----
+## ----message=FALSE, echo=TRUE, fig.height=4, fig.width=3, fig.cap="**Figure 3**. `superbPlot` with a custom-made descriptive sttistic function "----
     superbPlot(dataFigure1, 
         BSFactors = "grp", 
         statistic = "trimmedmean", errorbar = "CI",
@@ -113,7 +113,7 @@ superb:::is.gamma.required("SE.mean")
     # we check that it is a valid interval function
     superb:::is.errorbar.function("myBootstrapPI.mean")
 
-## ---- message=FALSE, echo=TRUE,  fig.height=4, fig.width=6, fig.cap="**Figure 4**. `superbPlot` with a custom-made interval function."----
+## ----message=FALSE, echo=TRUE,  fig.height=4, fig.width=6, fig.cap="**Figure 4**. `superbPlot` with a custom-made interval function."----
     plt1 <- superbPlot(dataFigure1, 
         BSFactors = "grp", 
         variable = c("score"), 

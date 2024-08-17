@@ -1,4 +1,4 @@
-## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
+## ----echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'-----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
@@ -35,7 +35,7 @@ init.d1 <- function(df) {
         GM.d1 <<- mean(df$DV) # will make d1 relative to the grand mean
 }
 
-## ---- message=TRUE, echo=TRUE, fig.width = 4, fig.cap="**Figure 1**. d_1 scores along with 95% confidence interval."----
+## ----message=TRUE, echo=TRUE, fig.width = 4, fig.cap="**Figure 1**. d_1 scores along with 95% confidence interval."----
 # show a plot with Cohen's d1 and difference-adjusted confidence intervals of d1
 superbPlot(dta, 
         BSFactors   = "Dose", variables = "score", 
@@ -81,7 +81,7 @@ cidp13 = round(CI.dp(grp3, grp1, 0.95 ), 3)
 cidp23 = round(CI.dp(grp3, grp2, 0.95 ), 3)
 c(cidp12,cidp13,cidp23)
 
-## ---- message=FALSE, echo=TRUE, fig.width=4, fig.cap="**Figure 2**. d_1 scores along with 95% confidence interval."----
+## ----message=FALSE, echo=TRUE, fig.width=4, fig.cap="**Figure 2**. d_1 scores along with 95% confidence interval."----
 superbPlot(dta, BSFactors  = "Dose", variables = "score", 
         statistic = "d1",  errorbar  = "CI", gamma     = 0.95, 
         plotStyle = "line",

@@ -1,4 +1,4 @@
-## ---- echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'----------
+## ----echo = FALSE, warning=FALSE, message = FALSE, results = 'hide'-----------
 cat("this will be hidden; use for general initializations.\n")
 library(superb)
 library(ggplot2)
@@ -31,7 +31,7 @@ ornate = list(
     theme( plot.subtitle = element_text(size=16))
 )
 
-## ---- fig.height=4, fig.width=3, fig.cap = "**Figure 1**. Plot of dtaHerero showing heterogeneous error bars."----
+## ----fig.height=4, fig.width=3, fig.cap = "**Figure 1**. Plot of dtaHerero showing heterogeneous error bars."----
 pt <- superbPlot(dtaHetero, 
                  BSFactors    = "group", 
                  variables   = "score", 
@@ -48,7 +48,7 @@ pt
 # Welch's rectified degrees of freedom
 wdf <- WelchDegreeOfFreedom(dtaHetero, "score","group")
 
-## ---- fig.height=4, fig.width=3, fig.cap = "**Figure 2**. Plot of dtaHerero with rectified degree of freedom."----
+## ----fig.height=4, fig.width=3, fig.cap = "**Figure 2**. Plot of dtaHerero with rectified degree of freedom."----
 pw <- superbPlot(dtaHetero, 
                  BSFactors   = "group", 
                  variables   = "score", 
@@ -61,7 +61,7 @@ pw <- superbPlot(dtaHetero,
 ) + ornate
 pw
 
-## ---- fig.height=4, fig.width=3, fig.cap = "**Figure 3**. Plot of dtaHerero with rectified degree of freedom and Tryon' difference-adjusted error bars."----
+## ----fig.height=4, fig.width=3, fig.cap = "**Figure 3**. Plot of dtaHerero with rectified degree of freedom and Tryon' difference-adjusted error bars."----
 pwt <- superbPlot(dtaHetero, 
                   BSFactors   = "group", 
                   variables   = "score", 
