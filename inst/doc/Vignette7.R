@@ -32,15 +32,15 @@ ornate = list(
 )
 
 ## ----fig.height=4, fig.width=3, fig.cap = "**Figure 1**. Plot of dtaHerero showing heterogeneous error bars."----
-pt <- superbPlot(dtaHetero, 
-                 BSFactors    = "group", 
-                 variables   = "score", 
-                 adjustments = list(purpose = "difference"),
-                 gamma       = 0.95,
-                 statistic   = "mean", 
-                 errorbar    = "CI",
-                 plotStyle   = "line",
-                 lineParams  = list(alpha = 0) #the line is made transparent
+pt <- superb(
+            score ~ group,
+            dtaHetero, 
+            adjustments = list(purpose = "difference"),
+            gamma       = 0.95,
+            statistic   = "mean", 
+            errorbar    = "CI",
+            plotStyle   = "line",
+            lineParams  = list(alpha = 0) #the line is made transparent
 ) + ornate
 pt
 
@@ -49,39 +49,40 @@ pt
 wdf <- WelchDegreeOfFreedom(dtaHetero, "score","group")
 
 ## ----fig.height=4, fig.width=3, fig.cap = "**Figure 2**. Plot of dtaHerero with rectified degree of freedom."----
-pw <- superbPlot(dtaHetero, 
-                 BSFactors   = "group", 
-                 variables   = "score", 
-                 adjustments = list(purpose = "difference"),
-                 gamma       = c(0.95, wdf),         # new! 
-                 statistic   = "mean", 
-                 errorbar    = "CIwithDF",           # new!
-                 plotStyle   = "halfwidthline",
-                 lineParams  = list(alpha = 0)
+pw <- superb(
+            score ~ group,
+            dtaHetero, 
+            adjustments = list(purpose = "difference"),
+            gamma       = c(0.95, wdf),         # new! 
+            statistic   = "mean", 
+            errorbar    = "CIwithDF",           # new!
+            plotStyle   = "halfwidthline",
+            lineParams  = list(alpha = 0)
 ) + ornate
 pw
 
 ## ----fig.height=4, fig.width=3, fig.cap = "**Figure 3**. Plot of dtaHerero with rectified degree of freedom and Tryon' difference-adjusted error bars."----
-pwt <- superbPlot(dtaHetero, 
-                  BSFactors   = "group", 
-                  variables   = "score", 
-                  adjustments = list(purpose = "tryon"), #new!
-                  gamma       = c(0.95, wdf),
-                  statistic   = "mean", 
-                  errorbar    = "CIwithDF",
-                  plotStyle   = "halfwidthline",
-                  lineParams  = list(alpha = 0)
+pwt <- superb(
+            score ~ group, 
+            dtaHetero, 
+            adjustments = list(purpose = "tryon"), #new!
+            gamma       = c(0.95, wdf),
+            statistic   = "mean", 
+            errorbar    = "CIwithDF",
+            plotStyle   = "halfwidthline",
+            lineParams  = list(alpha = 0)
 )+ ornate
 pwt
 
 ## -----------------------------------------------------------------------------
 # get the summary statistics with superbData
-t <- superbData(dtaHetero, 
-                BSFactors   = "group", 
-                variables   = "score", 
-                adjustments = list(purpose = "difference"),
-                gamma       = 0.95,
-                statistic   = "mean", errorbar = "CI"
+t <- superb(
+            score ~ group,
+            dtaHetero, 
+            adjustments = list(purpose = "difference"),
+            gamma       = 0.95,
+            statistic   = "mean", errorbar = "CI",
+            showPlot    = FALSE
 )
 # keep only the summary statistics:
 t2 <- t$summaryStatistics
@@ -95,12 +96,13 @@ tmean    <- (t2$upperwidth[1] + t2$upperwidth[2] )/2
 
 ## -----------------------------------------------------------------------------
 # get the summary statistics with superbData
-wt <- superbData(dtaHetero, 
-                BSFactors   = "group", 
-                variables   = "score", 
-                adjustments = list(purpose = "tryon"),
-                gamma       = c(0.95, wdf),
-                statistic   = "mean", errorbar = "CIwithDF"
+wt <- superb(
+            score ~ group, 
+            dtaHetero, 
+            adjustments = list(purpose = "tryon"),
+            gamma       = c(0.95, wdf),
+            statistic   = "mean", errorbar = "CIwithDF",
+            showPlot    = FALSE
 )
 wt2 <- wt$summaryStatistics
 wmean <- (wt2$upperwidth[1]+wt2$upperwidth[2]) / 2

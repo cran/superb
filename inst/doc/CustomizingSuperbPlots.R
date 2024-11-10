@@ -30,9 +30,10 @@ mycolors <- c("seagreen","chocolate2","mediumpurple3","deeppink","chartreuse4", 
 mylabels <- c("Verbal", "Numerical", "Spatial", "Creativity", "Intrapersonal", "Interpersonal")
 
 ## ----message=FALSE, fig.width=6.7, fig.height=2.5, fig.cap="Figure 2, preliminary version"----
-pltA <- superbPlot(dtaA,        # plot for the first data set...
-    WSFactors = "Domain(6)",    # ...a within-subject design with 6 levels
-    variables = mylabels,       # ...whose variables are contained in the above list
+pltA <- superb(
+    crange(Verbal, Interpersonal) ~ ., # no between-subject factors
+    dtaA,                       # plot for the first data set...
+    WSFactors   = "Domain(6)",  # ...a within-subject design with 6 levels
     adjustments = list(
         purpose = "difference", # we want to compare means
         decorrelation = "CM"    # and error bars are correlated-adjusted
@@ -82,9 +83,10 @@ finalpltA <- pltA + aes(fill = factor(Domain), colour = factor(Domain)) +
 finalpltA
 
 ## ----message=FALSE, fig.width=6.7, fig.height=2.5, fig.cap="Figure 2, bottom row"----
-pltB <- superbPlot(dtaB,        # plot for the second data set...
+pltB <- superb(
+    crange(Verbal, Interpersonal) ~ ., # no between-subject factors
+    dtaB,                       # the second data set...
     WSFactors = "Domain(6)",    # ...a within-subject design with 6 levels
-    variables = mylabels,       # ...whose variables are contained in the above list
     adjustments = list(
         purpose = "difference", # we want to compare means
         decorrelation = "CM"    # and error bars are correlated-adjusted
@@ -94,7 +96,7 @@ pltB <- superbPlot(dtaB,        # plot for the second data set...
     pointParams    = list(size = 0.75),
     jitterParams = list(width =0.1, shape=21,size=0.05,alpha=1), # less dispersed jitter dots,
     violinParams = list(trim=TRUE, alpha=1,adjust=3),            # not semi-transparent, smoother
-    errorbarParams = list(width = 0.1, size=0.5)                 # wider bars, thicker lines.
+    errorbarParams = list(width = 0.1, linewidth=0.5)                 # wider bars, thicker lines.
 )
 finalpltB <- pltB + aes(fill = factor(Domain), colour = factor(Domain)) + 
     commonstyle +                           # the following three lines are the differences:

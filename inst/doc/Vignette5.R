@@ -20,10 +20,10 @@ head(testdata)
 
 ## -----------------------------------------------------------------------------
 mp <- function(data, style, ...) {
-    superbPlot(data,
+    superb(
+        cbind(score.day1, score.day2) ~ Difficulty,
+        data,
         WSFactors = "Day(2)",
-        BSFactors = "Difficulty",
-        variables = c("score.day1", "score.day2"),
         adjustments = list(purpose="difference", decorrelation="CA"),
         plotStyle = style,
         ...
@@ -93,10 +93,10 @@ superbPlot.simple <- function( summarydata, xfactor, groupingfactor, addfactors,
        
     return(plot)
 }
-superbPlot(TMB1964r,
+superb(
+    crange(T1,T7) ~ Condition,
+    TMB1964r,
     WSFactors = "T(7)",
-    BSFactors = "Condition",
-    variables = c("T1","T2","T3","T4","T5","T6","T7"),
     plotStyle = "simple"
 )
 
@@ -120,36 +120,37 @@ superbPlot.simple <- function(
 superb:::is.superbPlot.function("superbPlot.simple")
 
 ## ----message=FALSE, echo=TRUE, results='hide', fig.show='hide'----------------
-superbPlot(TMB1964r,
-     WSFactors = "T(7)",      
-     BSFactors = "Condition",
-     variables = c("T1","T2","T3","T4","T5","T6","T7"),
-     plotStyle = "simple"
+superb(
+    crange(T1,T7) ~ Condition,
+    TMB1964r,
+    WSFactors = "T(7)",      
+    plotStyle = "simple"
 )
 
 ## ----eval = FALSE, message=FALSE, echo=TRUE, error=FALSE, results='hide'------
-#      do.call( geom_point, modifyList(
-#         list( size= 3 ##etc., the default directives##
-#         ), myownParams
-#      ))
+#  do.call( geom_point, modifyList(
+#     list( size= 3 ##etc., the default directives##
+#     ), myownParams
+#  ))
 
 ## -----------------------------------------------------------------------------
 superbPlot.simpleWithOptions <- function(
     summarydata, xfactor, groupingfactor, addfactors, rawdata,
-    myownParams = list()  ## will be used to add the optional arguments to the function
+    myownpointParams = list(),  ## will be used to add the optional arguments to the function
+    myownebParams    = list()  ## will be used to add the optional arguments to the function
 ) {
     plot <- ggplot(
         data = summarydata, 
         mapping = aes( x = !!sym(xfactor), y = center, group=Condition)
     ) +
     do.call( geom_point, modifyList(
-       list( color ="black" ),
-        myownParams
+        list( color ="black" ),
+        myownpointParams
     )) + 
     do.call( geom_errorbar, modifyList(
         list( mapping = aes(ymin = center + lowerwidth, 
                             ymax = center + upperwidth)  ),
-        myownParams 
+        myownebParams 
     )) + 
     facet_grid( addfactors )
         
@@ -158,13 +159,14 @@ superbPlot.simpleWithOptions <- function(
 superb:::is.superbPlot.function("superbPlot.simpleWithOptions")
 
 ## ----message=FALSE, eval=FALSE, echo=TRUE, results='hide', fig.show='show', fig.cap="**Figure 4**. A simple figure with optional arguments"----
-#  superbPlot(TMB1964r,
+#  superb(
+#      crange(T1,T7) ~ Condition,
+#      TMB1964r,
 #      WSFactors = "T(7)",
-#      BSFactors = "Condition",
-#      variables = c("T1","T2","T3","T4","T5","T6","T7"),
 #      plotStyle = "simpleWithOptions",
 #      ## here goes the optional arguments
-#      myownParams = list(size=1, color="purple", position = position_dodge(width = 0.3) )
+#      myownpointParams = list(size=1, color="purple", position = position_dodge(width = 0.3) ),
+#      myownebParams = list(linewidth=1, color="purple", position = position_dodge(width = 0.3) )
 #  )
 
 ## ----eval=TRUE, message=TRUE, echo=TRUE---------------------------------------
@@ -185,11 +187,11 @@ superbPlot.empty <- function(
     return(plot)
 }
 options(superb.feedback = 'inempty')  ## turn on feedback when reaching 'inempty'
-superbPlot(TMB1964r,
-     WSFactors = "T(7)",      
-     BSFactors = "Condition",
-     variables = c("T1","T2","T3","T4","T5","T6","T7"),
-     plotStyle = "empty" 
+superb(
+    crange(T1,T7) ~ Condition,
+    TMB1964r,
+    WSFactors = "T(7)",      
+    plotStyle = "empty" 
 )
 
 ## ----message=FALSE, echo=TRUE, results='hide', fig.show='hide'----------------
@@ -232,10 +234,10 @@ superbPlot.smiley <- function( summarydata, xfactor, groupingfactor, addfactors,
 superb:::is.superbPlot.function("superbPlot.smiley")
 
 ## ----fig.width= 4, fig.height = 3, fig.cap = "**Figure 5**. smile!"-----------
-superbPlot(TMB1964r,
-     WSFactors = "T(7)",      
-     BSFactors = "Condition", 
-     variables = c("T1","T2","T3","T4","T5","T6","T7"),
-     plotStyle = "smiley"
+superb(
+    crange(T1,T7) ~ Condition,
+    TMB1964r,
+    WSFactors = "T(7)",      
+    plotStyle = "smiley"
 )
 

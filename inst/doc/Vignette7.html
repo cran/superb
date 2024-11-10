@@ -416,15 +416,15 @@ will be added to these:</p>
 <p>). We are now ready to make a first plot. The adjustment
 <code>purpose = &quot;difference&quot;</code> is necessary as we plan to compare
 the two results.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>pt <span class="ot">&lt;-</span> <span class="fu">superbPlot</span>(dtaHetero, </span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                 <span class="at">BSFactors    =</span> <span class="st">&quot;group&quot;</span>, </span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                 <span class="at">variables   =</span> <span class="st">&quot;score&quot;</span>, </span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>                 <span class="at">adjustments =</span> <span class="fu">list</span>(<span class="at">purpose =</span> <span class="st">&quot;difference&quot;</span>),</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>                 <span class="at">gamma       =</span> <span class="fl">0.95</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>                 <span class="at">statistic   =</span> <span class="st">&quot;mean&quot;</span>, </span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>                 <span class="at">errorbar    =</span> <span class="st">&quot;CI&quot;</span>,</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>                 <span class="at">plotStyle   =</span> <span class="st">&quot;line&quot;</span>,</span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>                 <span class="at">lineParams  =</span> <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">0</span>) <span class="co">#the line is made transparent</span></span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>pt <span class="ot">&lt;-</span> <span class="fu">superb</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>            score <span class="sc">~</span> group,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>            dtaHetero, </span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>            <span class="at">adjustments =</span> <span class="fu">list</span>(<span class="at">purpose =</span> <span class="st">&quot;difference&quot;</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>            <span class="at">gamma       =</span> <span class="fl">0.95</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>            <span class="at">statistic   =</span> <span class="st">&quot;mean&quot;</span>, </span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>            <span class="at">errorbar    =</span> <span class="st">&quot;CI&quot;</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>            <span class="at">plotStyle   =</span> <span class="st">&quot;line&quot;</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>            <span class="at">lineParams  =</span> <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">0</span>) <span class="co">#the line is made transparent</span></span>
 <span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>) <span class="sc">+</span> ornate</span>
 <span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>pt</span></code></pre></div>
 <div class="float">
@@ -511,15 +511,15 @@ argument, use a vector with both the confidence level desired and the
 rectified degree of freedom, as in
 <code>gamma = c(0.95, 26.9965)</code>. Lets have a small plot of
 this:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>pw <span class="ot">&lt;-</span> <span class="fu">superbPlot</span>(dtaHetero, </span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                 <span class="at">BSFactors   =</span> <span class="st">&quot;group&quot;</span>, </span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>                 <span class="at">variables   =</span> <span class="st">&quot;score&quot;</span>, </span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>                 <span class="at">adjustments =</span> <span class="fu">list</span>(<span class="at">purpose =</span> <span class="st">&quot;difference&quot;</span>),</span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>                 <span class="at">gamma       =</span> <span class="fu">c</span>(<span class="fl">0.95</span>, wdf),         <span class="co"># new! </span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>                 <span class="at">statistic   =</span> <span class="st">&quot;mean&quot;</span>, </span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>                 <span class="at">errorbar    =</span> <span class="st">&quot;CIwithDF&quot;</span>,           <span class="co"># new!</span></span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>                 <span class="at">plotStyle   =</span> <span class="st">&quot;halfwidthline&quot;</span>,</span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>                 <span class="at">lineParams  =</span> <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">0</span>)</span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>pw <span class="ot">&lt;-</span> <span class="fu">superb</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>            score <span class="sc">~</span> group,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>            dtaHetero, </span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>            <span class="at">adjustments =</span> <span class="fu">list</span>(<span class="at">purpose =</span> <span class="st">&quot;difference&quot;</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>            <span class="at">gamma       =</span> <span class="fu">c</span>(<span class="fl">0.95</span>, wdf),         <span class="co"># new! </span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>            <span class="at">statistic   =</span> <span class="st">&quot;mean&quot;</span>, </span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>            <span class="at">errorbar    =</span> <span class="st">&quot;CIwithDF&quot;</span>,           <span class="co"># new!</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>            <span class="at">plotStyle   =</span> <span class="st">&quot;halfwidthline&quot;</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>            <span class="at">lineParams  =</span> <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">0</span>)</span>
 <span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>) <span class="sc">+</span> ornate</span>
 <span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>pw</span></code></pre></div>
 <div class="float">
@@ -553,15 +553,15 @@ compensate for the underestimation introduced by regular averaging. This
 transformation is right on so that the usual mean of the two error bars,
 following a Tryon transformation, will precisely indicate whether the
 means are included in the mean error bar length.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>pwt <span class="ot">&lt;-</span> <span class="fu">superbPlot</span>(dtaHetero, </span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                  <span class="at">BSFactors   =</span> <span class="st">&quot;group&quot;</span>, </span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>                  <span class="at">variables   =</span> <span class="st">&quot;score&quot;</span>, </span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>                  <span class="at">adjustments =</span> <span class="fu">list</span>(<span class="at">purpose =</span> <span class="st">&quot;tryon&quot;</span>), <span class="co">#new!</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>                  <span class="at">gamma       =</span> <span class="fu">c</span>(<span class="fl">0.95</span>, wdf),</span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>                  <span class="at">statistic   =</span> <span class="st">&quot;mean&quot;</span>, </span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>                  <span class="at">errorbar    =</span> <span class="st">&quot;CIwithDF&quot;</span>,</span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>                  <span class="at">plotStyle   =</span> <span class="st">&quot;halfwidthline&quot;</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>                  <span class="at">lineParams  =</span> <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">0</span>)</span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>pwt <span class="ot">&lt;-</span> <span class="fu">superb</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>            score <span class="sc">~</span> group, </span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>            dtaHetero, </span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>            <span class="at">adjustments =</span> <span class="fu">list</span>(<span class="at">purpose =</span> <span class="st">&quot;tryon&quot;</span>), <span class="co">#new!</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>            <span class="at">gamma       =</span> <span class="fu">c</span>(<span class="fl">0.95</span>, wdf),</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>            <span class="at">statistic   =</span> <span class="st">&quot;mean&quot;</span>, </span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>            <span class="at">errorbar    =</span> <span class="st">&quot;CIwithDF&quot;</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>            <span class="at">plotStyle   =</span> <span class="st">&quot;halfwidthline&quot;</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>            <span class="at">lineParams  =</span> <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">0</span>)</span>
 <span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>)<span class="sc">+</span> ornate</span>
 <span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>pwt</span></code></pre></div>
 <div class="float">
@@ -577,19 +577,20 @@ bars.</div>
 <p>If we used the difference-adjusted error bars, then we need to
 average in the square sense the error bars. Lets do that:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># get the summary statistics with superbData</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">superbData</span>(dtaHetero, </span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>                <span class="at">BSFactors   =</span> <span class="st">&quot;group&quot;</span>, </span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>                <span class="at">variables   =</span> <span class="st">&quot;score&quot;</span>, </span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>                <span class="at">adjustments =</span> <span class="fu">list</span>(<span class="at">purpose =</span> <span class="st">&quot;difference&quot;</span>),</span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>                <span class="at">gamma       =</span> <span class="fl">0.95</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>                <span class="at">statistic   =</span> <span class="st">&quot;mean&quot;</span>, <span class="at">errorbar =</span> <span class="st">&quot;CI&quot;</span></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>)</span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co"># keep only the summary statistics:</span></span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> t<span class="sc">$</span>summaryStatistics</span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co"># the length is in column &quot;upperwidth&quot;, for lines 1 and 2,</span></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co"># so lets do the mean in the square sense:</span></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>tmean2 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>( (t2<span class="sc">$</span>upperwidth[<span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> t2<span class="sc">$</span>upperwidth[<span class="dv">2</span>]<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span> )</span></code></pre></div>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">superb</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>            score <span class="sc">~</span> group,</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>            dtaHetero, </span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>            <span class="at">adjustments =</span> <span class="fu">list</span>(<span class="at">purpose =</span> <span class="st">&quot;difference&quot;</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>            <span class="at">gamma       =</span> <span class="fl">0.95</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>            <span class="at">statistic   =</span> <span class="st">&quot;mean&quot;</span>, <span class="at">errorbar =</span> <span class="st">&quot;CI&quot;</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>            <span class="at">showPlot    =</span> <span class="cn">FALSE</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>)</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co"># keep only the summary statistics:</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> t<span class="sc">$</span>summaryStatistics</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co"># the length is in column &quot;upperwidth&quot;, for lines 1 and 2,</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co"># so lets do the mean in the square sense:</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>tmean2 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>( (t2<span class="sc">$</span>upperwidth[<span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> t2<span class="sc">$</span>upperwidth[<span class="dv">2</span>]<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span> )</span></code></pre></div>
 <p>which equals 16.135. By comparison, here is the regular mean:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>tmean    <span class="ot">&lt;-</span> (t2<span class="sc">$</span>upperwidth[<span class="dv">1</span>] <span class="sc">+</span> t2<span class="sc">$</span>upperwidth[<span class="dv">2</span>] )<span class="sc">/</span><span class="dv">2</span></span></code></pre></div>
 <p>which equals 13.838. This shows that in the present case, the usual
@@ -599,15 +600,16 @@ average (in the square sense).</p>
 do the same following Tryon’s adjusment and Welch rectified degrees of
 freedom:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># get the summary statistics with superbData</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>wt <span class="ot">&lt;-</span> <span class="fu">superbData</span>(dtaHetero, </span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>                <span class="at">BSFactors   =</span> <span class="st">&quot;group&quot;</span>, </span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>                <span class="at">variables   =</span> <span class="st">&quot;score&quot;</span>, </span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>                <span class="at">adjustments =</span> <span class="fu">list</span>(<span class="at">purpose =</span> <span class="st">&quot;tryon&quot;</span>),</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>                <span class="at">gamma       =</span> <span class="fu">c</span>(<span class="fl">0.95</span>, wdf),</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>                <span class="at">statistic   =</span> <span class="st">&quot;mean&quot;</span>, <span class="at">errorbar =</span> <span class="st">&quot;CIwithDF&quot;</span></span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>)</span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>wt2 <span class="ot">&lt;-</span> wt<span class="sc">$</span>summaryStatistics</span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>wmean <span class="ot">&lt;-</span> (wt2<span class="sc">$</span>upperwidth[<span class="dv">1</span>]<span class="sc">+</span>wt2<span class="sc">$</span>upperwidth[<span class="dv">2</span>]) <span class="sc">/</span> <span class="dv">2</span></span></code></pre></div>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>wt <span class="ot">&lt;-</span> <span class="fu">superb</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>            score <span class="sc">~</span> group, </span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>            dtaHetero, </span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>            <span class="at">adjustments =</span> <span class="fu">list</span>(<span class="at">purpose =</span> <span class="st">&quot;tryon&quot;</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>            <span class="at">gamma       =</span> <span class="fu">c</span>(<span class="fl">0.95</span>, wdf),</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>            <span class="at">statistic   =</span> <span class="st">&quot;mean&quot;</span>, <span class="at">errorbar =</span> <span class="st">&quot;CIwithDF&quot;</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>            <span class="at">showPlot    =</span> <span class="cn">FALSE</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>)</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>wt2 <span class="ot">&lt;-</span> wt<span class="sc">$</span>summaryStatistics</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>wmean <span class="ot">&lt;-</span> (wt2<span class="sc">$</span>upperwidth[<span class="dv">1</span>]<span class="sc">+</span>wt2<span class="sc">$</span>upperwidth[<span class="dv">2</span>]) <span class="sc">/</span> <span class="dv">2</span></span></code></pre></div>
 <p>As seen, both length are very similar, 16.135 for the first, and
 16.041 for the second. The small difference comes from the fact that in
 the Tryon-adjusted error bars, the degree of freedom were rectified by

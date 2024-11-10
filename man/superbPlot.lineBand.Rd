@@ -12,8 +12,8 @@ superbPlot.lineBand(
   rawdata,
   pointParams = list(),
   lineParams = list(),
-  facetParams = list(),
   errorbandParams = list(),
+  facetParams = list(),
   xAsFactor = TRUE
 )
 }
@@ -32,9 +32,9 @@ superbPlot.lineBand(
 
 \item{lineParams}{(optional) list of graphic directives that are sent to the geom_jitter layer}
 
-\item{facetParams}{(optional) list of graphic directives that are sent to the facet_grid layer}
-
 \item{errorbandParams}{(optional) list of graphic directives that are sent to the geom_ribbon layer}
+
+\item{facetParams}{(optional) list of graphic directives that are sent to the facet_grid layer}
 
 \item{xAsFactor}{(optional) Boolean to indicate if the factor on the horizontal should continuous or discrete (default is discrete)}
 }
@@ -58,9 +58,10 @@ dta <- GRD( WSFactors = "timepoints (50) : condition(2)",
 )
 
 # This will make a plot with error band
-superbPlot(dta, 
+superb(
+   crange(activation.1.1, activation.50.2) ~ ., 
+   dta, 
    WSFactors   = c("timepoints(50)", "condition(2)"),
-   variables = colnames(dta)[2:101],   ## all the names of the dataframe except "id"
    adjustments = list(
         purpose       = "single",
         decorrelation = "CM"        ## or none for no decorrelation
@@ -71,7 +72,9 @@ superbPlot(dta,
 
 # if you extract the data with superbData, you can 
 # run this layout directly
-#processedData <- superbData(dta, 
+#processedData <- superb(
+#   crange(activation.1.1, activation.50.2) ~ ., 
+#   dta, 
 #   WSFactors   = c("timepoints(50)", "condition(2)"), variables = colnames(dta)[2:101],
 #   adjustments = list(
 #        purpose       = "single",

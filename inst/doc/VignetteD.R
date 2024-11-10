@@ -17,9 +17,10 @@ library(foreign)
 data <- read.spss(file, to.data.frame = TRUE)
 
 ## ----fig.width = 4, eval=FALSE, fig.cap="**Figure 1: A plot with SPSS data within R**"----
-#  superbPlot( data,
+#  superb(
+#      cbind(time1, time2) ~ .,
+#      data,
 #      WSFactors      = "Temps(2)",
-#      variables      = c("time1","time2"),
 #      plotStyle      = "line",
 #      adjustments    = list(purpose = "single",
 #                            decorrelation = "CA"),

@@ -121,9 +121,10 @@ fisherkurtosis <- function(x) {
 #' library(ggplot2)
 #'
 #' # First, a regular plot
-#' plt1 <- superbPlot(dta, 
+#' plt1 <- superb(
+#'            cbind(DV.1,DV.2,DV.3) ~ ., 
+#'            dta, 
 #'            WSFactors      = "Moment(3)", 
-#'            variables      = c("DV.1","DV.2","DV.3"), 
 #'            plotStyle      = "line",
 #'            adjustments    = list (purpose="difference",decorrelation="CM"),
 #'            errorbar       = "CI",
@@ -132,9 +133,10 @@ fisherkurtosis <- function(x) {
 #'                                  position = position_nudge(-0.0) )
 #'         )
 #' # Second, a plot where the df are set to the default
-#' plt2 <- superbPlot(dta, 
+#' plt2 <- superb(
+#'            cbind(DV.1,DV.2,DV.3) ~ .,
+#'            dta, 
 #'            WSFactors      = "Moment(3)", 
-#'            variables      = c("DV.1","DV.2","DV.3"), 
 #'            plotStyle      = "line",
 #'            adjustments    = list (purpose="difference",decorrelation="CM"),
 #'            errorbar       = "CIwithDF",    # NEW: change the CI computation 
@@ -143,9 +145,10 @@ fisherkurtosis <- function(x) {
 #'                                    position = position_nudge(-0.05) )
 #'         )
 #' # Third, a plot where the pooled df are explicitely set 
-#' plt3 <- superbPlot(dta, 
+#' plt3 <- superb(
+#'            cbind(DV.1,DV.2,DV.3) ~ .,
+#'            dta, 
 #'            WSFactors      = "Moment(3)", 
-#'            variables      = c("DV.1","DV.2","DV.3"), 
 #'            plotStyle      = "line",
 #'            adjustments    = list (purpose="difference",decorrelation="CM"),
 #'            errorbar       = "CIwithDF",         # NEW: again, change the CI computation
@@ -190,9 +193,9 @@ fisherkurtosis <- function(x) {
 #' wdf # should be between n-1 and N-n-p+1.
 #'
 #'# A regular plot
-#' plt1 <- superbPlot(dta, 
-#'            BSFactors      = "Group", 
-#'            variables      = "DV", 
+#' plt1 <- superb(
+#'            DV ~ Group,
+#'            dta, 
 #'            plotStyle      = "line",
 #'            adjustments    = list (purpose="difference"),
 #'            errorbar       = "CI",
@@ -201,9 +204,9 @@ fisherkurtosis <- function(x) {
 #'                                  position = position_nudge(-0.0) )
 #'         )
 #' # Second, a plot where the df are set to the pooled df
-#' plt2 <- superbPlot(dta, 
-#'            BSFactors      = "Group", 
-#'            variables      = "DV", 
+#' plt2 <- superb( 
+#'            DV ~ Group,
+#'            dta, 
 #'            plotStyle      = "line",
 #'            adjustments    = list (purpose="difference"),
 #'            errorbar       = "CIwithDF",         # NEW: change the CI computation 
@@ -212,9 +215,9 @@ fisherkurtosis <- function(x) {
 #'                                    position = position_nudge(-0.05) )
 #'         )
 #' # Third, a plot where the pooled df are explicitely set 
-#' plt3 <- superbPlot(dta, 
-#'            BSFactors      = "Group", 
-#'            variables      = "DV", 
+#' plt3 <- superb( 
+#'            DV ~ Group,
+#'            dta, 
 #'            plotStyle      = "line",
 #'            adjustments    = list (purpose="difference"),
 #'            errorbar       = "CIwithDF",       # NEW: again, change the CI computation
@@ -276,6 +279,8 @@ CIwithDF.mean <- function(x, gamma = 0.95) {
 #' They return the mean, the standard error of the mean and the confidence 
 #' interval of the mean.Note that we hesitated to provide these functions: you 
 #' should deal with missing data prior to making your plot.
+#' Removing NAs from the mean in a univariate setting is equivalent to performing
+#' mean imputation. See @enwiki:1243866876 for more.
 #' Also note that for repeated-measure design, only CA adjustment is available.
 #' 
 #' @usage meanNArm(x)

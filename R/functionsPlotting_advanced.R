@@ -1,114 +1,9 @@
 ######################################################
 ######################################################
-##  Advanced plot layouts: raincloud
+##  Two advanced plot layouts: raincloud, halfwidthline
 ######################################################
 ######################################################
 
-
-
-
-### This script creates an R function to generate raincloud plots, then simulates
-### data for plots. If using for your own data, you only need lines 1-80.
-### It relies largely on code previously written by David Robinson
-### (https://gist.github.com/dgrtwo/eb7750e74997891d7c20)
-### and the package ggplot2 by Hadley Wickham.
-###
-### Code from:
-### Allen M, Poggiali D, Whitaker K, Marshall TR, Kievit R. (2018) 
-###   RainCloudPlots tutorials and codebase (Version v1.1). Zenodo. 
-###   http://doi.org/10.5281/zenodo.3368186
-
-
-# Check if required packages are installed ----
-#packages <- c("ggplot2", "dplyr", "smooth", "Hmisc")
-#if (length(setdiff(packages, rownames(installed.packages()))) > 0) {
-#  install.packages(setdiff(packages, rownames(installed.packages())))
-#}
-
-# Load packages ----
-#library(ggplot2)
-
-# Defining the geom_flat_violin function ----
-# Note (from the original authors): the below code modifies the
-# existing github page by removing a parenthesis in line 50
-
-"%||%" <- function(a, b) {
-  if (!is.null(a)) a else b
-}
-
-geom_flat_violin <- function(mapping = NULL, data = NULL, stat = "ydensity",
-                             position = "dodge", trim = TRUE, scale = "area",
-                             show.legend = NA, inherit.aes = TRUE, ...) {
-    layer(
-        data = data,
-        mapping = mapping,
-        stat = stat,
-        geom = GeomFlatViolin,
-        position = position,
-        show.legend = show.legend,
-        inherit.aes = inherit.aes,
-        params = list(
-            trim = trim,
-            scale = scale,
-            ...
-        )
-    )
-}
-
-#### ' @rdname ggplot2-ggproto
-# ' @format NULL
-# ' @usage NULL
-# ' @export
-GeomFlatViolin <-
-    ggproto("GeomFlatViolin", Geom,
-        setup_data = function(data, params) {
-            data$width <- data$width %||%
-                params$width %||% (resolution(data$x, FALSE) * 0.9)
-
-            # new addition: D. Cousineau, 2024.08.03
-            data$push      <- abs(data$push %||% params$push %||% 0)
-            data$direction <- data$direction %||% params$direction %||% 0
-
-            # ymin, ymax, xmin, and xmax define the bounding rectangle for each group
-            # Note (from D. Cousineau): did it without the pipes which were generating complaints from CRAN
-            dplyr::mutate(dplyr::group_by(data, group),
-                ymin = min(y),
-                ymax = max(y),    
-                xmin = x - width / 2,
-                xmax = x + width / 2
-            )
-        },
-
-        draw_group = function(data, panel_scales, coord) {
-            # Find the points for the line to go all the way around
-            data <- transform(data,
-                        xmaxv = abs((1+direction)/2)*(x+push) + abs((1-direction)/2)*(x - violinwidth * (x-xmin)-push),
-                        xminv = abs((1+direction)/2)*(x + violinwidth * (x - xmin)+push) + abs((1-direction)/2)*(x-push)
-            )
-
-            # Make sure it's sorted properly to draw the outline
-            newdata <- rbind(
-                plyr::arrange(transform(data, x = xminv), y),
-                plyr::arrange(transform(data, x = xmaxv), -y)
-            )
-
-            # Close the polygon: set first and last point the same
-            # Needed for coord_polar and such
-            newdata <- rbind(newdata, newdata[1, ])
-
-            ggplot2:::ggname("geom_flat_violin", GeomPolygon$draw_panel(newdata, panel_scales, coord))
-        },
-
-        draw_key = draw_key_polygon,
-
-        default_aes = aes(
-                    weight = 1, colour = "grey20", fill = "white", linewidth = 0.5,
-                    alpha = NA, linetype = "solid",
-                    # new items
-                    direction = 1, push = 0),
-
-        required_aes = c("x", "y")
-  )
 
 
 ######################################################################################
@@ -119,7 +14,7 @@ GeomFlatViolin <-
 #' @md
 #'
 #' @description The raincloud layout display jittered dots as well as a "cloud" (half of a violin) above them.
-#' See Allen, Poggiali, Whitaker, Marshall, & Kievit (2018)
+#' See @allen2019.
 #' The functions has these parameters:
 #' 
 #' @param summarydata a data.frame with columns "center", "lowerwidth" and "upperwidth" for each level of the factors;
@@ -139,15 +34,17 @@ GeomFlatViolin <-
 #'
 #' @examples
 #' # This will make a plot with raincloud; they are better seen rotated: +coord_flip()
-#' superbPlot(ToothGrowth, 
-#'    BSFactors = c("dose","supp"), variables = "len",
+#' superb(
+#'    len ~ dose + supp,
+#'    ToothGrowth, 
 #'    plotStyle="raincloud" 
 #' )
 #'
 #' # if you extract the data with superbData, you can 
 #' # run this layout directly
-#' #processedData <- superbData(ToothGrowth, 
-#' #   BSFactors = c("dose","supp"), variables = "len"
+#' #processedData <- superb(ToothGrowth, 
+#' #   len ~ dose + supp,
+#' #   showPlot = FALSE
 #' #)
 #' #
 #' #superbPlot.raincloud(processedData$summaryStatistic,
@@ -183,7 +80,7 @@ superbPlot.raincloud <- function(
 
     # depending on the scale of the x-axis.
     if (!xAsFactor) 
-        summarydata[[xfactor]] = as.numeric(summarydata[[xfactor]])
+        summarydata[[xfactor]] = unfactor(summarydata[[xfactor]])
 
     # rename column "DV" as "center"
     rawdata$center <- rawdata$DV
@@ -291,15 +188,18 @@ superbPlot.raincloud <- function(
 #'
 #' @examples
 #' # This will make a plot with lines
-#' superbPlot(ToothGrowth, 
-#'    BSFactor = c("dose","supp"), variables = "len",
+#' superb(
+#'    len ~ dose + supp, 
+#'    ToothGrowth, 
 #'    plotStyle="halfwidthline" 
 #' )
 #'
 #' # if you extract the data with superbData, you can 
 #' # run this layout directly
-#' #processedData <- superbData(ToothGrowth, 
-#' #   BSFactor = c("dose","supp"), variables = "len"
+#' #processedData <- superb(
+#' #   len ~ dose + supp, 
+#' #   ToothGrowth, 
+#' #   showPlot = FALSE
 #' #)
 #' #
 #' #superbPlot.halfwidthline(processedData$summaryStatistic,
@@ -336,15 +236,11 @@ superbPlot.halfwidthline <- function(
 
     # depending on the scale of the x-axis.
     if (!xAsFactor) 
-        summarydata[[xfactor]] = as.numeric(summarydata[[xfactor]])
+        summarydata[[xfactor]] = unfactor(summarydata[[xfactor]])
 
     # let's do the plot!
     plot <- ggplot(
         summarydata, 
-#        aes_string(
-#            x = xfactor, y = "center", ymin = "center + lowerwidth", ymax = "center + upperwidth", 
-#            colour = groupingfactor
-#       Because aes_string is deprecated, we switch to the magical pair !!sym(string)...
         aes(
             x = !!mysym(xfactor), y = center, ymin = center + lowerwidth, ymax = center + upperwidth, 
             colour = !!mysym(groupingfactor)
@@ -366,9 +262,6 @@ superbPlot.halfwidthline <- function(
     # the error bars
     do.call(geom_superberrorbar, modifyList(
         list(width = 0.1, linewidth = 1.00, position = position_dodge(.15),
-#            aes_string(
-#                x = xfactor, y = "center", ymin = "center + lowerwidth", ymax = "center + upperwidth", 
-#                colour = groupingfactor ) ),
             aes(
                 x = !!mysym(xfactor), y = center, ymin = center + lowerwidth, ymax = center + upperwidth, 
                 colour = !!mysym(groupingfactor) ) ),

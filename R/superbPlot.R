@@ -3,9 +3,10 @@
 #'
 #' @md
 #'
-#' @description The function ``suberbPlot()`` plots standard error or confidence interval for various  
+#' @description The function ``superbPlot()`` plots standard error or confidence interval for various  
 #'      descriptive statistics under various designs, sampling schemes, population size and purposes,
 #'      according to the ``suberb`` framework. See \insertCite{cgh21}{superb} for more.
+#'      Note that this function has been superseded by ``superb()``.
 #'
 #' @param data Dataframe in wide format
 #'
@@ -37,7 +38,7 @@
 #'
 #' @param ...  In addition to the parameters above, superbPlot also accept a number of 
 #'  optional arguments that will be transmitted to the plotting function, such as
-#'  pointParams (a list of ggplot2 parameters to input inside geoms; see ?geom_bar2) and
+#'  pointParams (a list of g`lot2 parameters to input inside geoms; see ?geom_bar2) and
 #'  errorbarParams (a list of ggplot2 parameters for geom_errorbar; see ?geom_errorbar)
 #'
 #'
@@ -60,7 +61,7 @@
 #' * samplingDesign: Sampling method to obtain the sample. implemented 
 #'          sampling is "SRS" (Simple Randomize Sampling) and "CRS" (Cluster-Randomized Sampling).
 #'
-#' In version 0.97.5, the layouts for plots are the following:
+#' As of version 0.97.15, the layouts for plots are the following:
 #' * "bar" Shows the summary statistics with bars and error bars;
 #' * "line" Shows the summary statistics with lines connecting the conditions over the first factor;
 #' * "point" Shows the summary statistics with isolated points
@@ -68,6 +69,11 @@
 #' * "pointjitterviolin" Also adds violin plots to the previous layout
 #' * "pointindividualline" Connects the raw data with line along the first factor (which should be a repeated-measure factor)
 #' * "raincloud" Illustrates the distribution with a cloud (half_violin_plot) and jittered dots next to it. Looks better when coordinates are flipped ``+coord_flip()``.
+#' * "corset" Illustrates two repeated-measures with individual lines and clouds
+#' * "boxplot" Illustrates the limits, the quartiles and the median using a box
+#'
+#' but refer to `superb()` for a documentation that will be kept up do date.
+#'
 #' @md
 #'
 #' @references
@@ -80,6 +86,9 @@
 #' # By default, the mean is computed and the error bar are 95% confidence intervals
 #' superbPlot(ToothGrowth, BSFactors = c("dose", "supp"), 
 #'   variables = "len") 
+#'
+#' # Note that function superb() does the same with formula:
+#' superb( len ~ dose + supp, ToothGrowth )
 #'
 #' # Example changing the summary statistics to the median and
 #' # the error bar to 80% confidence intervals
@@ -133,6 +142,7 @@
 #' ######################################################################
 #' 
 #' # Another example: The Orange data
+#' data(Orange)
 #' # Use the Orange example, but let's define shorter column names...
 #' names(Orange) <- c("Tree","age","circ")
 #' # ... and turn the data into a wide format using superbToWide:
@@ -143,14 +153,14 @@
 #'
 #' # Makes the plots first without decorrelation:
 #' p1 <- superbPlot( Orange.wide, WSFactors = "age(7)",
-#'   variables = c("circ_118","circ_484","circ_664","circ_1004","circ_1231","circ_1372","circ_1582"),
+#'   variables = c("circ.118","circ.484","circ.664","circ.1004","circ.1231","circ.1372","circ.1582"),
 #'   adjustments = list(purpose = "difference", decorrelation = "none")
 #' ) + 
 #'   xlab("Age level") + ylab("Trunk diameter (mm)") +
 #'   coord_cartesian( ylim = c(0,250) ) + labs(title="''Standalone'' confidence intervals")
 #' # ... and then with decorrelation (technique Correlation-adjusted CA):
 #' p2 <- superbPlot( Orange.wide, WSFactors = "age(7)",
-#'   variables = c("circ_118","circ_484","circ_664","circ_1004","circ_1231","circ_1372","circ_1582"),
+#'   variables = c("circ.118","circ.484","circ.664","circ.1004","circ.1231","circ.1372","circ.1582"),
 #'   adjustments = list(purpose = "difference", decorrelation = "CA")
 #' ) + 
 #'   xlab("Age level") + ylab("Trunk diameter (mm)") +
@@ -194,7 +204,7 @@ superbPlot <- function(data,
     clusterColumn = "",              # if samplineScheme = CRS
     ...
     # the following are optional list of graphic directives...
-    # errorbarParams,                # merged into ggplot/geom_errorbar
+    # errorbarParams,                # merged into ggplot/geom_superberrorbar
     # pointParams,                   # merged into ggplot/geom_point
     # lineParams,                    # merged into ggplot/geom_line
     # barParams,                     # merged into ggplot/geom_bar
@@ -202,17 +212,9 @@ superbPlot <- function(data,
 ) {
 
     ##############################################################################
-    # STEP 0: Load required libraries
-    ##############################################################################
-    #require(ggplot2)    # all of it
-    #require(lsr)        # only function wideToLong is used
-    #require(plyr)       # only function ddply is used
-    
-    
-    ##############################################################################
     # STEP 1: Input validation
     ##############################################################################
-    # 1.0: is the data actually data!
+    # 1.0: are the data actually data!
 	data <- as.data.frame(data) # coerce to data.frame if tibble or compatible
     if(!(is.data.frame(data)))
             stop("superb::ERROR: data is not a data.frame or similar data structure. Exiting...")
@@ -396,6 +398,13 @@ superbPlot <- function(data,
     colnames(data.untransformed)[grep(temp, names(data.untransformed))] = newnames
     colnames(data.transformed)[grep(temp, names(data.transformed))] = newnames
 
+    if (exists("id", where = data.untransformed)) {
+        #print("Nothing to do, participants identifier exists")
+    } else {
+        #print("Adding id manually")
+        data.untransformed$id = 1:(dim(data.untransformed)[1])
+    }
+    
     # set data to long format using lsr (Navarro, 2015)
     data.untransformed.long <- suppressWarnings(lsr::wideToLong(data.untransformed, within = WSFactors, sep = weird))
     data.transformed.long   <- suppressWarnings(lsr::wideToLong(data.transformed, within = WSFactors, sep = weird))
@@ -407,7 +416,6 @@ superbPlot <- function(data,
         as.numeric.factor, data.untransformed.long[WSFactors])
     data.transformed.long[WSFactors] <- mapply(
         as.numeric.factor, data.transformed.long[WSFactors])
-
 
     # if there was no within-subject factor, a dummy had been added
     if (WSFactors[1]  == wsMissing) {
@@ -428,7 +436,6 @@ superbPlot <- function(data,
 
     runDebug("superb.3", "End of Step 3: Reformat data frame into long format", 
         c("data.transformed.long2","factorOrder3"), list(data.transformed.long,factorOrder) )
-
 
 
     ##############################################################################
@@ -462,7 +469,6 @@ superbPlot <- function(data,
 
     runDebug("superb.4", "End of Step 4: Statistics obtained", 
         c("summaryStatistics2"), list( summaryStatistics) )
-
 
     ##############################################################################
     # STEP 5: Get all the adjustments
@@ -518,7 +524,6 @@ superbPlot <- function(data,
         sqrt(1- rs)
     } else if (substr(adjustments$decorrelation,1,2) == "LD") {
         rs <- plyr::ddply(data, .fun = meanLocalCorrelation, .variables = BSFactors, cols = variables, w = radius)
-#        rs <- unlist(rs[,!is.na(rs)])
         rs <- suppressWarnings(as.numeric(unlist(rs))[!is.na(as.numeric(unlist(rs)))])
         # the rs is a vector containing one rLD for each measurement
         sqrt(1- rs)
@@ -533,7 +538,7 @@ superbPlot <- function(data,
 
 
     ##############################################################################
-    # STEP 6: Issue feedback information
+    # STEP 6: Display feedback information
     ##############################################################################
 
     if (('warnings' %in% getOption("superb.feedback") ) | ('all' %in% getOption("superb.feedback")) )  {
@@ -590,6 +595,7 @@ superbPlot <- function(data,
         }
     }
     
+    
     ##############################################################################
     # ALL DONE! Output the plot(s) or the summary data
     ##############################################################################
@@ -618,6 +624,7 @@ superbPlot <- function(data,
         # returns a list with summary statistsics as is and rawdata
         return( list(summaryStatistics = summaryStatistics, rawData = data.untransformed.long))
     }
+
 
     ##############################################################################
     # FINISHED! End of function superbPlot
@@ -685,7 +692,16 @@ meanLocalCorrelation <- function(X, cols, w) {
 # that simple!
 
 
+unfactor <- function( col ) {
+    unfactored <- suppressWarnings(as.numeric(as.character( col )))
+    if (all(is.na( unfactored ))) {
+        col <- as.numeric( col )
+    } else {
+        col <- unfactored
+    }
+    col
+}
 
 ##################################################################   
-# End of suberbPlot.
+# End of superbPlot.
 ##################################################################   

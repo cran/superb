@@ -1,3 +1,11 @@
+######################################################
+######################################################
+##  One advanced plot layout: lineBand
+######################################################
+######################################################
+
+
+
 ######################################################################################
 #' @name superbPlot.lineBand
 #'
@@ -34,9 +42,10 @@
 #' )
 #' 
 #' # This will make a plot with error band
-#' superbPlot(dta, 
+#' superb(
+#'    crange(activation.1.1, activation.50.2) ~ ., 
+#'    dta, 
 #'    WSFactors   = c("timepoints(50)", "condition(2)"),
-#'    variables = colnames(dta)[2:101],   ## all the names of the dataframe except "id"
 #'    adjustments = list(
 #'         purpose       = "single",
 #'         decorrelation = "CM"        ## or none for no decorrelation
@@ -47,7 +56,9 @@
 #'
 #' # if you extract the data with superbData, you can 
 #' # run this layout directly
-#' #processedData <- superbData(dta, 
+#' #processedData <- superb(
+#' #   crange(activation.1.1, activation.50.2) ~ ., 
+#' #   dta, 
 #' #   WSFactors   = c("timepoints(50)", "condition(2)"), variables = colnames(dta)[2:101],
 #' #   adjustments = list(
 #' #        purpose       = "single",
@@ -76,8 +87,8 @@ superbPlot.lineBand <- function(
     rawdata,
     pointParams         = list(),
     lineParams          = list(),
-    facetParams         = list(),
     errorbandParams     = list(),
+    facetParams         = list(),
     xAsFactor = TRUE
 ) {
     runDebug("lineBand", "Entering superbPlot.lineBand", c("xfactor2", "groupingfactor2", "addfactors2", "params"), 
@@ -88,7 +99,7 @@ superbPlot.lineBand <- function(
 
     # depending on the scale of the x-axis.
     if (!xAsFactor) 
-        summarydata[[xfactor]] = as.numeric(summarydata[[xfactor]])
+        summarydata[[xfactor]] = unfactor(summarydata[[xfactor]])
 
     # let's do the plot!
     plot <- ggplot(

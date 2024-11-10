@@ -1,4 +1,4 @@
-context("Testing suberbPlot")
+context("Testing suberbPlot()")
 
 
 test_that("PRELIMINARY TESTS (1/4)", {
@@ -14,7 +14,8 @@ test_that("PRELIMINARY TESTS (1/4)", {
 
     plt <- superbPlot(ToothGrowth, BSFactor = c("dose","supp"), variables = "len",
       statistic = "mean", plotStyle="bar" )
-
+    print(plt)
+    
     expect_equal( "ggplot" %in% class(plt), TRUE)
     # restores default information
     options("superb.feedback" = c('design','warnings','summary'))
@@ -34,6 +35,7 @@ test_that("PRELIMINARY TESTS (2/4)", {
     g1 <- g0 + xlab("Dose") + ylab("Tooth Growth") + labs(title="adsf") +
     theme_light(base_size=20) + annotation_custom(grid.text("allo",x=.5,y=.5,gp=gpar(fontsize=20, col="grey")))
     g2 <- g1 + theme(axis.text.x = element_text(size=30, colour="red") ) + coord_cartesian(ylim=c(5,45))
+    print(g2)
 
     expect_equal( "ggplot" %in% class(g2), TRUE)
     # restores default information
@@ -60,6 +62,7 @@ test_that("PRELIMINARY TESTS (4/4)", {
 
     p <- superbPlot(ToothGrowth, BSFactor = c("dose","supp"), variables = "len",
       statistic = "mean", plotStyle="line" )
+    print(p)
 
     expect_equal( "ggplot" %in% class(p), TRUE)
     # restores default information
@@ -839,6 +842,59 @@ test_that("Tryon vs. difference", {
 })
 
 
+
+
+
+#########################################
+# testing multiple formats!
+#########################################
+
+test_that("Testing corset plot", {
+	old <- options() 
+	on.exit(options(old)) 
+    options("superb.feedback" = c('none'))
+
+    ## corset plot
+    dta <- GRD(SubjectsPerGroup = 50, WSFactors = "moment(2)", Effects = list("moment"=slope(3)))
+    plt <- superbPlot(dta, WSFactors = "moment(2)", variables = c("DV.1","DV.2"),
+      plotStyle = "corset" )
+    expect_equal( "ggplot" %in% class(plt), TRUE)
+
+    plt <- superbPlot(dta, WSFactors = "moment(2)", variables = c("DV.1","DV.2"),
+        plotStyle    = "corset", 
+        lineParams   = list(colorize=TRUE),
+        violinParams = list(fill = "green", alpha = 0.2 ) 
+    ) + theme_bw() + 
+    theme(axis.line.y = element_line(color="black"), legend.position.inside=c(0.1,0.75), panel.border = element_blank() ) +
+    scale_color_manual('Direction\n of change', values=c("red","gray50"), labels=c('decreasing', 'increasing'))
+    expect_equal( "ggplot" %in% class(plt), TRUE)
+
+    # restores default information
+    options("superb.feedback" = c('design','warnings','summary'))
+})
+
+
+test_that("Testing local decorrelation plot", {
+	old <- options() 
+	on.exit(options(old)) 
+    options("superb.feedback" = c('none'))
+
+    #test
+    X <- GRD(SubjectsPerGroup = 50, WSFactors = "time(10)", Effects = list("time"=extent(3)))
+    go <- function(m) {
+        superbPlot(X, 
+            WSFactor = "time(10)",
+            variables = names(X)[-1],
+            adjustments = list(decorrelation = m),
+            plotStyle = "lineBand"
+        )+ylim(c(-6,6))
+    }
+    plt <- go("LD2")
+    expect_equal( "ggplot" %in% class(plt), TRUE)
+
+    # restores default information
+    options("superb.feedback" = c('design','warnings','summary'))
+})
 
 
 

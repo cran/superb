@@ -3,20 +3,20 @@
 #'
 #' @aliases showSignificance showVerticalSignificance showHorizontalSignificance
 #'
-#' @description showSignificance is used to add an annotation to 
-#'    a ggplot in the form of a bracket with a text. The bracket 
-#'    extends from x range (left, right) with a heigth of width. It is also possible
-#'    to have the bracket and the text vertical when y is a range (bottom, top).
+#' @description `showSignificance()` is used to add an annotation to 
+#'    a ggplot in the form of a square bracket with a text. The bracket 
+#'    extends from `x` range (left, right) with a heigth of `width`. It is also possible
+#'    to have the bracket and the text vertical when `y` is a range (bottom, top).
 #'
 #' @md
 #'
 #' @param x (a vector of 2 when horizontal) indicates the limits of the annotation;
-#' @param y (a vector of 2 when vertical) the location of the annotation in the y direction
-#' @param width height of the annotation; for negative width, the legs extends towards the bottom;
-#' @param text (optional) string text to be display on the opposite side of width;
+#' @param y (a vector of 2 when vertical) the location of the annotation in the `y` direction
+#' @param width height of the annotation; for negative `width`, the legs extends towards the bottom;
+#' @param text (optional) string text to be display on the opposite side of `width`;
 #' @param panel (optional) a list to identify in which panel to put the annotation;
-#' @param segmentParams (optional) a list of directives that will be sent to the geom_segment items;
-#' @param textParams (optional) a list of directives that will be sent to the geom_text item.
+#' @param segmentParams (optional) a list of directives that will be sent to the `geom_segment()` items;
+#' @param textParams (optional) a list of directives that will be sent to the `geom_text()` item.
 #'
 #' @return adds an annotation in a ggplot
 #'
@@ -36,17 +36,17 @@
 #' )
 #' 
 #' # making a two-factor plot and a three-factor plots (having panels)
-#' plt2 <- superbPlot(dta, 
-#'         BSFactor = c("Group"),
+#' plt2 <- superb(
+#'         cbind(DV.1,DV.2,DV.3) ~ Group, 
+#'         dta, 
 #'         WSFactor = c("Moment(3)"),
-#'         variables = c("DV.1","DV.2","DV.3"),
 #'         adjustments = list(purpose="difference"),
 #'         factorOrder = c("Moment","Group")
 #'     )
-#' plt3 <- superbPlot(dta, 
-#'         BSFactor = c("Group","Age"),
+#' plt3 <- superb(
+#'         cbind(DV.1,DV.2,DV.3) ~ Group + Age, 
+#'         dta,
 #'         WSFactor = c("Moment(3)"),
-#'         variables = c("DV.1","DV.2","DV.3"),
 #'         adjustments = list(purpose="difference"),
 #'         factorOrder = c("Moment","Group","Age")
 #'     )

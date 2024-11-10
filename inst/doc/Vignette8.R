@@ -12,33 +12,36 @@ dta = GRD(WSFactors="Moments(3)", SubjectsPerGroup =20,
 
 
 ## -----------------------------------------------------------------------------
-pCM <- superbPlot(dta, WSFactors = "moment(3)",     
-  variables = c("Score.1","Score.2","Score.3"), 
-  adjustments=list(decorrelation="none"),
-  preprocessfct = "subjectCenteringTransform",
-  postprocessfct = "biasCorrectionTransform",
-  plotStyle = "pointjitter",
-  errorbarParams = list(color="red", width= 0.1, position = position_nudge(-0.05) )
+pCM <- superb(
+    crange(Score.1,Score.3) ~ .,
+    dta, WSFactors = "moment(3)",     
+    adjustments=list(decorrelation="none"),
+    preprocessfct = "subjectCenteringTransform",
+    postprocessfct = "biasCorrectionTransform",
+    plotStyle = "pointjitter",
+    errorbarParams = list(color="red", width= 0.1, position = position_nudge(-0.05) )
 )
 
 ## -----------------------------------------------------------------------------
-pLM <- superbPlot(dta, WSFactors = "moment(3)", 
-  variables = c("Score.1","Score.2","Score.3"), 
-  adjustments=list(decorrelation="none"),
-  preprocessfct = "subjectCenteringTransform",
-  postprocessfct = c("biasCorrectionTransform","poolSDTransform"),
-  plotStyle = "line",
-  errorbarParams = list(color="orange", width= 0.1, position = position_nudge(-0.0) )
+pLM <- superb(
+    crange(Score.1,Score.3) ~ .,    
+    dta, WSFactors = "moment(3)", 
+    adjustments=list(decorrelation="none"),
+    preprocessfct = "subjectCenteringTransform",
+    postprocessfct = c("biasCorrectionTransform","poolSDTransform"),
+    plotStyle = "line",
+    errorbarParams = list(color="orange", width= 0.1, position = position_nudge(-0.0) )
 )
 
 ## -----------------------------------------------------------------------------
-pNKM <- superbPlot(dta, WSFactors = "moment(3)", 
-  variables = c("Score.1","Score.2","Score.3"), 
-  adjustments=list(decorrelation="none"),
-  preprocessfct = "subjectCenteringTransform",
-  postprocessfct = c("poolSDTransform"),
-  plotStyle = "line",
-  errorbarParams = list(color="blue", width= 0.1, position = position_nudge(+0.05) )
+pNKM <- superb(
+    crange(Score.1,Score.3) ~ .,
+    dta, WSFactors = "moment(3)", 
+    adjustments=list(decorrelation="none"),
+    preprocessfct = "subjectCenteringTransform",
+    postprocessfct = c("poolSDTransform"),
+    plotStyle = "line",
+    errorbarParams = list(color="blue", width= 0.1, position = position_nudge(+0.05) )
 )
 
 ## ----fig.height=4, fig.width=7, fig.cap = "**Figure 1**. Plot of the tree decorrelation methods based on subject transformation."----

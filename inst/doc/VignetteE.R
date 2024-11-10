@@ -7,9 +7,9 @@ options(superb.feedback = 'none')
 ## ----eval=TRUE----------------------------------------------------------------
 library(superb)
 library(ggplot2)
-t <- superbPlot(ToothGrowth, 
-    BSFactors = c("dose","supp"), 
-    variables = "len" )
+t <- superb(
+    len ~ dose + supp,
+    ToothGrowth )
 
 ## ----fig.width = 4, eval=TRUE, fig.cap="**Figure 1: A basic plot**"-----------
 t + geom_text(aes(x=dose, y=center, label=center) )
@@ -38,9 +38,11 @@ t + geom_text(aes(x=dose, y=center, label=sprintf('%.1f', center)), color="black
  geom_text(aes(x=dose, y=center+upperwidth, label=round(center+upperwidth)), position=position_dodge(0.9), vjust=-1, color="gray43") 
 
 ## ----eval=TRUE----------------------------------------------------------------
-d <- superbData(ToothGrowth, 
-    BSFactors = c("dose","supp"), 
-    variables = "len" )
+d <- superb(
+    len ~ dose + supp,
+    ToothGrowth,
+    showPlot = FALSE
+)
 d$summaryStatistics
 
 ## ----eval=TRUE----------------------------------------------------------------

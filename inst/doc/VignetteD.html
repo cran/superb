@@ -365,15 +365,16 @@ and the file name with</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(foreign)</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.spss</span>(file, <span class="at">to.data.frame =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Finally, ask for a plot with</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">superbPlot</span>( data, </span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>    <span class="at">WSFactors      =</span> <span class="st">&quot;Temps(2)&quot;</span>,</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="at">variables      =</span> <span class="fu">c</span>(<span class="st">&quot;time1&quot;</span>,<span class="st">&quot;time2&quot;</span>),</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    <span class="at">plotStyle      =</span> <span class="st">&quot;line&quot;</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="at">adjustments    =</span> <span class="fu">list</span>(<span class="at">purpose =</span> <span class="st">&quot;single&quot;</span>, </span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                          <span class="at">decorrelation =</span> <span class="st">&quot;CA&quot;</span>),</span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>    <span class="at">errorbarParams =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;purple&quot;</span>),</span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    <span class="at">pointParams    =</span> <span class="fu">list</span>( <span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">&quot;purple&quot;</span>)</span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">superb</span>( </span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>    <span class="fu">cbind</span>(time1, time2) <span class="sc">~</span> .,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    data, </span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    <span class="at">WSFactors      =</span> <span class="st">&quot;Temps(2)&quot;</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="at">plotStyle      =</span> <span class="st">&quot;line&quot;</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    <span class="at">adjustments    =</span> <span class="fu">list</span>(<span class="at">purpose =</span> <span class="st">&quot;single&quot;</span>, </span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>                          <span class="at">decorrelation =</span> <span class="st">&quot;CA&quot;</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    <span class="at">errorbarParams =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;purple&quot;</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="at">pointParams    =</span> <span class="fu">list</span>( <span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">&quot;purple&quot;</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>)</span></code></pre></div>
 </div>
 <div id="second-option-using-spss" class="section level2">
 <h2>Second option: Using SPSS</h2>

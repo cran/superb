@@ -63,7 +63,7 @@ contains the cluster membership}
 
 \item{...}{In addition to the parameters above, superbPlot also accept a number of
 optional arguments that will be transmitted to the plotting function, such as
-pointParams (a list of ggplot2 parameters to input inside geoms; see ?geom_bar2) and
+pointParams (a list of g`lot2 parameters to input inside geoms; see ?geom_bar2) and
 errorbarParams (a list of ggplot2 parameters for geom_errorbar; see ?geom_errorbar)}
 }
 \value{
@@ -71,9 +71,10 @@ a plot with the correct error bars or a table of those summary statistics.
 The plot is a ggplot2 object with can be modified with additional declarations.
 }
 \description{
-The function \code{suberbPlot()} plots standard error or confidence interval for various
+The function \code{superbPlot()} plots standard error or confidence interval for various
 descriptive statistics under various designs, sampling schemes, population size and purposes,
 according to the \code{suberb} framework. See \insertCite{cgh21}{superb} for more.
+Note that this function has been superseded by \code{superb()}.
 }
 \details{
 The possible adjustements are the following
@@ -93,7 +94,7 @@ correlation structures; see \insertCite{cppf24}{superb});
 sampling is "SRS" (Simple Randomize Sampling) and "CRS" (Cluster-Randomized Sampling).
 }
 
-In version 0.97.5, the layouts for plots are the following:
+As of version 0.97.15, the layouts for plots are the following:
 \itemize{
 \item "bar" Shows the summary statistics with bars and error bars;
 \item "line" Shows the summary statistics with lines connecting the conditions over the first factor;
@@ -102,7 +103,11 @@ In version 0.97.5, the layouts for plots are the following:
 \item "pointjitterviolin" Also adds violin plots to the previous layout
 \item "pointindividualline" Connects the raw data with line along the first factor (which should be a repeated-measure factor)
 \item "raincloud" Illustrates the distribution with a cloud (half_violin_plot) and jittered dots next to it. Looks better when coordinates are flipped \code{+coord_flip()}.
+\item "corset" Illustrates two repeated-measures with individual lines and clouds
+\item "boxplot" Illustrates the limits, the quartiles and the median using a box
 }
+
+but refer to \code{superb()} for a documentation that will be kept up do date.
 }
 \examples{
 ######################################################################
@@ -111,6 +116,9 @@ In version 0.97.5, the layouts for plots are the following:
 # By default, the mean is computed and the error bar are 95\% confidence intervals
 superbPlot(ToothGrowth, BSFactors = c("dose", "supp"), 
   variables = "len") 
+
+# Note that function superb() does the same with formula:
+superb( len ~ dose + supp, ToothGrowth )
 
 # Example changing the summary statistics to the median and
 # the error bar to 80\% confidence intervals
@@ -164,6 +172,7 @@ superbPlot(sleep2,
 ######################################################################
 
 # Another example: The Orange data
+data(Orange)
 # Use the Orange example, but let's define shorter column names...
 names(Orange) <- c("Tree","age","circ")
 # ... and turn the data into a wide format using superbToWide:
@@ -174,14 +183,14 @@ Orange.wide
 
 # Makes the plots first without decorrelation:
 p1 <- superbPlot( Orange.wide, WSFactors = "age(7)",
-  variables = c("circ_118","circ_484","circ_664","circ_1004","circ_1231","circ_1372","circ_1582"),
+  variables = c("circ.118","circ.484","circ.664","circ.1004","circ.1231","circ.1372","circ.1582"),
   adjustments = list(purpose = "difference", decorrelation = "none")
 ) + 
   xlab("Age level") + ylab("Trunk diameter (mm)") +
   coord_cartesian( ylim = c(0,250) ) + labs(title="''Standalone'' confidence intervals")
 # ... and then with decorrelation (technique Correlation-adjusted CA):
 p2 <- superbPlot( Orange.wide, WSFactors = "age(7)",
-  variables = c("circ_118","circ_484","circ_664","circ_1004","circ_1231","circ_1372","circ_1582"),
+  variables = c("circ.118","circ.484","circ.664","circ.1004","circ.1231","circ.1372","circ.1582"),
   adjustments = list(purpose = "difference", decorrelation = "CA")
 ) + 
   xlab("Age level") + ylab("Trunk diameter (mm)") +

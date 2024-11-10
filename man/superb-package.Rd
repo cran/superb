@@ -2,7 +2,6 @@
 % Please edit documentation in R/superb-package.R
 \docType{package}
 \name{superb-package}
-\alias{superb}
 \alias{superb-package}
 \title{superb: Summary Plots with Adjusted Error Bars}
 \description{
@@ -27,7 +26,7 @@ intervals can be obtained with a succession of simple corrections. I call these
 
 The main function is
 
-   \code{superbPlot(df,  ...)}  
+   \code{superb(formula, dataframe,  ...)}  
 
 where \code{df} is a dataframe.
 

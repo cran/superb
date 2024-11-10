@@ -19,10 +19,9 @@ dta
 library(superb)
 library(ggplot2)
 
-plt1 <- superbPlot(
+plt1 <- superb(
+    obsfreq ~ vocation + gender, 
     dta,
-    BSFactors = c("vocation","gender"),
-    variables = "obsfreq",                      # name of the column with the counts
     statistic = "identity",                     # the raw data as is
     errorbar  = "none",                         # no error bars
     # the following is for the look of the plot
@@ -56,10 +55,9 @@ CI.count <- function(n, gamma=0.95) {
 }
 
 ## ----eval=TRUE, fig.width = 6, eval=TRUE, fig.cap="**Figure 2: A complete plot**"----
-plt2 <- superbPlot(
+plt2 <- superb(
+    obsfreq ~ vocation + gender, 
     dta,
-    BSFactors = c("vocation","gender"),
-    variables = "obsfreq",
     statistic = "count",                                 # the function defined above
     errorbar  = "CI",                                    # its CI define above
     # the following is for the look of the plot

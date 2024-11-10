@@ -505,13 +505,13 @@ glucoselevels$gl[glucoselevels$gl<10]<-10
 head(glucoselevels)
 
 ## ----message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 1**. Mean glucose level as a function of concentration."----
-superbPlot(glucoselevels, 
-            BSFactors = "concentration",  
-            variables = "gl", 
-            statistic = "mean", 
-            errorbar  = "CI",
-            gamma     = 0.95,
-            plotStyle = "line")
+superb(
+    gl ~ concentration,
+    glucoselevels, 
+    statistic = "mean", 
+    errorbar  = "CI",
+    gamma     = 0.95,
+    plotStyle = "line")
 
 ## -----------------------------------------------------------------------------
 min(glucoselevels$gl)
@@ -523,13 +523,13 @@ max(glucoselevels$gl)
 #  }
 
 ## ----message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 2**. Mean glucose level and 95% reference intervals as a function of concentration."----
-superbPlot(glucoselevels, 
-            BSFactors = "concentration",  
-            variables = "gl", 
-            statistic = "mean", # mean is what RI is attached to
-            errorbar  = "RI",   # RI calls the function above
-            gamma     = 0.95,   # select the coverage desired
-            plotStyle = "line" )
+superb(
+    gl ~ concentration,
+    glucoselevels, 
+    statistic = "mean", # mean is what RI is attached to
+    errorbar  = "RI",   # RI calls the function above
+    gamma     = 0.95,   # select the coverage desired
+    plotStyle = "line" )
 
 ## ----eval=FALSE, message=FALSE, warning=FALSE, echo=TRUE----------------------
 #  ciloRI.mean <- function(data, gamma = c(0.95, 0.90) ) {
@@ -540,12 +540,12 @@ superbPlot(glucoselevels,
 #  }
 
 ## ----message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3**. Mean glucose level and 90% confidence intervals of the upper RI tips."----
-superbPlot(glucoselevels, 
-            BSFactors = "concentration",  
-            variables = "gl", 
-            statistic = "mean", errorbar = "cihiRI",
-            gamma     = c(0.95, 0.90),
-            plotStyle = "line" ) 
+superb(
+    gl ~ concentration,
+    glucoselevels, 
+    statistic = "mean", errorbar = "cihiRI",
+    gamma     = c(0.95, 0.90),
+    plotStyle = "line" ) 
 
 ## -----------------------------------------------------------------------------
 ornate = list(
@@ -558,35 +558,35 @@ ornate = list(
 )
 
 ## ----message=FALSE------------------------------------------------------------
-plt1 <- superbPlot(glucoselevels, 
-            BSFactors = "concentration",  
-            variables = "gl", 
-            statistic = "mean", 
-            errorbar  = "RI",
-            gamma     = 0.95,
-            errorbarParams = list(width = 0.0, linewidth = 1.5,
-                                  position = position_nudge( 0.0) ),
-            plotStyle = "line" ) + ornate
-plt2 <- superbPlot(glucoselevels, 
-            BSFactors = "concentration",  
-            variables = "gl", 
-            statistic = "mean", 
-            errorbar  = "cihiRI",
-            gamma     = c(0.95, 0.90),
-            errorbarParams = list(width = 0.2, linewidth = 0.2, color = "red",
-                                  direction = "left",
-                                  position = position_nudge(-0.15) ),
-            plotStyle = "line" ) + ornate + makeTransparent()
-plt3 <- superbPlot(glucoselevels, 
-            BSFactors = "concentration",  
-            variables = "gl", 
-            statistic = "mean", 
-            errorbar  = "ciloRI",
-            gamma     = c(0.95, 0.90),
-            errorbarParams = list(width = 0.2, linewidth = 0.2, color = "purple",
-                                  direction = "left",
-                                  position = position_nudge(-0.15) ),
-            plotStyle = "line" ) + ornate + makeTransparent()
+plt1 <- superb(
+    gl ~ concentration,
+    glucoselevels, 
+    statistic = "mean", 
+    errorbar  = "RI",
+    gamma     = 0.95,
+    errorbarParams = list(width = 0.0, linewidth = 1.5,
+                          position = position_nudge( 0.0) ),
+    plotStyle = "line" ) + ornate
+plt2 <- superb(
+    gl ~ concentration,
+    glucoselevels, 
+    statistic = "mean", 
+    errorbar  = "cihiRI",
+    gamma     = c(0.95, 0.90),
+    errorbarParams = list(width = 0.2, linewidth = 0.2, color = "red",
+                          direction = "left",
+                          position = position_nudge(-0.15) ),
+    plotStyle = "line" ) + ornate + makeTransparent()
+plt3 <- superb(
+    gl ~ concentration,
+    glucoselevels, 
+    statistic = "mean", 
+    errorbar  = "ciloRI",
+    gamma     = c(0.95, 0.90),
+    errorbarParams = list(width = 0.2, linewidth = 0.2, color = "purple",
+                          direction = "left",
+                          position = position_nudge(-0.15) ),
+    plotStyle = "line" ) + ornate + makeTransparent()
 
 ## ----message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3a**. Mean glucose level and 95% reference intervals with 95% confidence intervals."----
 # transform the three plots into visual objects
@@ -602,15 +602,15 @@ ggplot() +
 
 ## ----message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3b**. Jittered dots showing mean glucose level and 95% reference intervals with 95% confidence intervals."----
 # redo plt1; the other 2 are still in memory
-plt1 <- superbPlot(glucoselevels, 
-            BSFactors = "concentration",  
-            variables = "gl", 
-            statistic = "mean", 
-            errorbar  = "RI",
-            gamma     = 0.95,
-            errorbarParams = list(width = 0.0, linewidth = 1.5,
-                                  position = position_nudge( 0.0) ),
-            plotStyle = "pointjitter" ) + ornate
+plt1 <- superb(
+    gl ~ concentration,
+    glucoselevels, 
+    statistic = "mean", 
+    errorbar  = "RI",
+    gamma     = 0.95,
+    errorbarParams = list(width = 0.0, linewidth = 1.5,
+                          position = position_nudge( 0.0) ),
+    plotStyle = "pointjitter" ) + ornate
 
 # transform the new plot into a visual object
 plt1 <- ggplotGrob(plt1)
@@ -623,35 +623,35 @@ ggplot() +
 
 ## ----message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3c**. Jittered dots and violins showing mean glucose level and 95% reference intervals with 95% confidence intervals of the tips' position."----
 # redo plt1; the other 2 are still in memory
-plt1 <- superbPlot(glucoselevels, 
-            BSFactors = "concentration",  
-            variables = "gl", 
-            statistic = "mean", 
-            errorbar  = "RI",
-            gamma     = 0.95,
-            errorbarParams = list(width = 0.0, linewidth = 1.5,
-                                  position = position_nudge( 0.0) ),
-            plotStyle = "pointjitterviolin" ) + ornate
+plt1 <- superb(
+    gl ~ concentration,
+    glucoselevels, 
+    statistic = "mean", 
+    errorbar  = "RI",
+    gamma     = 0.95,
+    errorbarParams = list(width = 0.0, linewidth = 1.5,
+                          position = position_nudge( 0.0) ),
+    plotStyle = "pointjitterviolin" ) + ornate
 
 # transform the three plots into visual objects
 plt1 <- ggplotGrob(plt1)
 
 # you may superimpose the grobs onto an empty ggplot 
-#ggplot() + 
-#    annotation_custom(grob=plt1) + 
-#    annotation_custom(grob=plt2) + 
-#    annotation_custom(grob=plt3)
+ggplot() + 
+    annotation_custom(grob=plt1) + 
+    annotation_custom(grob=plt2) + 
+    annotation_custom(grob=plt3)
 
 ## ----message=FALSE------------------------------------------------------------
-plt4 <- superbPlot(glucoselevels, 
-            BSFactors = "concentration",  
-            variables = "gl", 
-            statistic = "mean", 
-            errorbar  = "CI",  # just the regular CI of the mean
-            errorbarParams = list(width = 0.2, linewidth = 1.5, color = "blue",
-                                  position = position_nudge( 0.00) ),
-            gamma     = 0.95,
-            plotStyle = "line" ) + ornate + makeTransparent()
+plt4 <- superb(
+    gl ~ concentration,
+    glucoselevels, 
+    statistic = "mean", 
+    errorbar  = "CI",  # just the regular CI of the mean
+    errorbarParams = list(width = 0.2, linewidth = 1.5, color = "blue",
+                          position = position_nudge( 0.00) ),
+    gamma     = 0.95,
+    plotStyle = "line" ) + ornate + makeTransparent()
 
 ## ----message=FALSE, echo=TRUE, fig.width = 4, fig.cap="**Figure 3d**. Jittered dots and violins showing mean glucose level +-95% confidence intervals of the mean, and 95% reference intervals with 95% confidence intervals."----
 # transform that plot too into visual objects

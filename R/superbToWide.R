@@ -34,23 +34,28 @@
 #' 
 #' # Makes the plots two different way:
 #' p1=superbPlot( Orange.wide, WSFactors = "age(7)",
-#'   variables = c("DV_118","DV_484","DV_664","DV_1004","DV_1231","DV_1372","DV_1582"),
+#'   variables = c("DV.118","DV.484","DV.664","DV.1004","DV.1231","DV.1372","DV.1582"),
 #'   adjustments = list(purpose = "difference", decorrelation = "none")
 #' ) + 
 #'   xlab("Age level") + ylab("Trunk diameter (mm)") +
 #'   coord_cartesian( ylim = c(0,250) ) + labs(title="Basic confidence intervals")
 #'
 #' p2=superbPlot( Orange.wide, WSFactors = "age(7)",
-#'   variables = c("DV_118","DV_484","DV_664","DV_1004","DV_1231","DV_1372","DV_1582"),
+#'   variables = c("DV.118","DV.484","DV.664","DV.1004","DV.1231","DV.1372","DV.1582"),
 #'   adjustments = list(purpose = "difference", decorrelation = "CA")
 #' ) + 
 #'   xlab("Age level") + ylab("Trunk diameter (mm)") +
 #'   coord_cartesian( ylim = c(0,250) ) + labs(title="Decorrelated confidence intervals")
 #' grid.arrange(p1,p2,ncol=2)
 #'
+#' # Note that with superb(), there is no need to reformat
+#' # into a wide format anymore:
+#' superb( DV ~ age | Tree, Orange )
+#'
 #'
 #' @export superbToWide
 #' @importFrom utils capture.output
+#' @importFrom stats reshape
 #
 ######################################################################################
 
@@ -61,11 +66,13 @@ superbToWide <- function(data,
     WSFactors     = NULL,            # vector of the names of the within-subject factors
 	variable      = NULL  	         # dependent variable name; if NULL, must be the only unnamed variable
 ) {
+
     ##############################################################################
     # STEP 1: Input validation
     ##############################################################################
     # 1.0: is the data actually data!
 	data <- as.data.frame(data) # coerce to data.frame if tibble or compatible
+
     if(!(is.data.frame(data)))
         stop("superb::ERROR: data is not a data.frame or similar data structure. Exiting...")
 	if (is.null(data))
@@ -103,8 +110,8 @@ superbToWide <- function(data,
 	data = data[ c(id, BSFactors, WSFactors, variable) ]
 
     # 1.5: We're clear to go! Turn this on with: options(superb.feedback = "superb.tw")
-    runDebug("superb.tw", "End of Step 1: Input validation", 
-        c("BSFactors2","WSFactors2","variable2","data2"), 
+    runDebug("superb.tw", "End of Step 0: superbToWide", 
+        c("BSFactors0","WSFactors0","variable0","data0"), 
         list( BSFactors, WSFactors, variable, data ) )
 
     ##################################################################################
@@ -112,17 +119,17 @@ superbToWide <- function(data,
     ##################################################################################
     remainingvars <- setdiff(names(data), c(WSFactors, variable))
     if (length(WSFactors) > 1) { # concatenate the factor levels in a single column 'within'
-        collapsed.treatments <- apply(as.matrix(data[, WSFactors]), 1, paste, collapse = "_")
+        collapsed.treatments <- apply(as.matrix(data[, WSFactors]), 1, paste, collapse = ".")
         data <- data[, setdiff(names(data), WSFactors)]
         data$within <- collapsed.treatments # put the concatenated levels in a new column
         WSFactors <- "within"               # use that new column from now on
     }
     times <- unique(data[, WSFactors])
     varying <- list()
-    for (i in seq_along(variable)) varying[[i]] <- paste(variable[i], times, sep = "_")
-    res <- stats::reshape(data, idvar = remainingvars, varying = varying, 
+    for (i in seq_along(variable)) varying[[i]] <- paste(variable[i], times, sep = ".")
+    res <- reshape(data, idvar = remainingvars, varying = varying, 
 			direction = "wide", times = times, v.names = variable, 
-			timevar = WSFactors)
+			sep = ".", timevar = WSFactors)
     rownames(res) <- NULL
 
 	return(res)

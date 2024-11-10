@@ -9,9 +9,6 @@ geom_superberrorbar(
   data = NULL,
   stat = "identity",
   position = "identity",
-  direction = "both",
-  tipformat = "single",
-  tipgap = 0.1,
   ...,
   na.rm = FALSE,
   orientation = NA,
@@ -28,14 +25,16 @@ geom_superberrorbar(
 
 \item{position}{(as usual) see geom_errorbar}
 
-\item{direction}{(NEW) "left", "right" or "both" (Default is "both")}
-
-\item{tipformat}{(NEW) "single", "double" or "triple" to add additional
-marker lines to the tips (default is "single")}
-
-\item{tipgap}{(NEW) The spacing between the markers when "double" or "triple" is used (default 0.1)}
-
-\item{...}{all additional parameters are sent to the underlying geom_path}
+\item{...}{all additional parameters are sent to the underlying geom_path. Includes
+\itemize{
+\item \code{pointing} (NEW) either "up", "down" or "both" up and down;
+\item \code{direction} (NEW) "left", "right" or "both" (Default is "both")
+\item \code{tipformat} (NEW) "single", "double" or "triple" to add additional
+marker lines to the tips (default is "single")
+\item \code{tipgap} (NEW) The spacing between the markers when "double" or "triple" is used (default 0.1)
+\item \code{vcolour} (NEW) for the vertical part of the error bar
+\item \code{wcolour} (NEW) if specified, for the second half of the vertical part of the error bar.
+}}
 
 \item{na.rm}{(as usual) see geom_errorbar}
 
@@ -52,13 +51,15 @@ a layer containing error bars in a ggplot object
 \code{geom_superberrorbar()} is a geom for ggplots; it is based on
 the original geom_errorbar (and is totally compatible with it) but
 expands this geom in four different ways. First, it is possible to
-decide whether the error bar tips are unidirectional, pointing to
-the "left" or to the "right" or if they go in "both" directions.
-Second, it is possible to "double" or "triple" the horizontal marks
-at the extremities of the error bar, with a "tipgap" of your liking.
-Third, an additiona characteristic is vcolour to set a different colour
-for the vertical part of the error bar. The colour can also be "NA" to
-have it invisible. Lastly, the error bar can be pointing "up" and "down"
+decide the error bar tips \code{direction} which can be unidirectional, pointing to
+the "left" or to the "right" or go in "both" directions.
+Second, it is possible set \code{tipformat} to "double" or "triple" the horizontal marks
+at the extremities of the error bar, with a \code{tipgap} of your liking.
+Third, an additional characteristic is \code{vcolour} to set a different colour
+for the vertical part of the error bar or the pair
+\code{vcolour} and \code{wcolour} for the top half and bottom half of the vertical
+error bar. The colour(s) can also be "NA" to
+have it invisible. Lastly, the error bar can be \code{pointing} "up" and "down"
 or go in "both" (the default)
 }
 \examples{
@@ -94,7 +95,7 @@ ggplot(dta, aes(ymin=center-width, ymax=center+width, x = grp ) ) +
   geom_superberrorbar(tipformat = "triple", width= 0.1, tipgap = 0.04, direction = "left",
            colour = "black", vcolour = "orange")
 
-# This new geom is integrated inside superbPlot() so that you can vary the 
+# This new geom is integrated inside superb() so that you can vary the 
 # error bar shapes. Let's see examples:
 
 # using GRD to generate random data with a moderate effect
@@ -102,35 +103,38 @@ options(superb.feedback = 'none') # shut down 'warnings' and 'design' interpreta
 test <- GRD(SubjectsPerGroup  = 20,
 		   WSFactors = "Moment(5)", 
             Effects = list("Moment" = extent(10) ),
-            Population = list(mean = 100, stddev = 25, rho = 0.8) ) 
+            Population = list(mean = 100, stddev = 15, rho = 0.8) ) 
 
 ornate = list(
         labs(title =paste("(left)            95\% confidence intervals",
                         "\n(right)          99\% confidence intervals",
                         "\n(center, up) 99.9\% confidence intervals")),
         xlab("Moment"), ylab("Score"),
-        coord_cartesian( ylim = c(85,110) )
+        coord_cartesian( ylim = c(85,125) )
 )
 
-plt1 <- superbPlot(test, 
+plt1 <- superb(
+            crange(DV.1, DV.5) ~ ., 
+            test, 
             WSFactors = "Moment(5)",  
-            variables = c("DV.1","DV.2","DV.3","DV.4","DV.5"), 
             adjustments=list(purpose = "difference", decorrelation = "CA"), 
             errorbarParams = list(direction = "left", color="purple", 
                                   width = 0.2, position = position_nudge(-0.05) ),
             gamma     = 0.95,
             plotStyle = "line" ) + ornate
-plt2 <- superbPlot(test, 
+plt2 <- superb( 
+            crange(DV.1, DV.5) ~ ., 
+            test, 
             WSFactors = "Moment(5)",  
-            variables = c("DV.1","DV.2","DV.3","DV.4","DV.5"), 
             adjustments=list(purpose = "difference", decorrelation = "CA"), 
             errorbarParams = list(direction = "right", tipgap = 0.25, tipformat = "double", 
                                   width = 0.2, position = position_nudge(+0.05) ),
             gamma     = 0.99,
             plotStyle = "line" ) + ornate 
-plt3 <- superbPlot(test, 
+plt3 <- superb( 
+            crange(DV.1, DV.5) ~ ., 
+            test, 
             WSFactors = "Moment(5)",  
-            variables = c("DV.1","DV.2","DV.3","DV.4","DV.5"), 
             adjustments=list(purpose = "difference", decorrelation = "CA"), 
             errorbarParams = list(direction = "both", tipformat = "single", pointing="up", 
                                   width = 0.2, position = position_nudge(0) ),
@@ -147,5 +151,32 @@ ggplot() +
     annotation_custom(grob=plt1) + 
     annotation_custom(grob=plt2) + 
     annotation_custom(grob=plt3)
+
+
+# all of them as aesthetics
+set.seed(1)
+library(dplyr)
+dat <- data.frame(Trial = c(rep("Pre",9),rep("Post",9)), 
+                     Time = rep.int(seq(0,120,15),2), 
+                     var = c(rnorm(9,15,2),rnorm(9,22,2)),
+                     var_sd = c(rnorm(18,3,1)))
+dat <- mutate(dat, point = ifelse(Trial == "Pre","down","up"))
+dat <- mutate(dat, direc = ifelse(Trial == "Pre","left","right"))
+dat <- mutate(dat, tipfo = ifelse(Trial == "Pre","double","triple"))
+dat <- mutate(dat, vcolo = ifelse(Trial == "Pre","red","blue"))
+   
+ggplot(data = dat, 
+       aes(x = Time, y = var, group = Trial)) +
+   geom_line(aes(linetype = Trial)) +  
+   geom_point(aes(shape= Trial, fill = Trial), size=2) +
+   geom_superberrorbar(aes(ymin=var-var_sd, 
+                           ymax=var+var_sd,
+                           direction = direc,
+                           pointing = point, 
+                           wcolour = vcolo,  
+                           vcolour = "green",
+                           tipformat = tipfo
+       ), 
+       width = 4)
 
 }

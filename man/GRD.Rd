@@ -30,7 +30,15 @@ enumerated in a vector of strings.}
 \item{WSFactors}{a string indicating the within-subject factor(s) in
 the same format as the between-subject factors}
 
-\item{Effects}{a list detailing the effects to apply to the data}
+\item{Effects}{a list detailing the effects to apply to the data. The effects
+can be given with a list of \code{"factorname" = effect_specification}
+or \code{"factorname1*factorname2" = effect_specification} pairs,
+in which effect_specification can either be \code{slope()}, \code{extent()},
+\code{custom()} and \code{Rexpression()}. For slope and extent, provide a range,
+for custom, indicate the deviation from the grand mean for each cell,
+finally, for Rexpression, give between quote any R commands which
+returns the deviation from the grand mean, using the factors.
+See the last example below.}
 
 \item{Population}{a list providing the population characteristics
 (default is a normal distribution with a mean of 0 and standard deviation of 1)}
@@ -88,7 +96,7 @@ Note that the \code{range} effect specification has been renamed
      Population=list(mean=50,stddev=5), 
      Effects = list("Difficulty" = slope(15) )  )
  # show the mean performance as a function of difficulty:
- superbPlot(dta, BSFactors = "Difficulty", variables="DV")
+ superb(DV ~ Difficulty, dta )
 
  # An example in which the moments are correlated
  dta <- GRD( BSFactors = "Difficulty(2)",WSFactors = "Moment (2)", 
@@ -97,14 +105,30 @@ Note that the \code{range} effect specification has been renamed
      Population=list(mean=50,stddev=20,rho=0.85)
  )
  # the mean plot on the raw data...
- superbPlot(dta, BSFactors = "Difficulty", WSFactors = "Moment(2)", 
-     variables=c("DV.1","DV.2"), plotStyle="line",
+ superb(cbind(DV.1,DV.2) ~ Difficulty, dta, WSFactors = "Moment(2)", 
+     plotStyle="line",
      adjustments = list (purpose="difference") )
  # ... and the mean plot on the decorrelated data; 
  # because of high correlation, the error bars are markedly different
- superbPlot(dta, BSFactors = "Difficulty", WSFactors = "Moment(2)", 
-     variables=c("DV.1","DV.2"), plotStyle="line",
+ superb(cbind(DV.1,DV.2) ~ Difficulty, dta, WSFactors = "Moment(2)", 
+     plotStyle="line",
      adjustments = list (purpose="difference", decorrelation = "CM") )
+ 
+ # This example creates a dataset in a 3 x 2 design. It has various effects,
+ # one effect of difficulty, with an overall effect of 10 more (+3.33 per level),
+ # one effect of gender, whose slope is 10 points (+10 points for each additional gender),
+ # and finally one interacting effect, which is 0 for the last three cells of the design:
+ GRD(
+     SubjectsPerGroup = 10,
+     BSFactors  = c("difficulty(3)","gender(2)"), 
+     Population = list(mean=100,stddev=15), 
+     Effects    = list(
+         "difficulty" = extent(10),
+         "gender"=slope(10),
+         "difficulty*gender"=custom(-300,+200,-100,0,0,0) 
+     ) 
+ )
+ 
  
 }
 \references{

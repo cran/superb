@@ -8,9 +8,8 @@ library(gridExtra)          # for grid.arrange
 head(dataFigure1)
 
 ## ----message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 1a**. Left panel of Figure 1."----
-plt1a <- superbPlot(dataFigure1, 
-            BSFactors   = "grp", 
-            variables   = "score", 
+plt1a <- superb( score ~ grp,
+            dataFigure1, 
             plotStyle   = "line" ) 
 plt1a
 
@@ -20,7 +19,7 @@ ornateBS <- list(
     ylab("Attitude towards class activities"),
     scale_x_discrete(labels = c("Collaborative\ngames", "Unstructured\nactivities")), #new!
     coord_cartesian( ylim = c(70,130) ),
-    geom_hline(yintercept = 100, colour = "black", size = 0.5, linetype=2),
+    geom_hline(yintercept = 100, colour = "black", linewidth = 0.5, linetype=2),
     theme_light(base_size = 10) +
     theme( plot.subtitle = element_text(size=12))
 )
@@ -30,18 +29,17 @@ plt1a <- plt1a + ornateBS + labs(subtitle="(stand-alone)\n95% CI")
 plt1a
 
 ## ----message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 1c**. Making and decorating central panel of Figure 1."----
-plt1b <- superbPlot(dataFigure1, 
-            BSFactors    = "grp", 
-            variables    = "score", 
+plt1b <- superb( score ~ grp,
+            dataFigure1, 
             adjustments  = list(purpose = "difference"), #new!
             plotStyle    = "line" )
 plt1b <- plt1b + ornateBS + labs(subtitle="Difference-adjusted\n95% CI") 
 plt1b
 
 ## ----message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 1d**. Making and decorating right panel of Figure 1."----
-plt1c <- superbPlot(dataFigure1, 
-            BSFactors    = "grp", 
-            variables    = "score", 
+plt1c <- superb(
+            score ~ grp,
+            dataFigure1, 
             adjustments  = list(purpose = "difference"),
             plotStyle    = "raincloud",                         # new layout!
             violinParams = list(fill = "green", alpha = 0.2) ) # changed color to the violin
@@ -76,27 +74,30 @@ ornateWS <- list(
 head(dataFigure2)
 
 ## ----message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 2a**. Making left panel of Figure 2."----
-plt2a <- superbPlot(dataFigure2, 
+plt2a <- superb(
+            cbind(pre,post) ~ . ,
+            dataFigure2, 
             WSFactors    = "Moment(2)", 
-            variables    = c("pre","post"), 
             adjustments  = list(purpose = "single"),
             plotStyle    = "line" ) 
 plt2a <- plt2a + ornateWS + labs(subtitle="Stand-alone\n95% CI")
 plt2a
 
 ## ----message=TRUE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 2b**. Making central panel of Figure 2."----
-plt2b <- superbPlot(dataFigure2, 
+plt2b <- superb(
+            cbind(pre, post) ~ . ,
+            dataFigure2, 
             WSFactors    = "Moment(2)", 
-            variables    = c("pre","post"), 
             adjustments  = list(purpose = "difference", decorrelation = "CA"), #new
             plotStyle    = "line" ) 
 plt2b <- plt2b + ornateWS + labs(subtitle="Correlation and difference-\nadjusted 95% CI") 
 plt2b
 
 ## ----message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 2c**. Making third panel of Figure 2."----
-plt2c <- superbPlot(dataFigure2, 
+plt2c <- superb(
+            cbind(pre, post) ~ ., 
+            dataFigure2, 
             WSFactors    = "Moment(2)", 
-            variables    = c("pre","post"), 
             adjustments  = list(purpose = "difference", decorrelation = "CA"),
             plotStyle    = "pointindividualline" )   #new
 plt2c <- plt2c + ornateWS + labs(subtitle="Correlation and difference-\nadjusted 95% CI")
@@ -115,9 +116,10 @@ ornateWS2 <- list(
 
 ## ----message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 2d**. Making right panel of Figure 2."----
 dataFigure2$diff <- dataFigure2$post - dataFigure2$pre
-plt2d <- superbPlot(dataFigure2, 
+plt2d <- superb(
+            diff ~ .,
+            dataFigure2, 
             WSFactor     = "Moment(1)", 
-            variables    = c("diff"), 
             adjustments  = list(purpose = "single", decorrelation = "none"),
             plotStyle    = "raincloud",
             violinParams = list(fill = "green") )  #new
@@ -147,18 +149,18 @@ ornateCRS <- list(
 )
 
 ## ----message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 3a**. The left panel of Figure 3."----
-plt3a <- superbPlot(dataFigure3, 
-    BSFactors     = "grp", 
-    variables     = "VD", 
+plt3a <- superb(
+    VD ~ grp,
+    dataFigure3, 
     adjustments   = list(purpose = "single", samplingDesign = "SRS"),
     plotStyle     = "line" )
 plt3a <- plt3a + ornateCRS + labs(subtitle="Stand-alone\n95% CI") 
 plt3a
 
 ## ----message=TRUE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 3b**. The central panel of Figure 3."----
-plt3b <- superbPlot(dataFigure3, 
-    BSFactors     = "grp", 
-    variables     = "VD", 
+plt3b <- superb(
+    VD ~ grp,
+    dataFigure3, 
     adjustments   = list(purpose = "difference", samplingDesign = "CRS"), #new
     plotStyle     = "line", 
     clusterColumn = "cluster" )                                           #new
@@ -166,12 +168,12 @@ plt3b <- plt3b + ornateCRS + labs(subtitle="Cluster and difference-\nadjusted 95
 plt3b
 
 ## ----message=FALSE, echo=TRUE, eval=TRUE, fig.width=8, fig.height=4, fig.cap="**Figure 3c**. The right panel of Figure 3."----
-plt3c <- superbPlot(dataFigure3, 
-    BSFactors    = "grp", 
-    variables   = "VD", 
-    adjustments = list(purpose = "difference", samplingDesign = "CRS"),
-    plotStyle   = "raincloud", 
-    violinParams = list(fill = "green", alpha = 0.2),
+plt3c <- superb(
+    VD ~ grp,
+    dataFigure3, 
+    adjustments   = list(purpose = "difference", samplingDesign = "CRS"),
+    plotStyle     = "raincloud", 
+    violinParams  = list(fill = "green", alpha = 0.2),
     clusterColumn = "cluster" )
 plt3c <- plt3c + ornateCRS + labs(subtitle="Cluster and difference-\nadjusted 95% CI")
 
@@ -210,25 +212,25 @@ ornateBS <- list(
 )
 
 ## ----message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 4a**. The left panel of Figure 4."----
-plt4a <- superbPlot(dataFigure4, 
-    BSFactors = "group", 
-    variables = "score", 
+plt4a <- superb(
+    score ~ group,
+    dataFigure4, 
     adjustments=list(purpose = "single", popSize = Inf),
     plotStyle="line" ) 
 plt4a <- plt4a + ornateBS + labs(subtitle="Stand-alone\n95% CI") 
 
 ## ----message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 4b**. The central panel of Figure 3b."----
-plt4b <- superbPlot(dataFigure4, 
-    BSFactors = "group",
-    variables = "score", 
+plt4b <- superb(
+    score ~ group, 
+    dataFigure4, 
     adjustments=list(purpose = "single", popSize = 50 ), # new!
     plotStyle="line" ) 
 plt4b <- plt4b + ornateBS + labs(subtitle="Population size-\nadjusted 95% CI") 
 
 ## ----message=FALSE, echo=TRUE, eval=TRUE, fig.width=3, fig.height=4, fig.cap="**Figure 4c**. The right panel of Figure 3b."----
-plt4c <- superbPlot(dataFigure4, 
-    BSFactors = "group",
-    variables = "score", 
+plt4c <- superb(
+    score ~ group,
+    dataFigure4, 
     adjustments=list(purpose = "single", popSize = 50 ), # new!
     plotStyle="pointjitterviolin",
     violinParams = list(fill = "green", alpha = 0.2)  ) 

@@ -37,12 +37,13 @@ init.d1 <- function(df) {
 
 ## ----message=TRUE, echo=TRUE, fig.width = 4, fig.cap="**Figure 1**. d_1 scores along with 95% confidence interval."----
 # show a plot with Cohen's d1 and difference-adjusted confidence intervals of d1
-superbPlot(dta, 
-        BSFactors   = "Dose", variables = "score", 
-        statistic   = "d1",  errorbar  = "CI", 
-        gamma       = 0.95, 
-        plotStyle   = "line",
-        adjustments = list(purpose="difference")
+superb(
+    score ~ Dose,
+    dta, 
+    statistic   = "d1",  errorbar  = "CI", 
+    gamma       = 0.95, 
+    plotStyle   = "line",
+    adjustments = list(purpose="difference")
 ) + theme_light(base_size = 10) + 
 coord_cartesian( ylim = c(-0.3,+0.45) ) +
 labs(title = "d_1 with difference-adjusted 95% confidence intervals of d_1",
@@ -82,10 +83,12 @@ cidp23 = round(CI.dp(grp3, grp2, 0.95 ), 3)
 c(cidp12,cidp13,cidp23)
 
 ## ----message=FALSE, echo=TRUE, fig.width=4, fig.cap="**Figure 2**. d_1 scores along with 95% confidence interval."----
-superbPlot(dta, BSFactors  = "Dose", variables = "score", 
-        statistic = "d1",  errorbar  = "CI", gamma     = 0.95, 
-        plotStyle = "line",
-        adjustments = list(purpose="difference")
+superb(
+    score ~ Dose,
+    dta, 
+    statistic = "d1",  errorbar  = "CI", gamma     = 0.95, 
+    plotStyle = "line",
+    adjustments = list(purpose="difference")
 ) + theme_light(base_size = 10) +
 coord_cartesian( ylim = c(-0.3,+0.45) ) +
 labs(title   = "d_1 with difference-adjusted 95% confidence intervals of d_1",

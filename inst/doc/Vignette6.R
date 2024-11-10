@@ -62,9 +62,9 @@ dta <- GRD(
         scores = "rnorm(1, mean = GM, sd = Group * STDDEV )"
     )
 )
-superbPlot(dta,
-    BSFactors = "Group",
-    variables = "DV",
+superb(
+    DV ~ Group,
+    dta,
     plotStyle = "pointjitterviolin" )
 
 ## ----dpi=72, fig.height=3, fig.width=4----------------------------------------
@@ -83,9 +83,10 @@ dta <- GRD(
     SubjectsPerGroup = 1000,
     Effects = list('Contrast' = slope(2))
 )
-superbPlot(dta,
-    BSFactors = "Therapy", WSFactors = "Contrast(3)",
-    variables = c("DV.1","DV.2","DV.3"),
+superb(
+    crange(DV.1, DV.3) ~ Therapy,
+    dta,
+    WSFactors = "Contrast(3)",
     plotStyle = "line" )
 
 ## ----message=FALSE, dpi=72, fig.height=3, fig.width=4-------------------------
@@ -98,9 +99,10 @@ dta <- GRD(
         "code2"=Rexpression("if (Contrast ==3) {+1} else {0}")
     )
 )
-superbPlot(dta,
-    BSFactors = "Therapy", WSFactors = "Contrast(3)",
-    variables = c("DV.1","DV.2","DV.3"),
+superb(
+    crange(DV.1, DV.3) ~ Therapy,    
+    dta,
+    WSFactors = "Contrast(3)",
     plotStyle = "line" )
 
 ## ----dpi=72, fig.width=4, fig.height=4----------------------------------------

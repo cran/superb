@@ -47,9 +47,9 @@ ornate = list(
     labs(x = "Group" ),
     scale_x_discrete(labels=c("Group A", "Group B", "Group C"))
 )
-superbPlot(dta, 
-    BSFactors = "group",
-    variables = "scores",
+superb(
+    scores ~ group,
+    dta, 
     statistic = "A", 
     error     = "CI",
     adjustment = list( purpose = "difference"),
@@ -79,9 +79,9 @@ CI.prop <- function(v, gamma = 0.95) {
 }
 
 ## ----message=FALSE, echo=TRUE, fig.width = 3, fig.cap="**Figure 2**. Proportion as a function of group."----
-superbPlot(dta, 
-    BSFactors = "group",
-    variables = "scores",
+superb(
+    scores ~ group,
+    dta, 
     statistic = "prop", 
     error     = "CI",
     adjustment = list( purpose = "difference"),

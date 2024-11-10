@@ -1,8 +1,8 @@
 Package: superb
 Type: Package
 Title: Summary Plots with Adjusted Error Bars
-Version: 0.95.15
-Date: 2024-08-17
+Version: 0.95.19
+Date: 2024-10-31
 Authors@R: c(
              person("Denis", "Cousineau", email = "denis.cousineau@uottawa.ca",
                     role = c("aut", "cre")),
@@ -35,15 +35,15 @@ Encoding: UTF-8
 VignetteBuilder: knitr
 LazyData: true
 RoxygenNote: 7.3.1
-Depends: R (>= 3.5.0)
-Imports: foreign, plyr (>= 1.8.4), ggplot2 (>= 3.1.0), MASS, lsr (>=
-        0.5), methods, Rdpack (>= 0.7), stats, shiny, shinyBS, stringr,
-        utils
+Depends: R (>= 4.1.0)
+Imports: methods, utils, stats, MASS, lsr (>= 0.5), plyr (>= 1.8.4),
+        ggplot2 (>= 3.5.0), stringr, foreign, shiny, shinyBS, rrapply,
+        Rdpack (>= 0.7)
 Suggests: dplyr, psych, emojifont, fMultivar, grid, gridExtra, knitr,
-        lattice, lawstat, boot, png, reshape2, rmarkdown, sadists,
-        scales, testthat, tibble
+        lattice, lawstat, boot, png, reshape2, rmarkdown, RColorBrewer,
+        sadists, scales, testthat, tibble
 RdMacros: Rdpack
 NeedsCompilation: no
-Packaged: 2024-08-17 18:35:12 UTC; Utlisateur
+Packaged: 2024-11-10 17:41:39 UTC; Utlisateur
 Repository: CRAN
-Date/Publication: 2024-08-17 19:00:02 UTC
+Date/Publication: 2024-11-10 18:10:02 UTC
